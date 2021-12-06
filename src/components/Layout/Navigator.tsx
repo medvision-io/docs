@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useStaticQuery, graphql } from "gatsby";
+import semver from "semver";
 import { alpha, styled } from "@mui/material/styles";
 import Drawer, { DrawerProps } from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -78,8 +79,21 @@ export default function Navigator(props: Props) {
       siteMetadata: { categories, title, sections },
     },
     allOpenapiYaml: { nodes },
+    allMarkdownRemark: { nodes: mdPages },
   } = useStaticQuery(graphql`
     query NavigationQuery {
+      allMarkdownRemark {
+        nodes {
+          fields {
+            slug
+          }
+          frontmatter {
+            category
+            docVersion
+            title
+          }
+        }
+      }
       allOpenapiYaml {
         nodes {
           info {
@@ -126,6 +140,9 @@ export default function Navigator(props: Props) {
   const groups = nodes.find(
     (node) => node.slug === selectedVersion
   ).x_tagGroups;
+
+  const currVersion = versions.find(ver => ver.key === selectedVersion);
+  const pages = mdPages.filter(page => semver.satisfies(currVersion.version, String(page.frontmatter.docVersion)));
 
   const handleChange = (event: SelectChangeEvent) => {
     const url = new URL(document.URL)
@@ -183,6 +200,7 @@ export default function Navigator(props: Props) {
           categories={categories}
           sections={sections}
           groups={groups}
+          pages={pages}
           openApiItems={openApiItems}
         />
       </List>

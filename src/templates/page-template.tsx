@@ -55,6 +55,7 @@ export default function PageTemplate({ data }: Props) {
   return (
     <Layout
       selectedVersion={openapiYaml.slug}
+      selectedPage={markdownRemark.fields.slug}
       openApiStore={openApiStore}
     >
       <div className="blog-post-container">

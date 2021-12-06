@@ -5,6 +5,7 @@ import {Dispatch, ReactElement, useReducer} from "react";
 type State = {
   selectedVersion: string | null,
   selectedTagGroup: string | null,
+  selectedPage: string | null,
 };
 
 enum ActionKind {
@@ -24,6 +25,7 @@ type AllActions = ActionInterface<ActionKind.UPDATE, string | null> | ActionInte
 const defaultNavigationOptions: State = {
   selectedVersion: null,
   selectedTagGroup: null,
+  selectedPage: null,
 }
 
 function reducer(state: State, action: AllActions) {

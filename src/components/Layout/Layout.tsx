@@ -34,12 +34,14 @@ interface Props {
   openApiStore: OpenAPI;
   selectedVersion?: string;
   selectedTagGroup?: string;
+  selectedPage?: string,
 }
 
 export default function Layout({
   children,
   selectedVersion,
   selectedTagGroup,
+  selectedPage,
   openApiStore,
 }: Props) {
   const {
@@ -68,6 +70,7 @@ export default function Layout({
       <NavigationContextProvider initialState={{
         selectedVersion: selectedVersion,
         selectedTagGroup: selectedTagGroup,
+        selectedPage: selectedPage
       }}>
         <Box sx={{ display: "flex", minHeight: "100vh" }}>
           <Helmet>

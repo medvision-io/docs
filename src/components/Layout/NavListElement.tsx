@@ -55,6 +55,16 @@ interface Props {
       slug: string;
     }[];
   }[];
+  pages?: {
+    fields: {
+      slug: string;
+    };
+    frontmatter: {
+      category: string;
+      docVersion: string;
+      title: string;
+    };
+  }[];
   openApiItems: MenuListItem[];
 }
 
@@ -62,12 +72,13 @@ export default function NavListElement({
   sections,
   categories,
   groups = [],
+  pages = [],
   openApiItems,
 }: Props) {
-  const [{ selectedVersion, selectedTagGroup }] = useContext(NavigationContext);
+  const [{ selectedVersion, selectedTagGroup, selectedPage }] = useContext(NavigationContext);
   const defaultSelectedCategory = selectedTagGroup
     ? groups.find((group) => group.slug === selectedTagGroup).section
-    : undefined;
+    : (selectedPage ? pages.find((page) => page.fields.slug === selectedPage).frontmatter.category : undefined);
 
   const [openedCategory, setOpenedCategory] = useState(defaultSelectedCategory);
 
@@ -104,6 +115,13 @@ export default function NavListElement({
     return acc;
   }, {});
 
+  const pagesClickHandlers = pages.reduce((acc, page) => {
+    acc[page.fields.slug] = () => {
+      window.location.href = `/${selectedVersion}${page.fields.slug}`;
+    };
+    return acc;
+  }, {});
+
   return (
     <React.Fragment>
       {sections.map(({ key, name }) => (
@@ -129,6 +147,20 @@ export default function NavListElement({
                   unmountOnExit
                 >
                   <List component="div" disablePadding>
+                    {pages
+                      .filter((page) => page.frontmatter.category === catKey)
+                      .map((page) => (
+                        <React.Fragment key={page.fields.slug}>
+                          <ListItemButton
+                            onClick={pagesClickHandlers[page.fields.slug]}
+                            selected={page.fields.slug === selectedPage}
+                            sx={{ ...item, pl: 6 }}
+                            key={page.fields.slug}
+                          >
+                            <ListItemText primary={page.frontmatter.title} />
+                          </ListItemButton>
+                        </React.Fragment>
+                      ))}
                     {groups
                       .filter((group) => group.section === catKey)
                       .map((group) => (
