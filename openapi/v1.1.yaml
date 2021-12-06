@@ -1,13 +1,11 @@
 openapi: 3.1.0
 info:
-  version: 1.0.0
+  version: 1.1.0
   title: zviha.ai
   termsOfService: 'https://example.com/terms/'
   contact:
     email: ceo@zhiva.ai
     url: 'https://zhiva.ai/contact'
-  x-logo:
-    url: '/zhiva_sq.png'
   description:
     $ref: ./info-description.md
 tags:
@@ -18,7 +16,6 @@ tags:
   - name: Tag
     description: This is a tag description.
 servers:
-  - url: 'http://example.com/api/v1'
   - url: 'https://example.com/api/v1'
 paths:
   '/users/{username}':

@@ -1,0 +1,24 @@
+{
+  "name": "gatsby-transformer-openapi",
+  "version": "1.0.0",
+  "description": "Plugin to transform openapi yaml files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build script setup\""
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-transformer",
+    "openapi"
+  ],
+  "author": "Kemal Erdem",
+  "license": "MIT",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "chokidar": "^3.5.2",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21"
+  }
+}

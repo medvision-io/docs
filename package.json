@@ -1,20 +1,66 @@
 {
-  "name": "acme-api",
+  "name": "documentation",
   "version": "1.0.0",
-  "dependencies": {
-    "@redocly/openapi-cli": "^1.0.0-beta.69",
-    "copyfiles": "^2.4.1",
-    "cpy-cli": "^3.1.1",
-    "mkdirp": "^1.0.4",
-    "redoc-cli": "^0.13.1",
-    "rimraf": "^3.0.2"
-  },
   "private": true,
+  "description": "documentation",
+  "author": "burnpiro",
+  "keywords": [
+    "gatsby"
+  ],
   "scripts": {
-    "start": "openapi preview-docs",
-    "prebuild": "npm run test &&rimraf dist && mkdirp dist",
-    "build": "npm run generate-yaml && redoc-cli bundle -t template.hbs dist.yaml && cpy 'docs/**/*' '!docs/index.html' dist && cpy 'redoc-static.html' dist --rename=index.html",
-    "test": "openapi lint",
-    "generate-yaml": "openapi bundle -o dist"
-  }
+    "develop": "npm run bundle-openapi-watch & gatsby develop",
+    "start": "gatsby develop",
+    "build": "npm run bundle-openapi && gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "bundle-openapi-watch": "node openapi-bundler.js watch",
+    "bundle-openapi": "node openapi-bundler.js"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.7.0",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.6.0",
+    "@mdx-js/mdx": "^1.6.22",
+    "@mdx-js/react": "^1.6.22",
+    "@mui/icons-material": "^5.2.0",
+    "@mui/material": "^5.2.2",
+    "@redocly/openapi-cli": "^1.0.0-beta.69",
+    "@redocly/react-dropdown-aria": "^2.0.12",
+    "decko": "^1.2.0",
+    "dompurify": "^2.3.3",
+    "gatsby": "^4.3.0",
+    "gatsby-plugin-google-gtag": "^4.3.0",
+    "gatsby-plugin-image": "^2.3.0",
+    "gatsby-plugin-manifest": "^4.3.0",
+    "gatsby-plugin-mdx": "^3.3.0",
+    "gatsby-plugin-react-helmet": "^5.3.0",
+    "gatsby-plugin-sharp": "^4.3.0",
+    "gatsby-plugin-sitemap": "^5.3.0",
+    "gatsby-source-filesystem": "^4.3.0",
+    "gatsby-transformer-remark": "^5.3.0",
+    "gatsby-transformer-sharp": "^4.3.0",
+    "js-yaml": "^4.1.0",
+    "lodash.kebabcase": "^4.1.1",
+    "marked": "^4.0.6",
+    "openapi-types": "^10.0.0",
+    "prettier": "^2.5.1",
+    "prismjs": "^1.25.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0",
+    "semver": "^7.3.5",
+    "url": "^0.11.0"
+  },
+  "docfiles": [
+    {
+      "path": "./openapi/v1.yaml",
+      "out": "./content/openapi/v1.yaml",
+      "name": "V1"
+    },
+    {
+      "path": "./openapi/v1.1.yaml",
+      "out": "./content/openapi/v1.1.yaml",
+      "name": "V1.1"
+    }
+  ]
 }

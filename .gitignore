@@ -1,6 +1,77 @@
-# Dir for bundles
-dist
+node_modules/
+.cache/
+public
+/content/openapi/*.yaml
+
+# Logs
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+*.iml
+out
+gen
+
+### Linux ###
+*~
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+demo/dist/
+
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directory
+# https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
-redoc-static.html
-dist.yaml
+
+lib/
+stats.json
+cypress/
+bundles/
+typings/*
+!typings/styled-patch.d.ts
+cli/index.js
+
+/benchmark/revisions
+
+/coverage
+.ghpages-tmp
+yarn.lock
 .idea
+.vscode
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk

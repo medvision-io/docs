@@ -15,27 +15,32 @@ Starts the reference docs preview server.
 #### `npm run build`
 Bundles the definition to the dist folder.
 
-#### `npm test`
-Validates the definition.
-
 ## Contribution Guide
 
-Below is a sample contribution guide. The tools
-in the repository don't restrict you to any
-specific structure. Adjust the contribution guide
-to match your own structure. However, if you
-don't have a structure in mind, this is a
-good place to start.
+### Pages
 
-Update this contribution guide if you
-adjust the file/folder organization.
+If you want to add page just create `.md` file in `/content/pages` directory. Template markdown looks like:
 
-The `.redocly.yaml` controls settings for various
-tools including the lint tool and the reference
-docs engine.  Open it to find examples and
-[read the docs](https://redoc.ly/docs/cli/configuration/)
-for more information.
+```markdown
+---
+title: "my page"
+date: "2021-12-05T23:19:51.246Z"
+docVersion: x
+category: authentication
+isTop: true
+---
 
+## some title
+
+some content
+```
+
+Where:
+- `title` (`string (required)`) - is just a page title
+- `date` (`string (required)`) - set at the start and don't change
+- `docVersion` (`string (required)`) - valid [SemVer](https://semver.org/) from OpenApi versions created in `/openapi` directory, you can use `x` to indicate rage like `1.x` will add this page to all versions stating with `1`
+- `category` (`string (required)`) - one of the `x-tagGroup` categories available in `docVersion` specifications
+- `isTop` (`string (required)`) - in progress
 
 ### Schemas
 
