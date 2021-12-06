@@ -22,6 +22,10 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
+        name: `zhiva.ai Documentation`,
+        short_name: `Docs | zhiva.ai`,
+        description: `Documentation for zhiva.ai`,
+        lang: `en`,
         icon: "src/images/icon.png",
       },
     },
