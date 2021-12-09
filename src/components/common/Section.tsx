@@ -1,6 +1,12 @@
-import {styled} from "@mui/material/styles";
+import {styled, ThemedProps} from "@mui/material/styles";
+import {Theme} from "@emotion/react";
 
-export const Section = styled('div')<{ underlined?: boolean }>`
+interface Props {
+  underlined?: boolean;
+  theme?: Theme
+}
+
+export const Section = styled('div')<Props>`
   padding: ${props => props.theme.spacing(4)}px 0;
 
   &:last-child {
@@ -14,7 +20,7 @@ export const Section = styled('div')<{ underlined?: boolean }>`
   ${(props) => props.theme.breakpoints.down("md")} {
     padding: 0;
   }
-  ${(props: any) =>
+  ${(props: Props) =>
   (props.underlined &&
     `
     position: relative;

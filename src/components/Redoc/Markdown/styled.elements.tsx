@@ -131,7 +131,7 @@ export const StyledMarkdownBlock = styled(
     background-color: #fff;
     border-top: 1px solid #ccc;
 
-    &:nth-child(2n) {
+    &:nth-of-type(2n) {
       background-color: ${({ theme }) => theme.schema.nestedBackground};
     }
   }

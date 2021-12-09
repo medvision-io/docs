@@ -72,17 +72,22 @@ async function onCreateNode(
 
 
     if (obj["x-tagGroups"] == null || !Array.isArray(obj["x-tagGroups"])) {
-      yamlNode["x-tagGroups"] = [
+      obj["x-tagGroups"] = [
         {
           name: "General",
           tags: [...obj.tags.map(tag => tag.name)],
         },
       ];
     }
-    yamlNode["x-tagGroups"] = yamlNode["x-tagGroups"].map((tagGroup) => {
+
+    obj["x-tagGroups"] = obj["x-tagGroups"].map(tagGroup => ({
+      ...tagGroup,
+      slug: kebabCase(tagGroup.name.replace(/\W/g, "")),
+    }))
+
+    yamlNode["x-tagGroups"] = obj["x-tagGroups"].map((tagGroup) => {
       return {
         ...tagGroup,
-        slug: kebabCase(tagGroup.name.replace(/\W/g, "")),
         tags: tagGroup.tags.map((tag) => {
           return {
             name: tag,

@@ -1,4 +1,9 @@
-import { OpenAPISpec } from "../types/OpenAPISpec";
+import * as JsonPointer from 'json-pointer';
+import {OpenAPISpec, OpenAPIXCodeSample} from "../types/OpenAPISpec";
+import buildMenu from "./helpers/buildMenu";
+import {OpenAPIV3_1} from "openapi-types";
+import buildOperations from "./helpers/buildOperations";
+import {getDefinitionName} from "./helpers/openapi";
 
 export type TagsInfoMap = Record<string, any>;
 
@@ -15,12 +20,70 @@ export const operationNames = {
 
 export type MenuListItem = {
   tags: string[];
+  id: string;
   pathName: string;
   summary: string;
   operationId: string;
   httpVerb: string;
   isWebhook: boolean;
 };
+
+export interface SectionItem {
+  id: string;
+  type: string;
+  name: string;
+  description: string;
+  path: string;
+  deprecated: boolean;
+  depth: number;
+  isWebhook: boolean;
+  isEvent: boolean;
+  isCallback: boolean;
+}
+
+export type OperationItem = OpenAPIV3_1.OperationObject & SectionItem & {
+  operationId: string;
+  id: string;
+  operationSpec: {
+    'x-codeSamples'?: OpenAPIXCodeSample[];
+  } & OpenAPIV3_1.OperationObject;
+  security: OpenAPIV3_1.SecurityRequirementObject[];
+  servers: OpenAPIV3_1.ServerObject[]
+}
+
+export interface OpenAPIRef {
+  $ref: string;
+}
+
+export type Referenced<T> = OpenAPIRef | T;
+
+export type OpenAPIParameterLocation = 'query' | 'header' | 'path' | 'cookie';
+export type OpenAPIParameterStyle =
+  | 'matrix'
+  | 'label'
+  | 'form'
+  | 'simple'
+  | 'spaceDelimited'
+  | 'pipeDelimited'
+  | 'deepObject';
+
+export interface OpenAPIParameter {
+  name: string;
+  in?: OpenAPIParameterLocation;
+  description?: string;
+  required?: boolean;
+  deprecated?: boolean;
+  allowEmptyValue?: boolean;
+  style?: OpenAPIParameterStyle;
+  explode?: boolean;
+  allowReserved?: boolean;
+  schema?: Referenced<OpenAPIV3_1.SchemaObject>;
+  example?: any;
+  examples?: { [media: string]: Referenced<OpenAPIV3_1.ExampleObject> };
+  content?: { [media: string]: OpenAPIV3_1.MediaTypeObject };
+  encoding?: Record<string, OpenAPIV3_1.EncodingObject>;
+  const?: any;
+}
 
 export function isOperationName(key: string): boolean {
   return key in operationNames;
@@ -30,152 +93,139 @@ export const GROUP_DEPTH = 0;
 export class OpenAPI {
   spec: OpenAPISpec;
   menuItems: MenuListItem[];
+  items: TagsInfoMap;
+  allowMergeRefs: boolean;
+  _refCounter: RefCounter;
+  ignoreNamedSchemas: Set<string>;
 
   constructor({ spec }: { spec: OpenAPISpec }) {
     this.spec = spec;
+    this._refCounter = new RefCounter();
+    this.allowMergeRefs = true;
+    this.ignoreNamedSchemas = new Set([]);
 
-    this.menuItems = OpenAPI.buildMenu(this.spec);
+    this.menuItems = buildMenu(this.spec);
+    this.items = buildOperations(this.spec);
   }
 
-  static buildMenu(spec: OpenAPISpec): MenuListItem[] {
-    const items: any[] = [];
-
-    const tagsMap = OpenAPI.getTagsWithOperations(spec);
-    items.push(...OpenAPI.getTagsItems(tagsMap));
-
-    return OpenAPI.reduceMapsToListItems(items);
+  getRefValue = (ref: string) => {
+    return this.byRef(ref);
   }
 
-  static reduceMapsToListItems(tagsMap: any[]): MenuListItem[] {
-    const listItems: MenuListItem[] = [];
-
-    function addItemsToList(list: MenuListItem[], item: any) {
-      if (item.items) {
-        item.items.forEach((innerTagMap) => addItemsToList(list, innerTagMap));
-      } else {
-        list.push({
-          tags: item.tags,
-          pathName: item.pathName,
-          summary: item.summary,
-          operationId: item.operationId,
-          httpVerb: item.httpVerb,
-          isWebhook: item.isWebhook,
-        });
-      }
+  exitRef = <T>(ref: Referenced<T>) => {
+    if (!this.isRef(ref)) {
+      return;
     }
-
-    tagsMap.forEach((tagsMap) => addItemsToList(listItems, tagsMap));
-
-    return listItems;
+    this._refCounter.exit(ref.$ref);
   }
 
-  static getTagsWithOperations(spec: OpenAPISpec) {
-    const tags: TagsInfoMap = {};
-    const webhooks = spec["x-webhooks"] || spec.webhooks;
-    for (const tag of spec.tags || []) {
-      tags[tag.name] = { ...tag, operations: [] };
-    }
-
-    if (webhooks) {
-      getTags(webhooks, true);
-    }
-
-    if (spec.paths) {
-      getTags(spec.paths);
-    }
-
-    function getTags(paths: OpenAPISpec["paths"], isWebhook?: boolean) {
-      for (const pathName of Object.keys(paths)) {
-        const path = paths[pathName];
-        const operations = Object.keys(path).filter(isOperationName);
-        for (const operationName of operations) {
-          const operationInfo = path[operationName];
-          let operationTags = operationInfo?.tags;
-
-          if (!operationTags || !operationTags.length) {
-            // empty tag
-            operationTags = [""];
-          }
-
-          for (const tagName of operationTags) {
-            let tag = tags[tagName];
-            if (tag === undefined) {
-              tag = {
-                name: tagName,
-                operations: [],
-              };
-              tags[tagName] = tag;
-            }
-            if (tag["x-traitTag"]) {
-              continue;
-            }
-            tag.operations.push({
-              ...operationInfo,
-              pathName,
-              // pointer: JsonPointer.compile(['paths', pathName, operationName]),
-              httpVerb: operationName,
-              pathParameters: path.parameters || [],
-              pathServers: path.servers,
-              isWebhook: !!isWebhook,
-            });
-          }
-        }
+  deref = <T extends object>(obj: OpenAPIRef | T, forceCircular = false, mergeAsAllOf = false): T => {
+    if (this.isRef(obj)) {
+      const schemaName = getDefinitionName(obj.$ref);
+      if (schemaName && this.ignoreNamedSchemas.has(schemaName)) {
+        return { type: 'object', title: schemaName } as T;
       }
+
+      const resolved = this.byRef<T>(obj.$ref)!;
+      const visited = this._refCounter.visited(obj.$ref);
+      this._refCounter.visit(obj.$ref);
+      if (visited && !forceCircular) {
+        // circular reference detected
+        // tslint:disable-next-line
+        return Object.assign({}, resolved, { 'x-circular-ref': true });
+      }
+      // deref again in case one more $ref is here
+      let result = resolved;
+      if (this.isRef(resolved)) {
+        result = this.deref(resolved, false, mergeAsAllOf);
+        this.exitRef(resolved);
+      }
+      return this.allowMergeRefs ? this.mergeRefs(obj, resolved, mergeAsAllOf) : result;
     }
-    return tags;
+    return obj;
   }
 
-  static getTagsItems(tagsMap: TagsInfoMap): any[] {
-    const tagNames = Object.keys(tagsMap); // all tags
-
-    const tags = tagNames.map((tagName) => {
-      if (!tagsMap[tagName]) {
-        console.warn(`Non-existing tag "${tagName}"`);
-        return null;
-      }
-      tagsMap[tagName].used = true;
-      return tagsMap[tagName];
-    });
-
-    const res: Array<any> = [];
-    for (const tag of tags) {
-      if (!tag) {
-        continue;
-      }
-      const item = tag;
-      item.depth = GROUP_DEPTH + 1;
-
-      // don't put empty tag into content, instead put its operations
-      if (tag.name === "") {
-        const items = [
-          ...this.getOperationsItems(undefined, tag, item.depth + 1),
-        ];
-        res.push(...items);
-        continue;
-      }
-
-      item.items = [...this.getOperationsItems(item, tag, item.depth + 1)];
-
-      res.push(item);
+  /**
+   * get spec part by JsonPointer ($ref)
+   */
+  byRef = <T extends any = any>(ref: string): T | undefined => {
+    let res;
+    if (!this.spec) {
+      return;
     }
-    return res;
+    if (ref.charAt(0) === '#') {
+      ref = ref.substring(1);
+    }
+    ref = decodeURIComponent(ref);
+    try {
+      res = JsonPointer.get(this.spec, ref);
+    } catch (e) {
+      // do nothing
+    }
+    return res || {};
+  };
+
+  shallowDeref = <T extends unknown>(obj: OpenAPIRef | T): T => {
+    if (this.isRef(obj)) {
+      const schemaName = getDefinitionName(obj.$ref);
+      if (schemaName && this.ignoreNamedSchemas.has(schemaName)) {
+        return { type: 'object', title: schemaName } as T;
+      }
+      const resolved = this.byRef<T>(obj.$ref);
+      return this.allowMergeRefs ? this.mergeRefs(obj, resolved, false) : (resolved as T);
+    }
+    return obj;
   }
 
-  static getOperationsItems(
-    parent: any | undefined,
-    tag: any,
-    depth: number
-  ): any[] {
-    if (tag.operations.length === 0) {
-      return [];
+  mergeRefs = (ref, resolved, mergeAsAllOf: boolean) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { $ref, ...rest } = ref;
+    const keys = Object.keys(rest);
+    if (keys.length === 0) {
+      return resolved;
     }
+    if (
+      mergeAsAllOf &&
+      keys.some(k => k !== 'description' && k !== 'title' && k !== 'externalDocs')
+    ) {
+      return {
+        allOf: [rest, resolved],
+      };
+    } else {
+      return {
+        ...resolved,
+        ...rest,
+      };
+    }
+  }
 
-    const res: any[] = [];
-    for (const operationInfo of tag.operations) {
-      const operation = operationInfo;
-      operation.depth = depth;
-      res.push(operation);
+  /**
+   * checks if the object is OpenAPI reference (contains $ref property)
+   */
+  isRef(obj: any): obj is OpenAPIRef {
+    if (!obj) {
+      return false;
     }
-    return res;
+    return obj.$ref !== undefined && obj.$ref !== null;
+  }
+}
+
+class RefCounter {
+  _counter = {};
+
+  reset(): void {
+    this._counter = {};
+  }
+
+  visit(ref: string): void {
+    this._counter[ref] = this._counter[ref] ? this._counter[ref] + 1 : 1;
+  }
+
+  exit(ref: string): void {
+    this._counter[ref] = this._counter[ref] && this._counter[ref] - 1;
+  }
+
+  visited(ref: string): boolean {
+    return !!this._counter[ref];
   }
 }

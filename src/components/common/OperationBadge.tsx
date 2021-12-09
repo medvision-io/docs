@@ -1,20 +1,20 @@
 import * as React from "react";
 
 import { styled } from "@mui/material/styles";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 import { MenuListItem } from "../../services/OpenAPI";
-import { ReactElement } from "react";
 
-const OperationBadgeElement = styled("span")`
+const OperationBadgeElement = styled(Typography)<TypographyProps>`
   &.operation-type {
     width: 9ex;
     display: inline-block;
-    height: ${(props) => props.theme.typography.h6.fontSize};
-    line-height: ${(props) => props.theme.typography.h6.fontSize};
+    height: 32px;
+    line-height: 32px;
     background-color: #333;
     border-radius: 3px;
     background-repeat: no-repeat;
     background-position: 6px 4px;
-    font-size: 7px;
+    font-size: 16px;
     font-family: Verdana, sans-serif; // web-safe
     color: white;
     text-transform: uppercase;
@@ -22,6 +22,13 @@ const OperationBadgeElement = styled("span")`
     font-weight: bold;
     vertical-align: middle;
     margin-right: 6px;
+    margin-top: 0;
+  }
+
+  &.operation-type--compact {
+    height: 18px;
+    line-height: 18px;
+    font-size: 7px;
     margin-top: 2px;
   }
 
@@ -68,12 +75,22 @@ const OperationBadgeElement = styled("span")`
 
 interface Props {
   item: MenuListItem;
+  compact?: boolean;
 }
 
-const OperationBadge: React.FC<Props> = ({ item, children }) => {
+const OperationBadge: React.FC<Props> = ({
+  item,
+  compact = true,
+  ...otherProps
+}) => {
   return (
     <OperationBadgeElement
-      className={`operation-type ${item.isWebhook ? "hook" : item.httpVerb}`}
+      variant="body1"
+      component="span"
+      className={`operation-type ${item.isWebhook ? "hook" : item.httpVerb} ${
+        compact ? "operation-type--compact" : ""
+      }`}
+      {...otherProps}
     >
       {item.isWebhook && "event"}
       {!item.isWebhook && item.httpVerb}

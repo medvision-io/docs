@@ -1,0 +1,19 @@
+code {
+  font-size: 0.85rem;
+  font-family: Courier, monospace;
+  line-height: 1.66rem;
+  font-weight: 400;
+  color: #e53935;
+  background-color: rgba(38, 50, 56, 0.05);
+  white-space: nowrap;
+}
+
+code.regex {
+  font-size: 0.75rem;
+  font-family: Courier, monospace;
+  line-height: 1.66rem;
+  font-weight: 400;
+  color: #0e7c86;
+  background-color: rgba(38, 50, 56, 0.05);
+  white-space: break-spaces;
+}

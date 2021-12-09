@@ -5,9 +5,8 @@ import { StylingMarkdownProps } from "./Markdown";
 import { StyledMarkdownBlock } from "./styled.elements";
 
 const StyledMarkdownSpan = StyledMarkdownBlock.withComponent("span");
-
-const sanitize = (untrustedSpec, html) =>
-  untrustedSpec ? DOMPurify.sanitize(html) : html;
+const isBrowser = () => typeof window !== "undefined"
+let sanitize = (untrustedSpec, html) => html;
 
 export function SanitizedMarkdownHTML(
   props: StylingMarkdownProps & {
@@ -18,7 +17,13 @@ export function SanitizedMarkdownHTML(
   }
 ) {
   const Wrap = props.inline ? StyledMarkdownSpan : StyledMarkdownBlock;
-  const untrustedSpec = props.untrustedSpec != null ? props.untrustedSpec : false;
+  const untrustedSpec = props.untrustedSpec != null ? props.untrustedSpec : true;
+
+  if(isBrowser()) {
+    const domPurify = DOMPurify(window)
+    sanitize = (untrustedSpec, html) =>
+      untrustedSpec ? domPurify.sanitize(html) : html;
+  }
 
   return (
     <Wrap

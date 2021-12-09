@@ -5,6 +5,7 @@ import {PageContext} from "gatsby/internal";
 import {OpenAPI} from "../services/OpenAPI";
 import {OpenAPISpec} from "../types/OpenAPISpec";
 import AppInfo from "../components/Redoc/ApiInfo/ApiInfo";
+import Group from "../components/Redoc/Group/Group";
 
 interface Props {
   data: {
@@ -47,7 +48,7 @@ export default function PageTemplate({ data, pageContext }: Props) {
   return (
     <Layout selectedVersion={pageContext.version} selectedTagGroup={pageContext.group}
             openApiStore={openApiStore}>
-      <AppInfo store={openApiStore}/>
+      <Group selectedGroup={pageContext.group} openApiStore={openApiStore}/>
     </Layout>
   );
 }

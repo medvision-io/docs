@@ -9,7 +9,7 @@ const MiddlePanel = styled("div")<{ compact?: boolean }>`
   `
     ${(props) => props.theme.breakpoints.down("md")} {
       width: 100%;
-      padding: ${`${compact ? 0 : theme.spacing(4)}px ${theme.spacing(4)}px`};
+      padding: ${`${!!compact ? 0 : theme.spacing(4)}px ${theme.spacing(4)}px`};
     }
   `};
 `;

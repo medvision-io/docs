@@ -75,10 +75,14 @@ export default function NavListElement({
   pages = [],
   openApiItems,
 }: Props) {
-  const [{ selectedVersion, selectedTagGroup, selectedPage }] = useContext(NavigationContext);
+  const [{ selectedVersion, selectedTagGroup, selectedPage }] =
+    useContext(NavigationContext);
   const defaultSelectedCategory = selectedTagGroup
     ? groups.find((group) => group.slug === selectedTagGroup).section
-    : (selectedPage ? pages.find((page) => page.fields.slug === selectedPage).frontmatter.category : undefined);
+    : selectedPage
+    ? pages.find((page) => page.fields.slug === selectedPage).frontmatter
+        .category
+    : undefined;
 
   const [openedCategory, setOpenedCategory] = useState(defaultSelectedCategory);
 
@@ -105,7 +109,7 @@ export default function NavListElement({
             groupacc[`${group.slug}#${operation.operationId}`] = () => {
               window.location.href =
                 ["", selectedVersion, group.slug].join("/") +
-                `#${operation.pathName}`;
+                `#${operation.id}`;
             };
           }
         });
