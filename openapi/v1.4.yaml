@@ -118,22 +118,55 @@ paths:
             - 'write:pets'
             - 'read:pets'
       x-codeSamples:
-        - lang: 'C#'
+        - lang: 'js'
           source: |
-            PetStore.v1.Pet pet = new PetStore.v1.Pet();
-            pet.setApiKey("your api key");
-            pet.petType = PetStore.v1.Pet.TYPE_DOG;
-            pet.name = "Rex";
-            // set other fields
-            PetStoreResponse response = pet.create();
             if (response.statusCode == HttpStatusCode.Created)
             {
               // Successfully created
             }
-            else
-            {
-              // Something wrong -- check response for errors
-              Console.WriteLine(response.getRawResponse());
+        - lang: 'python'
+          source: |
+            words = ['cat', 'window', 'defenestrate']
+            for w in words:
+                print w, len(w)
+        - lang: 'sql'
+          source: |
+            SELECT Country FROM Customers WHERE Country <> 'USA'
+        - lang: 'c'
+          source: |
+            typedef struct Bert Bert;
+            typedef struct Wilma Wilma;
+            struct Bert {
+                Wilma *wilma;
+            };
+        - lang: 'cpp'
+          source: |
+            #include
+            using namespace std;
+            int main () {
+              cout << "Hello World!";
+              return 0;
+            }
+        - lang: 'java'
+          source: |
+            class HelloWorldApp {
+                public static void main(String[] args) {
+                    System.out.println("Hello World!");
+                }
+            }
+        - lang: 'bash'
+          source: |
+            #!/bin/bash
+            #define cpp #
+            printf 'Hello, world!\n'
+            cpp $0 2> /dev/null | /bin/bash; exit $?
+        - lang: 'r'
+          source: |
+            # Declare function “f” with parameters “x”, “y“
+            # that returns a linear combination of x and y.
+            f <- function(x, y) {
+              z <- 3 * x + 4 * y
+              return(z) ## the return() function is optional here
             }
         - lang: PHP
           name: test
