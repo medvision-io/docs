@@ -8,6 +8,8 @@ import { highlight } from "../../../utils";
 
 interface Props {
   codeSamples: {
+    name?: string,
+    key?: string,
     lang: string;
     source: string;
   }[];
@@ -17,7 +19,11 @@ export default function CodeItem({ codeSamples }: Props) {
   if (codeSamples == null || codeSamples.length < 1) {
     return null;
   }
-  const [selectedKey, setSelectedKey] = useState(codeSamples[0].lang);
+  codeSamples = codeSamples.map(codeSample => ({
+    ...codeSample,
+    key: `${codeSample.lang}-${codeSample.name}`,
+  }));
+  const [selectedKey, setSelectedKey] = useState(codeSamples[0].key);
 
   const handleLangChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -33,18 +39,18 @@ export default function CodeItem({ codeSamples }: Props) {
         Code samples:
       </Typography>
       <Grid item xs={12}>
-        {codeSamples.map(({ lang }) => (
+        {codeSamples.map(({ lang, name, key }) => (
           <StyledToggleButton
-            key={lang}
+            key={key}
             color={"secondary"}
             sx={{ mr: 1, pl: 2, pr: 2, pt: 0, pb: 0 }}
             size="small"
-            selected={selectedKey === lang}
-            value={lang}
-            style={{ fontWeight: (selectedKey === lang ? 700 : 400) }}
+            selected={selectedKey === key}
+            value={key}
+            style={{ fontWeight: (selectedKey === key ? 700 : 400) }}
             onChange={handleLangChange}
           >
-            {lang}
+            {name ? `${name} <` : ''}{lang}{name ? `>` : ''}
           </StyledToggleButton>
         ))}
       </Grid>
@@ -54,7 +60,7 @@ export default function CodeItem({ codeSamples }: Props) {
         sx={{ mt: 1, backgroundColor: (theme) => theme.palette.grey[900] }}
       >
         {codeSamples
-          .filter(({ lang }) => lang === selectedKey)
+          .filter(({ key }) => key === selectedKey)
           .map(({ lang, source }) => {
             return (
               <Grid item xs={12}>

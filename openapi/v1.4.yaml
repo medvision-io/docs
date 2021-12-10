@@ -136,6 +136,7 @@ paths:
               Console.WriteLine(response.getRawResponse());
             }
         - lang: PHP
+          name: test
           source: |
             $form = new \PetStore\Entities\Pet();
             $form->setPetType("Dog");
