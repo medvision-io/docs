@@ -1,5 +1,7 @@
 import { format, parse } from 'url';
 import kebabCase from 'lodash.kebabcase';
+import {OpenAPIV3_1} from "openapi-types";
+import * as URLtemplate from 'url-template';
 
 /**
  * Maps over array passing `isLast` bool to iterator as the second argument
@@ -34,6 +36,14 @@ export function mapValues<T, P>(
     }
   }
   return res;
+}
+
+export function isJsonLike(contentType: string): boolean {
+  return contentType.search(/json/i) !== -1;
+}
+
+export function isFormUrlEncoded(contentType: string): boolean {
+  return contentType === 'application/x-www-form-urlencoded';
 }
 
 /**
@@ -194,4 +204,76 @@ export function unescapeHTMLChars(str: string): string {
   return str
     .replace(/&#(\d+);/g, (_m, code) => String.fromCharCode(parseInt(code, 10)))
     .replace(/&amp;/g, '&');
+}
+
+function delimitedEncodeField(fieldVal: any, fieldName: string, delimiter: string): string {
+  if (Array.isArray(fieldVal)) {
+    return fieldVal.map(v => v.toString()).join(delimiter);
+  } else if (typeof fieldVal === 'object') {
+    return Object.keys(fieldVal)
+      .map(k => `${k}${delimiter}${fieldVal[k]}`)
+      .join(delimiter);
+  } else {
+    return fieldName + '=' + fieldVal.toString();
+  }
+}
+
+function deepObjectEncodeField(fieldVal: any, fieldName: string): string {
+  if (Array.isArray(fieldVal)) {
+    console.warn('deepObject style cannot be used with array value:' + fieldVal.toString());
+    return '';
+  } else if (typeof fieldVal === 'object') {
+    return Object.keys(fieldVal)
+      .map(k => `${fieldName}[${k}]=${fieldVal[k]}`)
+      .join('&');
+  } else {
+    console.warn('deepObject style cannot be used with non-object value:' + fieldVal.toString());
+    return '';
+  }
+}
+
+function serializeFormValue(name: string, explode: boolean, value: any) {
+  // Use RFC6570 safe name ([a-zA-Z0-9_]) and replace with our name later
+  // e.g. URI.template doesn't parse names with hyphen (-) which are valid query param names
+  const safeName = '__redoc_param_name__';
+  const suffix = explode ? '*' : '';
+  const template = URLtemplate.parse(`{?${safeName}${suffix}}`);
+  return template
+    .expand({ [safeName]: value })
+    .substring(1)
+    .replace(/__redoc_param_name__/g, name);
+}
+
+/*
+ * Should be used only for url-form-encoded body payloads
+ * To be used for parameters should be extended with other style values
+ */
+export function urlFormEncodePayload(
+  payload: object,
+  encoding: { [field: string]: OpenAPIV3_1.EncodingObject } = {},
+) {
+  if (Array.isArray(payload)) {
+    throw new Error('Payload must have fields: ' + payload.toString());
+  } else {
+    return Object.keys(payload)
+      .map(fieldName => {
+        const fieldVal = payload[fieldName];
+        const { style = 'form', explode = true } = encoding[fieldName] || {};
+        switch (style) {
+          case 'form':
+            return serializeFormValue(fieldName, explode, fieldVal);
+          case 'spaceDelimited':
+            return delimitedEncodeField(fieldVal, fieldName, '%20');
+          case 'pipeDelimited':
+            return delimitedEncodeField(fieldVal, fieldName, '|');
+          case 'deepObject':
+            return deepObjectEncodeField(fieldVal, fieldName);
+          default:
+            // TODO implement rest of styles for path parameters
+            console.warn('Incorrect or unsupported encoding style: ' + style);
+            return '';
+        }
+      })
+      .join('&');
+  }
 }

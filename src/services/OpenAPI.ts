@@ -1,9 +1,10 @@
-import * as JsonPointer from 'json-pointer';
-import {OpenAPISpec, OpenAPIXCodeSample} from "../types/OpenAPISpec";
+import * as JsonPointer from "json-pointer";
+import { OpenAPISpec, OpenAPIXCodeSample } from "../types/OpenAPISpec";
 import buildMenu from "./helpers/buildMenu";
-import {OpenAPIV3_1} from "openapi-types";
+import { OpenAPIV3_1 } from "openapi-types";
 import buildOperations from "./helpers/buildOperations";
-import {getDefinitionName} from "./helpers/openapi";
+import { getDefinitionName } from "./helpers/openapi";
+import {MediaTypeModel} from "./models/MediaTypeModel";
 
 export type TagsInfoMap = Record<string, any>;
 
@@ -41,15 +42,16 @@ export interface SectionItem {
   isCallback: boolean;
 }
 
-export type OperationItem = OpenAPIV3_1.OperationObject & SectionItem & {
-  operationId: string;
-  id: string;
-  operationSpec: {
-    'x-codeSamples'?: OpenAPIXCodeSample[];
-  } & OpenAPIV3_1.OperationObject;
-  security: OpenAPIV3_1.SecurityRequirementObject[];
-  servers: OpenAPIV3_1.ServerObject[]
-}
+export type OperationItem = OpenAPIV3_1.OperationObject &
+  SectionItem & {
+    operationId: string;
+    id: string;
+    operationSpec: {
+      "x-codeSamples"?: OpenAPIXCodeSample[];
+    } & OpenAPIV3_1.OperationObject;
+    security: OpenAPIV3_1.SecurityRequirementObject[];
+    servers: OpenAPIV3_1.ServerObject[];
+  };
 
 export interface OpenAPIRef {
   $ref: string;
@@ -57,15 +59,15 @@ export interface OpenAPIRef {
 
 export type Referenced<T> = OpenAPIRef | T;
 
-export type OpenAPIParameterLocation = 'query' | 'header' | 'path' | 'cookie';
+export type OpenAPIParameterLocation = "query" | "header" | "path" | "cookie";
 export type OpenAPIParameterStyle =
-  | 'matrix'
-  | 'label'
-  | 'form'
-  | 'simple'
-  | 'spaceDelimited'
-  | 'pipeDelimited'
-  | 'deepObject';
+  | "matrix"
+  | "label"
+  | "form"
+  | "simple"
+  | "spaceDelimited"
+  | "pipeDelimited"
+  | "deepObject";
 
 export interface OpenAPIParameter {
   name: string;
@@ -106,24 +108,83 @@ export class OpenAPI {
 
     this.menuItems = buildMenu(this.spec);
     this.items = buildOperations(this.spec);
+    console.log(this.items);
+
+    this.addExamplesToItems();
+    console.log(this.items)
   }
+
+  addExamplesToItems = () => {
+    Object.keys(this.items).forEach((itemKey) => {
+      this.items[itemKey].items = this.items[itemKey].items.map((tagItem) => {
+        const additionalData = {
+        }
+
+        if(tagItem.requestBody != null) {
+          if(tagItem.requestBody.$ref != null) {
+            additionalData.requestBody = this.deref(tagItem.requestBody);
+          } else {
+            additionalData.requestBody = tagItem.requestBody;
+          }
+          additionalData.requestBody.examples = {}
+          Object.entries(additionalData.requestBody.content).forEach(([requestType, requestData]) => {
+            additionalData.requestBody.examples[requestType] = new MediaTypeModel(this, requestType, true, requestData)
+          })
+        }
+        if(tagItem.responses != null) {
+          if(tagItem.responses.$ref != null) {
+            additionalData.responses = this.deref(tagItem.responses);
+          } else {
+            additionalData.responses = tagItem.responses;
+          }
+          Object.keys(additionalData.responses).forEach(responseKey => {
+            if (additionalData.responses[responseKey].$ref != null) {
+              additionalData.responses[responseKey] = this.deref(additionalData.responses[responseKey])
+            }
+            if(additionalData.responses[responseKey].content != null) {
+              additionalData.responses[responseKey].examples = {}
+              Object.entries(additionalData.responses[responseKey].content).forEach(([responseType, responseData]) => {
+                if(responseData.schema) {
+                  additionalData.responses[responseKey].examples[responseType] = new MediaTypeModel(this, responseType, false, responseData)
+                } else if (responseData.example) {
+                  additionalData.responses[responseKey].examples[responseType] = [responseData.example]
+                } else if (responseData.examples) {
+
+                  additionalData.responses[responseKey].examples[responseType] = responseData.examples
+                }
+              })
+            }
+          })
+        }
+
+        return {
+          ...tagItem,
+          ...additionalData,
+        };
+      });
+    });
+  };
 
   getRefValue = (ref: string) => {
     return this.byRef(ref);
-  }
+  };
 
   exitRef = <T>(ref: Referenced<T>) => {
     if (!this.isRef(ref)) {
       return;
     }
     this._refCounter.exit(ref.$ref);
-  }
+  };
 
-  deref = <T extends object>(obj: OpenAPIRef | T, forceCircular = false, mergeAsAllOf = false): T => {
+  deref = <T extends object>(
+    obj: OpenAPIRef | T,
+    forceCircular = false,
+    mergeAsAllOf = false
+  ): T => {
     if (this.isRef(obj)) {
       const schemaName = getDefinitionName(obj.$ref);
       if (schemaName && this.ignoreNamedSchemas.has(schemaName)) {
-        return { type: 'object', title: schemaName } as T;
+        return { type: "object", title: schemaName } as T;
       }
 
       const resolved = this.byRef<T>(obj.$ref)!;
@@ -132,7 +193,7 @@ export class OpenAPI {
       if (visited && !forceCircular) {
         // circular reference detected
         // tslint:disable-next-line
-        return Object.assign({}, resolved, { 'x-circular-ref': true });
+        return Object.assign({}, resolved, { "x-circular-ref": true });
       }
       // deref again in case one more $ref is here
       let result = resolved;
@@ -140,10 +201,12 @@ export class OpenAPI {
         result = this.deref(resolved, false, mergeAsAllOf);
         this.exitRef(resolved);
       }
-      return this.allowMergeRefs ? this.mergeRefs(obj, resolved, mergeAsAllOf) : result;
+      return this.allowMergeRefs
+        ? this.mergeRefs(obj, resolved, mergeAsAllOf)
+        : result;
     }
     return obj;
-  }
+  };
 
   /**
    * get spec part by JsonPointer ($ref)
@@ -153,7 +216,7 @@ export class OpenAPI {
     if (!this.spec) {
       return;
     }
-    if (ref.charAt(0) === '#') {
+    if (ref.charAt(0) === "#") {
       ref = ref.substring(1);
     }
     ref = decodeURIComponent(ref);
@@ -169,13 +232,15 @@ export class OpenAPI {
     if (this.isRef(obj)) {
       const schemaName = getDefinitionName(obj.$ref);
       if (schemaName && this.ignoreNamedSchemas.has(schemaName)) {
-        return { type: 'object', title: schemaName } as T;
+        return { type: "object", title: schemaName } as T;
       }
       const resolved = this.byRef<T>(obj.$ref);
-      return this.allowMergeRefs ? this.mergeRefs(obj, resolved, false) : (resolved as T);
+      return this.allowMergeRefs
+        ? this.mergeRefs(obj, resolved, false)
+        : (resolved as T);
     }
     return obj;
-  }
+  };
 
   mergeRefs = (ref, resolved, mergeAsAllOf: boolean) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -186,7 +251,9 @@ export class OpenAPI {
     }
     if (
       mergeAsAllOf &&
-      keys.some(k => k !== 'description' && k !== 'title' && k !== 'externalDocs')
+      keys.some(
+        (k) => k !== "description" && k !== "title" && k !== "externalDocs"
+      )
     ) {
       return {
         allOf: [rest, resolved],
@@ -197,7 +264,7 @@ export class OpenAPI {
         ...rest,
       };
     }
-  }
+  };
 
   /**
    * checks if the object is OpenAPI reference (contains $ref property)
