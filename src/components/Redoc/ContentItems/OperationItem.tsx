@@ -9,14 +9,12 @@ import {MiddlePanel, RightPanel} from "../../common/Panels";
 import { ExternalDocumentation } from "../ExternalDocumentation/ExternalDocumentation";
 import { Markdown } from "../Markdown/Markdown";
 import OperationBadge from "../../common/OperationBadge";
-import Extensions from "./Extensions";
-import SecurityRequirements from "./SecurityRequirements";
-import Parameters from "./Parameters";
 import AuthorizationItem from "./components/AuthorizationItem";
 import PathParametersItem from "./components/PathParametersItem";
 import ResponsesItem from "./components/ResponsesItem";
 import RequestBodyItem from "./components/RequestBodyItem";
 import ExamplesItem from "./components/ExamplesItem";
+import CodeItem from "./CodeItem";
 
 interface Props {
   item: any;
@@ -76,6 +74,7 @@ export default function OperationItem({ item }: Props) {
         <RightPanel>
           <ExamplesItem requestBody={item.requestBody} type={"request"} />
           <ExamplesItem responses={item.responses} type={"response"} />
+          <CodeItem codeSamples={item['x-codeSamples']} />
         </RightPanel>
       </OperationRow>
     </React.Fragment>

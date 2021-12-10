@@ -126,7 +126,7 @@ function getExamplesList({ responses, requestBody, type }: Props): {
   return [];
 }
 
-const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
+export const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
   "&.MuiToggleButton-root": {
     color: theme.palette.grey[400],
     borderColor: theme.palette.grey[400],
@@ -191,7 +191,8 @@ export default function ExamplesItem({ responses, requestBody, type }: Props) {
           {uniqueParentKeys.map((parentKey) => (
             <StyledToggleButton
               key={parentKey}
-              sx={{ mr: 1 }}
+              sx={{ mr: 1, pl: 2, pr: 2, pt: 0, pb: 0 }}
+              style={{ fontWeight: (selectedParent === parentKey ? 700 : 400) }}
               color={"secondary"}
               selected={selectedParent === parentKey}
               value={parentKey}

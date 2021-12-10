@@ -121,6 +121,17 @@ const PrismDiv = styled("div")`
   }
 `;
 
+
+export const StyledPre = styled(PrismDiv.withComponent('pre'))`
+  font-family: ${props => props.theme.code.fontFamily};
+  font-size: ${props => props.theme.code.fontSize};
+  overflow-x: auto;
+  margin: 0;
+
+  white-space: ${({ theme }) => (theme.code.wrap ? 'pre-wrap' : 'pre')};
+`;
+
+
 export const StyledMarkdownBlock = styled(PrismDiv)`
   font-family: ${props => props.theme.typography.fontFamily};
   font-weight: ${props => props.theme.typography.fontWeightRegular};
