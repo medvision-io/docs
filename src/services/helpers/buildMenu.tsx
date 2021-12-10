@@ -25,6 +25,7 @@ function reduceMapsToListItems(tagsMap: any[]): MenuListItem[] {
     } else {
       list.push({
         id: getOperationId(item.httpVerb, item.pathName),
+        urlId: encodeURIComponent(getOperationId(item.httpVerb, item.pathName)),
         tags: item.tags,
         pathName: item.pathName,
         summary: item.summary,
@@ -98,6 +99,7 @@ export function getTagsWithOperations(spec: OpenAPISpec) {
             pathName,
             id: getOperationId(operationName, pathName),
             // pointer: JsonPointer.compile(['paths', pathName, operationName]),
+            urlId: encodeURIComponent(getOperationId(operationName, pathName)),
             deprecated: !!operationInfo.deprecated,
             httpVerb: operationName,
             pathParameters: path.parameters || [],

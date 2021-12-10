@@ -23,6 +23,7 @@ export const operationNames = {
 export type MenuListItem = {
   tags: string[];
   id: string;
+  urlId: string,
   pathName: string;
   summary: string;
   operationId: string;

@@ -7,12 +7,13 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Navigator from "./Navigator";
 import Header from "./Header";
-import { ReactElement } from "react";
+import {ReactElement, useEffect} from "react";
 import theme from "../../theme";
 import { OpenAPI } from "../../services/OpenAPI";
 import { NavigationContextProvider } from "./NavigationContext";
 import DocHead from "./DocHead";
 import { OpenAPIContextProvider } from "./OpenAPIContext";
+import './global.css';
 
 function Copyright() {
   return (
@@ -58,6 +59,7 @@ export default function Layout({
             selectedVersion: selectedVersion,
             selectedTagGroup: selectedTagGroup,
             selectedPage: selectedPage,
+            visibleElements: [],
           }}
         >
           <Box sx={{ display: "flex", minHeight: "100vh" }}>
@@ -86,6 +88,7 @@ export default function Layout({
               <Header onDrawerToggle={handleDrawerToggle} />
               <Box
                 component="main"
+                style={{scrollBehavior: 'smooth'}}
                 sx={{ flex: 1, py: 0, px: 0, bgcolor: "#eaeff1" }}
               >
                 {children}

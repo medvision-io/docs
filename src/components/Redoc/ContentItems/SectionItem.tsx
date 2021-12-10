@@ -19,7 +19,7 @@ export default function SectionItem({ item }: Props) {
       <Row>
         <MiddlePanel compact={false}>
           <Header>
-            <Link href={`#${item.id}`}>{name}</Link>
+            <Link href={`#${item.urlId}`}>{name}</Link>
           </Header>
           <Markdown
             source={item.description}

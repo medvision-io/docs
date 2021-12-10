@@ -29,7 +29,7 @@ export default function ContentItem({ item }: Props) {
   return (
     <React.Fragment>
       {content != null && (
-        <Section id={item.id} underlined={item.type === 'operation'}>
+        <Section id={item.urlId} underlined={item.type === 'operation'}>
           {content}
         </Section>
       )}

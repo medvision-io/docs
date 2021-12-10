@@ -36,7 +36,7 @@ export default function OperationItem({ item }: Props) {
         <MiddlePanel compact={false}>
           <H5>
             <OperationBadge item={item} compact={false} />
-            <Link href={`#${item.id}`} sx={{textDecorationLine: `${deprecated ? 'line-through' : undefined}`}}>{summary}</Link>
+            <Link href={`#${item.urlId}`} sx={{textDecorationLine: `${deprecated ? 'line-through' : undefined}`}}>{summary}</Link>
             {deprecated && (
               <Chip
                 sx={{ ml: 2 }}

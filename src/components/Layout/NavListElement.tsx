@@ -21,6 +21,7 @@ import { useContext, useState } from "react";
 import { MenuListItem } from "../../services/OpenAPI";
 import OperationBadge from "../common/OperationBadge";
 import { NavigationContext } from "./NavigationContext";
+import { scrollToId } from "../../utils/scrollToId";
 
 const ICON_MAP = {
   users: <PeopleIcon />,
@@ -75,7 +76,7 @@ export default function NavListElement({
   pages = [],
   openApiItems,
 }: Props) {
-  const [{ selectedVersion, selectedTagGroup, selectedPage }] =
+  const [{ selectedVersion, selectedTagGroup, selectedPage, visibleElements }] =
     useContext(NavigationContext);
   const defaultSelectedCategory = selectedTagGroup
     ? groups.find((group) => group.slug === selectedTagGroup).section
@@ -106,11 +107,23 @@ export default function NavListElement({
       ...groups.reduce((groupacc, group) => {
         group.tags.forEach((tag) => {
           if (group.tags.some((tag) => operation.tags.includes(tag.name))) {
-            groupacc[`${group.slug}#${operation.operationId}`] = () => {
-              window.location.href =
-                ["", selectedVersion, group.slug].join("/") +
-                `#${operation.id}`;
-            };
+            if (
+              window.location.pathname.includes(
+                ["", selectedVersion, group.slug].join("/")
+              )
+            ) {
+              groupacc[`${group.slug}#${operation.operationId}`] = () => {
+                window.location.hash = operation.urlId;
+
+                scrollToId(operation.urlId);
+              };
+            } else {
+              groupacc[`${group.slug}#${operation.operationId}`] = () => {
+                window.location.href =
+                  ["", selectedVersion, group.slug].join("/") +
+                  `#${operation.urlId}`;
+              };
+            }
           }
         });
         return groupacc;
@@ -196,6 +209,9 @@ export default function NavListElement({
                                         `${group.slug}#${openApiItem.operationId}`
                                       ]
                                     }
+                                    selected={visibleElements.includes(
+                                      openApiItem.urlId
+                                    )}
                                     sx={{ ...item, pl: 8 }}
                                     key={
                                       group.slug +
