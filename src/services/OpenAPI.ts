@@ -4,7 +4,8 @@ import buildMenu from "./helpers/buildMenu";
 import { OpenAPIV3_1 } from "openapi-types";
 import buildOperations from "./helpers/buildOperations";
 import { getDefinitionName } from "./helpers/openapi";
-import {MediaTypeModel} from "./models/MediaTypeModel";
+import { MediaTypeModel } from "./models/MediaTypeModel";
+import { ExampleModel } from "./models/ExampleModel";
 
 export type TagsInfoMap = Record<string, any>;
 
@@ -108,53 +109,81 @@ export class OpenAPI {
 
     this.menuItems = buildMenu(this.spec);
     this.items = buildOperations(this.spec);
-    console.log(this.items);
 
     this.addExamplesToItems();
-    console.log(this.items)
   }
 
   addExamplesToItems = () => {
     Object.keys(this.items).forEach((itemKey) => {
       this.items[itemKey].items = this.items[itemKey].items.map((tagItem) => {
-        const additionalData = {
-        }
+        const additionalData = {};
 
-        if(tagItem.requestBody != null) {
-          if(tagItem.requestBody.$ref != null) {
+        if (tagItem.requestBody != null) {
+          if (tagItem.requestBody.$ref != null) {
             additionalData.requestBody = this.deref(tagItem.requestBody);
           } else {
             additionalData.requestBody = tagItem.requestBody;
           }
-          additionalData.requestBody.examples = {}
-          Object.entries(additionalData.requestBody.content).forEach(([requestType, requestData]) => {
-            additionalData.requestBody.examples[requestType] = new MediaTypeModel(this, requestType, true, requestData)
-          })
+          additionalData.requestBody.examples = {};
+          Object.entries(additionalData.requestBody.content).forEach(
+            ([requestType, requestData]) => {
+              additionalData.requestBody.examples[requestType] =
+                new MediaTypeModel(this, requestType, true, requestData);
+            }
+          );
         }
-        if(tagItem.responses != null) {
-          if(tagItem.responses.$ref != null) {
+        if (tagItem.responses != null) {
+          if (tagItem.responses.$ref != null) {
             additionalData.responses = this.deref(tagItem.responses);
           } else {
             additionalData.responses = tagItem.responses;
           }
-          Object.keys(additionalData.responses).forEach(responseKey => {
+          Object.keys(additionalData.responses).forEach((responseKey) => {
             if (additionalData.responses[responseKey].$ref != null) {
-              additionalData.responses[responseKey] = this.deref(additionalData.responses[responseKey])
+              additionalData.responses[responseKey] = this.deref(
+                additionalData.responses[responseKey]
+              );
             }
-            if(additionalData.responses[responseKey].content != null) {
-              additionalData.responses[responseKey].examples = {}
-              Object.entries(additionalData.responses[responseKey].content).forEach(([responseType, responseData]) => {
-                if(responseData.schema) {
-                  additionalData.responses[responseKey].examples[responseType] = new MediaTypeModel(this, responseType, false, responseData)
+            if (additionalData.responses[responseKey].content != null) {
+              additionalData.responses[responseKey].examples = {};
+              Object.entries(
+                additionalData.responses[responseKey].content
+              ).forEach(([responseType, responseData]) => {
+                if (responseData.schema) {
+                  additionalData.responses[responseKey].examples[responseType] =
+                    new MediaTypeModel(this, responseType, false, responseData);
                 } else if (responseData.example) {
-                  additionalData.responses[responseKey].examples[responseType] = [responseData.example]
+                  additionalData.responses[responseKey].examples[responseType] =
+                    {
+                      examples: {
+                        default: new ExampleModel(
+                          this,
+                          { value: this.shallowDeref(responseData.example) },
+                          responseType,
+                          responseData.encoding
+                        ),
+                      },
+                    };
                 } else if (responseData.examples) {
-
-                  additionalData.responses[responseKey].examples[responseType] = responseData.examples
+                  additionalData.responses[responseKey].examples[responseType] =
+                    {
+                      examples: Object.entries(responseData.examples).reduce(
+                        (acc, [exampleId, example]) => {
+                          acc[exampleId] = new ExampleModel(
+                            this,
+                            { value: this.shallowDeref(example) },
+                            responseType,
+                            responseData.encoding
+                          );
+                          return acc;
+                        },
+                        {}
+                      ),
+                    };
                 }
-              })
+              });
             }
-          })
+          });
         }
 
         return {

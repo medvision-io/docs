@@ -34,7 +34,7 @@ export default function SectionItem({ item }: Props) {
           {/*)}*/}
         </MiddlePanel>
         <RightPanel>
-          test
+
         </RightPanel>
       </Row>
     </React.Fragment>

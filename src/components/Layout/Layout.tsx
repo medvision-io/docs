@@ -82,7 +82,7 @@ export default function Layout({
                 sx={{ display: { sm: "block", xs: "none" } }}
               />
             </Box>
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", width: { sm: `calc(100% - ${drawerWidth}px)`, xs: '100%' } }}>
               <Header onDrawerToggle={handleDrawerToggle} />
               <Box
                 component="main"

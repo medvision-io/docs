@@ -16,6 +16,7 @@ import AuthorizationItem from "./components/AuthorizationItem";
 import PathParametersItem from "./components/PathParametersItem";
 import ResponsesItem from "./components/ResponsesItem";
 import RequestBodyItem from "./components/RequestBodyItem";
+import ExamplesItem from "./components/ExamplesItem";
 
 interface Props {
   item: any;
@@ -73,7 +74,8 @@ export default function OperationItem({ item }: Props) {
           <ResponsesItem responses={item.responses} />
         </MiddlePanel>
         <RightPanel>
-          test
+          <ExamplesItem requestBody={item.requestBody} type={"request"} />
+          <ExamplesItem responses={item.responses} type={"response"} />
         </RightPanel>
       </OperationRow>
     </React.Fragment>
