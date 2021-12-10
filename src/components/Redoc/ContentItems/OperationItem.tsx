@@ -5,7 +5,7 @@ import Chip from "@mui/material/Chip";
 import { H1, H2, H4, H5 } from "../../common/Headings";
 import { Row } from "../../common/Row";
 import { Description } from "../../common/Description";
-import MiddlePanel from "../../common/MiddlePanel";
+import {MiddlePanel, RightPanel} from "../../common/Panels";
 import { ExternalDocumentation } from "../ExternalDocumentation/ExternalDocumentation";
 import { Markdown } from "../Markdown/Markdown";
 import OperationBadge from "../../common/OperationBadge";
@@ -72,6 +72,9 @@ export default function OperationItem({ item }: Props) {
           <RequestBodyItem requestBody={item.requestBody} />
           <ResponsesItem responses={item.responses} />
         </MiddlePanel>
+        <RightPanel>
+          test
+        </RightPanel>
       </OperationRow>
     </React.Fragment>
   );

@@ -1,5 +1,5 @@
 import {styled} from "@mui/material/styles";
-import MiddlePanel from "../../common/MiddlePanel";
+import {MiddlePanel} from "../../common/Panels";
 import {H1, H3} from "../../common/Headings";
 
 const delimiterWidth = 15;

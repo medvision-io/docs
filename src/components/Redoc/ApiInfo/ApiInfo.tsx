@@ -12,7 +12,7 @@ import {
   InfoSpanBoxWrap,
 } from "./styled.elements";
 import { Row } from "../../common/Row";
-import MiddlePanel from "../../common/MiddlePanel";
+import {MiddlePanel} from "../../common/Panels";
 import { Section } from "../../common/Section";
 
 export interface ApiInfoProps {

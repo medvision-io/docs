@@ -86,7 +86,7 @@ export default function Layout({
               <Header onDrawerToggle={handleDrawerToggle} />
               <Box
                 component="main"
-                sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1" }}
+                sx={{ flex: 1, py: 0, px: 0, bgcolor: "#eaeff1" }}
               >
                 {children}
               </Box>

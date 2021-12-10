@@ -1,7 +1,7 @@
 import * as React from "react";
 import { H1, H2 } from "../../common/Headings";
 import { Row } from "../../common/Row";
-import MiddlePanel from "../../common/MiddlePanel";
+import {MiddlePanel} from "../../common/Panels";
 import { ExternalDocumentation } from "../ExternalDocumentation/ExternalDocumentation";
 import { ReactElement } from "react";
 import { OpenAPI } from "../../../services/OpenAPI";

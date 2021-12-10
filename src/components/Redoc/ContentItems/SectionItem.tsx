@@ -2,7 +2,7 @@ import * as React from "react";
 import Link from '@mui/material/Link';
 import {H3, H4} from "../../common/Headings";
 import { Row } from "../../common/Row";
-import MiddlePanel from "../../common/MiddlePanel";
+import {MiddlePanel, RightPanel} from "../../common/Panels";
 import {ExternalDocumentation} from "../ExternalDocumentation/ExternalDocumentation";
 import {Markdown} from "../Markdown/Markdown";
 
@@ -21,19 +21,22 @@ export default function SectionItem({ item }: Props) {
           <Header>
             <Link href={`#${item.id}`}>{name}</Link>
           </Header>
+          <Markdown
+            source={item.description}
+            data-role="redoc-description"
+          />
+          {/*{externalDocs && (*/}
+          {/*  <Row>*/}
+          {/*    <MiddlePanel>*/}
+          {/*      <ExternalDocumentation externalDocs={externalDocs} />*/}
+          {/*    </MiddlePanel>*/}
+          {/*  </Row>*/}
+          {/*)}*/}
         </MiddlePanel>
+        <RightPanel>
+          test
+        </RightPanel>
       </Row>
-      <Markdown
-        source={item.description}
-        data-role="redoc-description"
-      />
-      {/*{externalDocs && (*/}
-      {/*  <Row>*/}
-      {/*    <MiddlePanel>*/}
-      {/*      <ExternalDocumentation externalDocs={externalDocs} />*/}
-      {/*    </MiddlePanel>*/}
-      {/*  </Row>*/}
-      {/*)}*/}
     </React.Fragment>
   );
 }
