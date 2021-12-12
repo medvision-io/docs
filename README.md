@@ -15,7 +15,7 @@ Starts the reference docs preview server.
 #### `npm run build`
 Bundles the definition to the dist folder.
 
-## Contribution Guide
+## Contribution Guide (READ [WIKI PAGE](https://github.com/medvision-io/docs/wiki/OpenAPI-Basics))
 
 ### Pages
 
@@ -25,7 +25,8 @@ If you want to add page just create `.md` file in `/content/pages` directory. Te
 ---
 title: "my page"
 date: "2021-12-05T23:19:51.246Z"
-docVersion: x
+docVersion: 1.x
+description: Some page description for SEO purposes
 category: authentication
 isTop: true
 ---
@@ -39,6 +40,7 @@ Where:
 - `title` (`string (required)`) - is just a page title
 - `date` (`string (required)`) - set at the start and don't change
 - `docVersion` (`string (required)`) - valid [SemVer](https://semver.org/) from OpenApi versions created in `/openapi` directory, you can use `x` to indicate rage like `1.x` will add this page to all versions stating with `1`
+- `description` (`string (required)`) - for SEO
 - `category` (`string (required)`) - one of the `x-tagGroup` categories available in `docVersion` specifications
 - `isTop` (`string (required)`) - in progress
 
