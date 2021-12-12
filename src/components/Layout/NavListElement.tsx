@@ -77,7 +77,7 @@ export default function NavListElement({
   pages = [],
   openApiItems,
 }: Props) {
-  const [{ selectedVersion, selectedTagGroup, selectedPage, visibleElements }] =
+  const [{ selectedVersion, selectedVersionSlug, selectedTagGroup, selectedPage, visibleElements }] =
     useContext(NavigationContext);
   const defaultSelectedCategory = selectedTagGroup
     ? groups.find((group) => group.slug === selectedTagGroup).section
@@ -97,7 +97,7 @@ export default function NavListElement({
 
   const groupClickHandlers = groups.reduce((acc, group) => {
     acc[group.slug] = () => {
-      window.location.href = ["", selectedVersion, group.slug].join("/");
+      window.location.href = ["", selectedVersionSlug, group.slug].join("/");
     };
     return acc;
   }, {});
@@ -111,7 +111,7 @@ export default function NavListElement({
             if(isBrowser()) {
               if (
                 window.location.pathname.includes(
-                  ["", selectedVersion, group.slug].join("/")
+                  ["", selectedVersionSlug, group.slug].join("/")
                 )
               ) {
                 groupacc[`${group.slug}#${operation.operationId}`] = () => {
@@ -122,7 +122,7 @@ export default function NavListElement({
               } else {
                 groupacc[`${group.slug}#${operation.operationId}`] = () => {
                   window.location.href =
-                    ["", selectedVersion, group.slug].join("/") +
+                    ["", selectedVersionSlug, group.slug].join("/") +
                     `#${operation.urlId}`;
                 };
               }
@@ -137,7 +137,7 @@ export default function NavListElement({
 
   const pagesClickHandlers = pages.reduce((acc, page) => {
     acc[page.fields.slug] = () => {
-      window.location.href = `/${selectedVersion}${page.fields.slug}`;
+      window.location.href = `/${selectedVersionSlug}${page.fields.slug}`;
     };
     return acc;
   }, {});

@@ -46,7 +46,7 @@ export default function PageTemplate({ data, pageContext }: Props) {
   const openApiStore = new OpenAPI({spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec});
   return (
     <Layout
-      selectedVersion={pageContext.version}
+      selectedVersion={openapiYaml.slug}
       openApiStore={openApiStore}
     >
       <AppInfo store={openApiStore}/>
@@ -55,8 +55,8 @@ export default function PageTemplate({ data, pageContext }: Props) {
 }
 
 export const pageQuery = graphql`
-  query ($version: String!) {
-    openapiYaml(slug: { eq: $version }) {
+  query ($verid: String!) {
+    openapiYaml(id: { eq: $verid }) {
       info {
         contact {
           email

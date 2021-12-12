@@ -7,7 +7,7 @@ async function createVersionPage({ data, actions }) {
     createPage({
       path: versionSlug,
       component: path.resolve(`src/templates/page-version.tsx`),
-      context: { version: versionSlug },
+      context: { verid: node.id },
     });
 
     node.x_tagGroups.forEach(xTagGroup => {
@@ -15,7 +15,7 @@ async function createVersionPage({ data, actions }) {
       createPage({
         path: tagSlug,
         component: path.resolve(`src/templates/page-tag-group.tsx`),
-        context: { version: versionSlug, group: xTagGroup.slug },
+        context: { verid: node.id, group: xTagGroup.slug },
       });
     })
   });

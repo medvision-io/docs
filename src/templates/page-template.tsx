@@ -76,7 +76,7 @@ export default function PageTemplate({ data }: Props) {
 
 
 export const pageQuery = graphql`
-  query PageBySlug($markdownid: String!, $version: String!) {
+  query PageBySlug($markdownid: String!, $verid: String!) {
     markdownRemark(id: { eq: $markdownid }) {
       html
       fields {
@@ -89,7 +89,7 @@ export const pageQuery = graphql`
         description
       }
     }
-    openapiYaml(slug: { eq: $version }) {
+    openapiYaml(id: { eq: $verid }) {
       info {
         contact {
           email

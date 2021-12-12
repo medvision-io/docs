@@ -37,7 +37,7 @@ const IndexPage = ({ data }: Props) => {
   );
   useEffect(() => {
     if (latestVer != null) {
-      window.location.href = ["", latestVer.node.slug].join("/");
+      window.location.href = ["", "latest"].join("/");
     }
   }, [latestVer]);
   const openApiStore = new OpenAPI({

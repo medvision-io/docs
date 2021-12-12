@@ -3,6 +3,7 @@ import { Dispatch, ReactElement, useReducer } from "react";
 
 type State = {
   selectedVersion: string | null;
+  selectedVersionSlug: string | null;
   selectedTagGroup: string | null;
   selectedPage: string | null;
   visibleElements: string[] | null;
@@ -29,6 +30,7 @@ type AllActions =
 
 const defaultNavigationOptions: State = {
   selectedVersion: null,
+  selectedVersionSlug: null,
   selectedTagGroup: null,
   selectedPage: null,
   visibleElements: [],

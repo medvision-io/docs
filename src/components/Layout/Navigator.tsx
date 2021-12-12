@@ -19,7 +19,8 @@ import NavListElement from "./NavListElement";
 import zhivaIcon from "./zhiva_light.svg";
 import { useContext, useEffect, useState } from "react";
 import { MenuListItem, OpenAPI } from "../../services/OpenAPI";
-import { NavigationContext } from "./NavigationContext";
+import { ActionKind, NavigationContext } from "./NavigationContext";
+import {compareVersions, getLatestSemver} from "../../utils";
 
 const item = {
   py: "2px",
@@ -128,34 +129,57 @@ export default function Navigator(props: Props) {
       }
     }
   `);
-  const [{ selectedVersion }] = useContext(NavigationContext);
+  const [{ selectedVersion, selectedVersionSlug }, dispatch] = useContext(NavigationContext);
   const { openApiItems, ...other } = props;
+
+  const latestVersion = getLatestSemver(nodes.map((openapi) => openapi.info.version));
+  const latestVersionSlug = nodes.find(
+    (openapi) => openapi.info.version === latestVersion
+  ).slug;
 
   const versions = nodes.map((openapi) => ({
     version: openapi.info.version,
-    key: openapi.slug,
+    key: latestVersion === openapi.info.version ? 'latest' : openapi.slug,
     slug: `/${openapi.slug}`,
-  }));
+    orgSlug: openapi.slug,
+  })).sort((a, b) => compareVersions(a.version, b.version));
+
+  useEffect(() => {
+    if (latestVersionSlug === selectedVersion) {
+      dispatch({
+        type: ActionKind.UPDATE,
+        field: "selectedVersionSlug",
+        value: "latest",
+      });
+    }
+  }, [latestVersion, selectedVersion]);
 
   const groups = nodes.find(
     (node) => node.slug === selectedVersion
   ).x_tagGroups;
 
-  const currVersion = versions.find(ver => ver.key === selectedVersion);
-  const pages = mdPages.filter(page => semver.satisfies(currVersion.version, String(page.frontmatter.docVersion)));
+  const currVersion = versions.find((ver) => ver.orgSlug === selectedVersion);
+  const pages = mdPages.filter((page) =>
+    semver.satisfies(currVersion.version, String(page.frontmatter.docVersion))
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
-    const url = new URL(document.URL)
+    const url = new URL(document.URL);
     const currPath = url.pathname.split("/");
     currPath[1] = event.target.value;
     window.location.href = currPath.join("/") + url.hash;
   };
 
+  const goToHome = () => {
+    window.location.href = ['', selectedVersionSlug].join("/");
+  }
+
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem
-          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
+          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff", cursor: 'pointer' }}
+          onClick={goToHome}
         >
           <ListItemIcon sx={{ height: 32 }}>
             <img src={zhivaIcon} alt={"Logo"} />
@@ -176,7 +200,7 @@ export default function Navigator(props: Props) {
             <FormControl margin={"dense"} sx={{ m: 0 }}>
               <Select
                 id="version-select"
-                value={selectedVersion}
+                value={selectedVersionSlug}
                 input={<CustomizedInput />}
                 inputProps={{ "aria-label": "Without label" }}
                 MenuProps={MenuProps}
@@ -184,7 +208,7 @@ export default function Navigator(props: Props) {
               >
                 {versions.map(({ version, key }) => (
                   <MenuItem value={key} key={key}>
-                    {version}
+                    {version} {key === 'latest' ? '(cur.)' : ''}
                   </MenuItem>
                 ))}
               </Select>
@@ -194,7 +218,7 @@ export default function Navigator(props: Props) {
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText>Project Version</ListItemText>
+          <ListItemText>Version</ListItemText>
         </ListItem>
         <NavListElement
           categories={categories}

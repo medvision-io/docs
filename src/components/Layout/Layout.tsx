@@ -58,6 +58,7 @@ export default function Layout({
         <NavigationContextProvider
           initialState={{
             selectedVersion: selectedVersion,
+            selectedVersionSlug: selectedVersion,
             selectedTagGroup: selectedTagGroup,
             selectedPage: selectedPage,
             visibleElements: [],

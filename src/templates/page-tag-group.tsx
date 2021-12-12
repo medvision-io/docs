@@ -1,9 +1,9 @@
 import * as React from "react";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout/Layout";
-import {PageContext} from "gatsby/internal";
-import {OpenAPI} from "../services/OpenAPI";
-import {OpenAPISpec} from "../types/OpenAPISpec";
+import { PageContext } from "gatsby/internal";
+import { OpenAPI } from "../services/OpenAPI";
+import { OpenAPISpec } from "../types/OpenAPISpec";
 import AppInfo from "../components/Redoc/ApiInfo/ApiInfo";
 import Group from "../components/Redoc/Group/Group";
 
@@ -29,7 +29,7 @@ interface Props {
         };
         slug: string;
       };
-      spec: string,
+      spec: string;
       slug: string;
       tags: {
         description: string;
@@ -37,25 +37,31 @@ interface Props {
       };
     };
   };
-  pageContext: PageContext
+  pageContext: PageContext;
 }
 
 export default function PageTemplate({ data, pageContext }: Props) {
-  const {
-    openapiYaml,
-  } = data;
-  const openApiStore = new OpenAPI({spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec});
+  const { openapiYaml } = data;
+  const openApiStore = new OpenAPI({
+    spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec,
+  });
   return (
-    <Layout selectedVersion={pageContext.version} selectedTagGroup={pageContext.group}
-            openApiStore={openApiStore}>
-      <Group selectedGroup={pageContext.group} openApiStore={openApiStore}/>
+    <Layout
+      selectedVersion={openapiYaml.slug}
+      selectedTagGroup={pageContext.group}
+      openApiStore={openApiStore}
+    >
+      <Group selectedGroup={pageContext.group} openApiStore={openApiStore} />
     </Layout>
   );
 }
 
 export const pageQuery = graphql`
-  query VersionWithGroup($version: String!, $group: String!) {
-    openapiYaml(x_tagGroups: {elemMatch: {slug: {eq: $group}}}, slug: { eq: $version }) {
+  query VersionWithGroup($verid: String!, $group: String!) {
+    openapiYaml(
+      x_tagGroups: { elemMatch: { slug: { eq: $group } } }
+      id: { eq: $verid }
+    ) {
       info {
         contact {
           email

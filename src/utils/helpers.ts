@@ -2,6 +2,7 @@ import { format, parse } from 'url';
 import kebabCase from 'lodash.kebabcase';
 import {OpenAPIV3_1} from "openapi-types";
 import * as URLtemplate from 'url-template';
+import semver from "semver";
 
 /**
  * Maps over array passing `isLast` bool to iterator as the second argument
@@ -276,4 +277,28 @@ export function urlFormEncodePayload(
       })
       .join('&');
   }
+}
+
+/**
+ * Returns latest version from the list of strings
+ * @param versions Array of versions
+ * @return version latest version from the list
+ */
+export function getLatestSemver(versions) {
+  let sortedVersions = versions
+    .map((version) => version.trim())
+    .sort((a, b) => semver.rcompare(a, b))
+    .filter((version) => semver.prerelease(version) === null);
+
+  return sortedVersions[0];
+}
+
+/**
+ * Returns latest version from the list of strings
+ * @param a version
+ * @param b version
+ * @return boolean
+ */
+export function compareVersions(a, b) {
+  return semver.rcompare(a, b);
 }
