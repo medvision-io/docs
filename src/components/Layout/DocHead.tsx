@@ -45,7 +45,7 @@ export default function DocHead({ description, title }: HeadProps) {
     <Helmet>
       <meta charSet="utf-8" />
       <title>
-        {title ? `${title} |` : ""}
+        {title ? `${title} | ` : ""}
         {`Docs ${appTitle}`}
       </title>
       <meta name="description" content={description || defaultDescription} />

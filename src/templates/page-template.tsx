@@ -3,14 +3,15 @@ import { graphql } from "gatsby";
 import Layout from "../components/Layout/Layout";
 import {OpenAPI} from "../services/OpenAPI";
 import {OpenAPISpec} from "../types/OpenAPISpec";
+import DocHead from "../components/Layout/DocHead";
 
 interface Props {
   data: {
     markdownRemark: {
       frontmatter: {
         title: string;
+        description: string;
         date: string;
-        slug: string;
       };
       fields: {
         slug: string;
@@ -59,6 +60,7 @@ export default function PageTemplate({ data }: Props) {
       openApiStore={openApiStore}
     >
       <div className="blog-post-container">
+        <DocHead title={frontmatter.title} description={frontmatter.description}/>
         <div className="blog-post">
           <h1>{frontmatter.title}</h1>
           <h2>{frontmatter.date}</h2>
@@ -84,6 +86,7 @@ export const pageQuery = graphql`
         date(formatString: "MMMM DD, YYYY")
         title
         category
+        description
       }
     }
     openapiYaml(slug: { eq: $version }) {

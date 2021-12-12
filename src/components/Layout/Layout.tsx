@@ -14,6 +14,7 @@ import { NavigationContextProvider } from "./NavigationContext";
 import DocHead from "./DocHead";
 import { OpenAPIContextProvider } from "./OpenAPIContext";
 import './global.css';
+import 'katex/dist/katex.min.css';
 
 function Copyright() {
   return (
