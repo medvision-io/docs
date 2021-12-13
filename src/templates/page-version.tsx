@@ -5,6 +5,7 @@ import { PageContext } from "gatsby/internal";
 import AppInfo from '../components/Redoc/ApiInfo/ApiInfo'
 import {OpenAPI} from "../services/OpenAPI";
 import {OpenAPISpec} from "../types/OpenAPISpec";
+import DocHead from "../components/Layout/DocHead";
 
 interface Props {
   data: {
@@ -27,7 +28,7 @@ interface Props {
           slug: string;
         };
         slug: string;
-      };
+      }[];
       spec: string,
       slug: string;
       tags: {
@@ -49,7 +50,10 @@ export default function PageTemplate({ data, pageContext }: Props) {
       selectedVersion={openapiYaml.slug}
       openApiStore={openApiStore}
     >
-      <AppInfo store={openApiStore}/>
+      <React.Fragment>
+        <DocHead title={openapiYaml.info.title + ' ' + openapiYaml.info.version}/>
+        <AppInfo store={openApiStore}/>
+      </React.Fragment>
     </Layout>
   );
 }

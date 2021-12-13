@@ -1,8 +1,8 @@
 import * as React from "react";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout/Layout";
-import {OpenAPI} from "../services/OpenAPI";
-import {OpenAPISpec} from "../types/OpenAPISpec";
+import { OpenAPI } from "../services/OpenAPI";
+import { OpenAPISpec } from "../types/OpenAPISpec";
 import DocHead from "../components/Layout/DocHead";
 
 interface Props {
@@ -11,11 +11,12 @@ interface Props {
       frontmatter: {
         title: string;
         description: string;
+        category: string;
         date: string;
       };
       fields: {
         slug: string;
-      }
+      };
       html: string;
     };
     openapiYaml: {
@@ -37,12 +38,20 @@ interface Props {
           slug: string;
         };
         slug: string;
-      };
-      spec: string,
+      }[];
+      spec: string;
       slug: string;
       tags: {
         description: string;
         name: string;
+      };
+    };
+    site: {
+      siteMetadata: {
+        categories: {
+          name: string;
+          key: string;
+        }[];
       };
     };
   };
@@ -50,9 +59,20 @@ interface Props {
 
 // markup
 export default function PageTemplate({ data }: Props) {
-  const { markdownRemark, openapiYaml } = data;
+  const {
+    markdownRemark,
+    openapiYaml,
+    site: {
+      siteMetadata: { categories },
+    },
+  } = data;
   const { frontmatter, html } = markdownRemark;
-  const openApiStore = new OpenAPI({spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec});
+  const openApiStore = new OpenAPI({
+    spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec,
+  });
+  const selectedCategory = categories.find(
+    (cat) => cat.key === frontmatter?.category
+  );
   return (
     <Layout
       selectedVersion={openapiYaml.slug}
@@ -60,7 +80,16 @@ export default function PageTemplate({ data }: Props) {
       openApiStore={openApiStore}
     >
       <div className="blog-post-container">
-        <DocHead title={frontmatter.title} description={frontmatter.description}/>
+        <DocHead
+          title={
+            frontmatter.title +
+            " - " +
+            selectedCategory.name +
+            " - v" +
+            openapiYaml.info.version
+          }
+          description={frontmatter.description}
+        />
         <div className="blog-post">
           <h1>{frontmatter.title}</h1>
           <h2>{frontmatter.date}</h2>
@@ -73,7 +102,6 @@ export default function PageTemplate({ data }: Props) {
     </Layout>
   );
 }
-
 
 export const pageQuery = graphql`
   query PageBySlug($markdownid: String!, $verid: String!) {
@@ -115,6 +143,14 @@ export const pageQuery = graphql`
       tags {
         description
         name
+      }
+    }
+    site {
+      siteMetadata {
+        categories {
+          name
+          key
+        }
       }
     }
   }

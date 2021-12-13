@@ -4,8 +4,8 @@ import Layout from "../components/Layout/Layout";
 import { PageContext } from "gatsby/internal";
 import { OpenAPI } from "../services/OpenAPI";
 import { OpenAPISpec } from "../types/OpenAPISpec";
-import AppInfo from "../components/Redoc/ApiInfo/ApiInfo";
 import Group from "../components/Redoc/Group/Group";
+import DocHead from "../components/Layout/DocHead";
 
 interface Props {
   data: {
@@ -23,12 +23,13 @@ interface Props {
       openapi: string;
       x_tagGroups: {
         name: string;
+        section: string;
         tags: {
           name: string;
           slug: string;
         };
         slug: string;
-      };
+      }[];
       spec: string;
       slug: string;
       tags: {
@@ -36,22 +37,52 @@ interface Props {
         name: string;
       };
     };
+    site: {
+      siteMetadata: {
+        categories: {
+          name: string;
+          key: string;
+        }[];
+      };
+    };
   };
   pageContext: PageContext;
 }
 
 export default function PageTemplate({ data, pageContext }: Props) {
-  const { openapiYaml } = data;
+  const {
+    openapiYaml,
+    site: {
+      siteMetadata: { categories },
+    },
+  } = data;
   const openApiStore = new OpenAPI({
     spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec,
   });
+  const selectedGroup = openapiYaml?.x_tagGroups?.find(
+    (group) => group.slug === pageContext.group
+  );
+  const selectedCategory = categories.find(
+    (cat) => cat.key === selectedGroup?.section
+  );
   return (
     <Layout
       selectedVersion={openapiYaml.slug}
       selectedTagGroup={pageContext.group}
       openApiStore={openApiStore}
     >
-      <Group selectedGroup={pageContext.group} openApiStore={openApiStore} />
+      <React.Fragment>
+        <DocHead
+          title={
+            selectedGroup.name +
+            " - " +
+            selectedCategory.name +
+            " - v" +
+            openapiYaml.info.version
+          }
+        />
+        <Group selectedGroup={pageContext.group} openApiStore={openApiStore} />
+      </React.Fragment>
     </Layout>
   );
 }
@@ -87,6 +118,14 @@ export const pageQuery = graphql`
       tags {
         description
         name
+      }
+    }
+    site {
+      siteMetadata {
+        categories {
+          name
+          key
+        }
       }
     }
   }
