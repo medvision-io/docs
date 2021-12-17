@@ -5,7 +5,7 @@ import {
   MenuListItem,
   TagsInfoMap,
 } from "../OpenAPI";
-import kebabCase from "lodash.kebabcase";
+import slugify from "slugify";
 
 function buildMenu(spec: OpenAPISpec): MenuListItem[] {
   const items: any[] = [];
@@ -42,11 +42,19 @@ function reduceMapsToListItems(tagsMap: any[]): MenuListItem[] {
 }
 
 function getTagId(tag: any): string {
-  return kebabCase(tag.name);
+  return slugify(tag.name, {
+    replacement: "-",
+    lower: true,
+    strict: true,
+  });
 }
 
 function getOperationId(httpVerb: string, pathName: string): string {
-  return `${kebabCase(httpVerb)}${pathName}`;
+  return `${slugify(httpVerb, {
+    replacement: "-",
+    lower: true,
+    strict: true,
+  })}${pathName}`;
 }
 
 export function getTagsWithOperations(spec: OpenAPISpec) {

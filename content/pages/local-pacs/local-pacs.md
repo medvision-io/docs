@@ -7,6 +7,15 @@ category: dicom-server
 isTop: true
 ---
 
+## TLDR:
+
+```shell
+git clone https://github.com/medvision-io/pacs-server.git
+
+docker-compose up
+```
+
+If you didn't get your TSL certificate file execute [Generate local TSL](/latest/setting-up-local-pacs#generate-local-tsl-certificate-only-once-every-365-days) first.
 
 ## Requirements
 
@@ -109,9 +118,64 @@ Now you should be able to access studies which were generated after uploading DI
 
 ## FAQs
 
+- _"How to use this server with your DICOM viewer?"_
+
+Detailed instruction is described in [Managing servers inside the DICOM viewer](/latest/managing-servers-inside-the-dicom-viewer#zhivaai-local-server-setup) guide.
+
 - _"Why my server doesn't accept very large DICOM files?"_
 
 There is an maximum file size setting inside server config. If you want to change that please go to `./nginx.conf` and modify:
 ```nginx configuration
 client_max_body_size 2000m;
 ```
+
+## Customization
+
+### URL
+
+You're able to change server url by modifying two settings:
+- `orthanc.json` - inner server settings
+- `nginx.conf` - main server settings
+
+Inside `orthanc.json` go to `DicomWeb` attribute and change `Root` property. This property is responsible for path to `dicom-web` server (the one used by the viewer).
+
+```javascript
+// orthanc.json
+{
+  "DicomWeb": {
+    [...]
+    "Root": "/pacs/"
+    [...]
+  }
+}
+```
+
+If you want to change main path to your server you have to modify the second setting (`nginx.conf`). Path is defined as a location and rewrite (reverse-proxy). Change following lines
+
+```javascript
+// nginx.conf
+[...]
+    location /zhiva {
+      [..]
+      rewrite /zhiva(.*) $1 break;
+    }
+[..]
+```
+
+you can change it to:
+
+```javascript
+// nginx.conf
+[...]
+    location /serv {
+      [..]
+      rewrite /serv(.*) $1 break;
+    }
+[..]
+```
+
+and access your server at `https://localhost/serv/...`
+
+## Storage
+
+Currently, all the data are stored in [Docker's persistent volume](https://docs.docker.com/storage/volumes/). This is volume created by Docker itself. If you want to specify the path please follow the instruction from the [Docker Docs](https://docs.docker.com/compose/compose-file/compose-file-v3/#short-syntax-3) about setting up directories as volumes. 

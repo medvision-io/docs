@@ -1,5 +1,5 @@
 const { createFilePath } = require(`gatsby-source-filesystem`);
-const kebabCase = require("lodash.kebabcase");
+const slugify = require('slugify');
 
 function onCreateNode({ node, getNode, actions }) {
   const { createNodeField } = actions;
@@ -8,7 +8,11 @@ function onCreateNode({ node, getNode, actions }) {
     if (node.frontmatter.slug && node.frontmatter.slug.length > 0) {
       slug = `/${node.frontmatter.slug}`;
     } else if (node.frontmatter.title && node.frontmatter.title.length > 0) {
-      slug = `/${kebabCase(node.frontmatter.title.replace(/\W/g, ""))}`;
+      slug = `/${slugify(node.frontmatter.title, {
+        replacement: "-",
+        lower: true,
+        strict: true,
+      })}`;
     } else {
       slug = createFilePath({ node, getNode, basePath: `pages` });
     }

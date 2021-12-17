@@ -1,13 +1,16 @@
-import { format, parse } from 'url';
-import kebabCase from 'lodash.kebabcase';
-import {OpenAPIV3_1} from "openapi-types";
-import * as URLtemplate from 'url-template';
+import { format, parse } from "url";
+import slugify from "slugify";
+import { OpenAPIV3_1 } from "openapi-types";
+import * as URLtemplate from "url-template";
 import semver from "semver";
 
 /**
  * Maps over array passing `isLast` bool to iterator as the second argument
  */
-export function mapWithLast<T, P>(array: T[], iteratee: (item: T, isLast: boolean) => P) {
+export function mapWithLast<T, P>(
+  array: T[],
+  iteratee: (item: T, isLast: boolean) => P
+) {
   const res: P[] = [];
   for (let i = 0; i < array.length - 1; i++) {
     res.push(iteratee(array[i], false));
@@ -28,7 +31,7 @@ export function mapWithLast<T, P>(array: T[], iteratee: (item: T, isLast: boolea
  */
 export function mapValues<T, P>(
   object: Record<string, T>,
-  iteratee: (val: T, key: string, obj: Record<string, T>) => P,
+  iteratee: (val: T, key: string, obj: Record<string, T>) => P
 ): Record<string, P> {
   const res: { [key: string]: P } = {};
   for (const key in object) {
@@ -44,7 +47,7 @@ export function isJsonLike(contentType: string): boolean {
 }
 
 export function isFormUrlEncoded(contentType: string): boolean {
-  return contentType === 'application/x-www-form-urlencoded';
+  return contentType === "application/x-www-form-urlencoded";
 }
 
 /**
@@ -54,7 +57,7 @@ export function isFormUrlEncoded(contentType: string): boolean {
  */
 export function flattenByProp<T extends object, P extends keyof T>(
   collectionItems: T[],
-  prop: P,
+  prop: P
 ): T[] {
   const res: T[] = [];
   const iterate = (items: T[]) => {
@@ -70,7 +73,7 @@ export function flattenByProp<T extends object, P extends keyof T>(
 }
 
 export function stripTrailingSlash(path: string): string {
-  if (path.endsWith('/')) {
+  if (path.endsWith("/")) {
     return path.substring(0, path.length - 1);
   }
   return path;
@@ -80,15 +83,23 @@ export function isNumeric(n: any): n is number {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-export function appendToMdHeading(md: string, heading: string, content: string) {
+export function appendToMdHeading(
+  md: string,
+  heading: string,
+  content: string
+) {
   // if  heading is already in md and append to the end of it
-  const testRegex = new RegExp(`(^|\\n)#\\s?${heading}\\s*\\n`, 'i');
-  const replaceRegex = new RegExp(`((\\n|^)#\\s*${heading}\\s*(\\n|$)(?:.|\\n)*?)(\\n#|$)`, 'i');
+  const testRegex = new RegExp(`(^|\\n)#\\s?${heading}\\s*\\n`, "i");
+  const replaceRegex = new RegExp(
+    `((\\n|^)#\\s*${heading}\\s*(\\n|$)(?:.|\\n)*?)(\\n#|$)`,
+    "i"
+  );
   if (testRegex.test(md)) {
     return md.replace(replaceRegex, `$1\n\n${content}\n$4`);
   } else {
     // else append heading itself
-    const br = md === '' || md.endsWith('\n\n') ? '' : md.endsWith('\n') ? '\n' : '\n\n';
+    const br =
+      md === "" || md.endsWith("\n\n") ? "" : md.endsWith("\n") ? "\n" : "\n\n";
     return `${md}${br}# ${heading}\n\n${content}`;
   }
 }
@@ -120,7 +131,7 @@ export const mergeObjects = (target: any, ...sources: any[]): any => {
 };
 
 const isObject = (item: any): boolean => {
-  return item !== null && typeof item === 'object';
+  return item !== null && typeof item === "object";
 };
 
 const isMergebleObject = (item): boolean => {
@@ -129,15 +140,19 @@ const isMergebleObject = (item): boolean => {
 
 export function safeSlugify(value: string): string {
   return (
-    kebabCase(value.replace(/\W/g, "")) ||
+    slugify(value, {
+      replacement: "-",
+      lower: true,
+      strict: true,
+    }) ||
     value
       .toString()
       .toLowerCase()
-      .replace(/\s+/g, '-') // Replace spaces with -
-      .replace(/&/g, '-and-') // Replace & with 'and'
-      .replace(/\--+/g, '-') // Replace multiple - with single -
-      .replace(/^-+/, '') // Trim - from start of text
-      .replace(/-+$/, '')
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/&/g, "-and-") // Replace & with 'and'
+      .replace(/\--+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, "")
   ); // Trim - from end of text
 }
 
@@ -151,13 +166,13 @@ export function isAbsoluteUrl(url: string) {
  */
 export function resolveUrl(url: string, to: string) {
   let res;
-  if (to.startsWith('//')) {
+  if (to.startsWith("//")) {
     const { protocol: specProtocol } = parse(url);
-    res = `${specProtocol || 'https:'}${to}`;
+    res = `${specProtocol || "https:"}${to}`;
   } else if (isAbsoluteUrl(to)) {
     res = to;
-  } else if (!to.startsWith('/')) {
-    res = stripTrailingSlash(url) + '/' + to;
+  } else if (!to.startsWith("/")) {
+    res = stripTrailingSlash(url) + "/" + to;
   } else {
     const urlObj = parse(url);
     res = format({
@@ -184,7 +199,7 @@ export function titleize(text: string) {
 export function removeQueryString(serverUrl: string): string {
   try {
     const url = parseURL(serverUrl);
-    url.search = '';
+    url.search = "";
     return url.toString();
   } catch (e) {
     // when using with redoc-cli serverUrl can be empty resulting in crash
@@ -193,9 +208,9 @@ export function removeQueryString(serverUrl: string): string {
 }
 
 function parseURL(url: string) {
-  if (typeof URL === 'undefined') {
+  if (typeof URL === "undefined") {
     // node
-    return new (require('url').URL)(url);
+    return new (require("url").URL)(url);
   } else {
     return new URL(url);
   }
@@ -204,40 +219,49 @@ function parseURL(url: string) {
 export function unescapeHTMLChars(str: string): string {
   return str
     .replace(/&#(\d+);/g, (_m, code) => String.fromCharCode(parseInt(code, 10)))
-    .replace(/&amp;/g, '&');
+    .replace(/&amp;/g, "&");
 }
 
-function delimitedEncodeField(fieldVal: any, fieldName: string, delimiter: string): string {
+function delimitedEncodeField(
+  fieldVal: any,
+  fieldName: string,
+  delimiter: string
+): string {
   if (Array.isArray(fieldVal)) {
-    return fieldVal.map(v => v.toString()).join(delimiter);
-  } else if (typeof fieldVal === 'object') {
+    return fieldVal.map((v) => v.toString()).join(delimiter);
+  } else if (typeof fieldVal === "object") {
     return Object.keys(fieldVal)
-      .map(k => `${k}${delimiter}${fieldVal[k]}`)
+      .map((k) => `${k}${delimiter}${fieldVal[k]}`)
       .join(delimiter);
   } else {
-    return fieldName + '=' + fieldVal.toString();
+    return fieldName + "=" + fieldVal.toString();
   }
 }
 
 function deepObjectEncodeField(fieldVal: any, fieldName: string): string {
   if (Array.isArray(fieldVal)) {
-    console.warn('deepObject style cannot be used with array value:' + fieldVal.toString());
-    return '';
-  } else if (typeof fieldVal === 'object') {
+    console.warn(
+      "deepObject style cannot be used with array value:" + fieldVal.toString()
+    );
+    return "";
+  } else if (typeof fieldVal === "object") {
     return Object.keys(fieldVal)
-      .map(k => `${fieldName}[${k}]=${fieldVal[k]}`)
-      .join('&');
+      .map((k) => `${fieldName}[${k}]=${fieldVal[k]}`)
+      .join("&");
   } else {
-    console.warn('deepObject style cannot be used with non-object value:' + fieldVal.toString());
-    return '';
+    console.warn(
+      "deepObject style cannot be used with non-object value:" +
+        fieldVal.toString()
+    );
+    return "";
   }
 }
 
 function serializeFormValue(name: string, explode: boolean, value: any) {
   // Use RFC6570 safe name ([a-zA-Z0-9_]) and replace with our name later
   // e.g. URI.template doesn't parse names with hyphen (-) which are valid query param names
-  const safeName = '__redoc_param_name__';
-  const suffix = explode ? '*' : '';
+  const safeName = "__redoc_param_name__";
+  const suffix = explode ? "*" : "";
   const template = URLtemplate.parse(`{?${safeName}${suffix}}`);
   return template
     .expand({ [safeName]: value })
@@ -251,31 +275,31 @@ function serializeFormValue(name: string, explode: boolean, value: any) {
  */
 export function urlFormEncodePayload(
   payload: object,
-  encoding: { [field: string]: OpenAPIV3_1.EncodingObject } = {},
+  encoding: { [field: string]: OpenAPIV3_1.EncodingObject } = {}
 ) {
   if (Array.isArray(payload)) {
-    throw new Error('Payload must have fields: ' + payload.toString());
+    throw new Error("Payload must have fields: " + payload.toString());
   } else {
     return Object.keys(payload)
-      .map(fieldName => {
+      .map((fieldName) => {
         const fieldVal = payload[fieldName];
-        const { style = 'form', explode = true } = encoding[fieldName] || {};
+        const { style = "form", explode = true } = encoding[fieldName] || {};
         switch (style) {
-          case 'form':
+          case "form":
             return serializeFormValue(fieldName, explode, fieldVal);
-          case 'spaceDelimited':
-            return delimitedEncodeField(fieldVal, fieldName, '%20');
-          case 'pipeDelimited':
-            return delimitedEncodeField(fieldVal, fieldName, '|');
-          case 'deepObject':
+          case "spaceDelimited":
+            return delimitedEncodeField(fieldVal, fieldName, "%20");
+          case "pipeDelimited":
+            return delimitedEncodeField(fieldVal, fieldName, "|");
+          case "deepObject":
             return deepObjectEncodeField(fieldVal, fieldName);
           default:
             // TODO implement rest of styles for path parameters
-            console.warn('Incorrect or unsupported encoding style: ' + style);
-            return '';
+            console.warn("Incorrect or unsupported encoding style: " + style);
+            return "";
         }
       })
-      .join('&');
+      .join("&");
   }
 }
 

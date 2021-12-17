@@ -7,6 +7,7 @@
 
 const YAML = require(`js-yaml`);
 const kebabCase = require("lodash.kebabcase");
+const slugify = require("slugify");
 const {
   isString,
   upperFirst,
@@ -62,7 +63,7 @@ async function onCreateNode(
         type,
       },
       info: {
-        ...obj.info
+        ...obj.info,
       },
       tags: obj.tags,
       openapi: obj.openapi,
@@ -70,20 +71,23 @@ async function onCreateNode(
       slug: kebabCase(obj.info.version),
     };
 
-
     if (obj["x-tagGroups"] == null || !Array.isArray(obj["x-tagGroups"])) {
       obj["x-tagGroups"] = [
         {
           name: "General",
-          tags: [...obj.tags.map(tag => tag.name)],
+          tags: [...obj.tags.map((tag) => tag.name)],
         },
       ];
     }
 
-    obj["x-tagGroups"] = obj["x-tagGroups"].map(tagGroup => ({
+    obj["x-tagGroups"] = obj["x-tagGroups"].map((tagGroup) => ({
       ...tagGroup,
-      slug: kebabCase(tagGroup.name.replace(/\W/g, "")),
-    }))
+      slug: slugify(tagGroup.name, {
+        replacement: "-",
+        lower: true,
+        strict: true,
+      }),
+    }));
 
     yamlNode["x-tagGroups"] = obj["x-tagGroups"].map((tagGroup) => {
       return {
@@ -91,8 +95,12 @@ async function onCreateNode(
         tags: tagGroup.tags.map((tag) => {
           return {
             name: tag,
-              slug: kebabCase(tag.replace(/\W/g, "")),
-          }
+            slug: slugify(tag, {
+              replacement: "-",
+              lower: true,
+              strict: true,
+            }),
+          };
         }),
       };
     });
