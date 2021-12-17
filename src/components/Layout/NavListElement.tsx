@@ -170,7 +170,7 @@ export default function NavListElement({
     return acc;
   }, {});
 
-  const selectedHash = window.location.hash;
+  const selectedHash = isBrowser() ? window.location.hash : '';
 
   return (
     <React.Fragment>
