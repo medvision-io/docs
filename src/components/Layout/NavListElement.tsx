@@ -22,7 +22,7 @@ import { MenuListItem } from "../../services/OpenAPI";
 import OperationBadge from "../common/OperationBadge";
 import { NavigationContext } from "./NavigationContext";
 import { scrollToId } from "../../utils/scrollToId";
-import {isBrowser} from "../Redoc/Markdown/SanitizedMdBlock";
+import { isBrowser } from "../Redoc/Markdown/SanitizedMdBlock";
 
 const ICON_MAP = {
   users: <PeopleIcon />,
@@ -77,8 +77,15 @@ export default function NavListElement({
   pages = [],
   openApiItems,
 }: Props) {
-  const [{ selectedVersion, selectedVersionSlug, selectedTagGroup, selectedPage, visibleElements }] =
-    useContext(NavigationContext);
+  const [
+    {
+      selectedVersion,
+      selectedVersionSlug,
+      selectedTagGroup,
+      selectedPage,
+      visibleElements,
+    },
+  ] = useContext(NavigationContext);
   const defaultSelectedCategory = selectedTagGroup
     ? groups.find((group) => group.slug === selectedTagGroup).section
     : selectedPage
@@ -108,7 +115,7 @@ export default function NavListElement({
       ...groups.reduce((groupacc, group) => {
         group.tags.forEach((tag) => {
           if (group.tags.some((tag) => operation.tags.includes(tag.name))) {
-            if(isBrowser()) {
+            if (isBrowser()) {
               if (
                 window.location.pathname.includes(
                   ["", selectedVersionSlug, group.slug].join("/")
@@ -235,23 +242,26 @@ export default function NavListElement({
                         </React.Fragment>
                       ))}
                     {groups.filter((group) => group.section === catKey)
-                      .length === 0 && (
-                      <ListItem sx={{ ...item, pl: 8 }} key={"not found"}>
-                        <ListItemIcon sx={{ mr: 1 }}>
-                          <ConstructionIcon
-                            sx={{
+                      .length === 0 &&
+                      pages.filter(
+                        (page) => page.frontmatter.category === catKey
+                      ).length === 0 && (
+                        <ListItem sx={{ ...item, pl: 8 }} key={"not found"}>
+                          <ListItemIcon sx={{ mr: 1 }}>
+                            <ConstructionIcon
+                              sx={{
+                                color: "rgba(255,255,255,0.26)",
+                              }}
+                            />
+                          </ListItemIcon>
+                          <ListItemText
+                            primaryTypographyProps={{
                               color: "rgba(255,255,255,0.26)",
                             }}
+                            primary={"Under construction"}
                           />
-                        </ListItemIcon>
-                        <ListItemText
-                          primaryTypographyProps={{
-                            color: "rgba(255,255,255,0.26)",
-                          }}
-                          primary={"Under construction"}
-                        />
-                      </ListItem>
-                    )}
+                        </ListItem>
+                      )}
                   </List>
                 </Collapse>
               </List>
