@@ -93,6 +93,11 @@ export default function Navigator(props: Props) {
             docVersion
             title
           }
+          headings {
+            id
+            value
+            depth
+          }
         }
       }
       allOpenapiYaml {

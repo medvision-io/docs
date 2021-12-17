@@ -66,6 +66,11 @@ interface Props {
       docVersion: string;
       title: string;
     };
+    headings: {
+      id: string;
+      value: string;
+      depth: number;
+    }[];
   }[];
   openApiItems: MenuListItem[];
 }
@@ -143,11 +148,29 @@ export default function NavListElement({
   }, {});
 
   const pagesClickHandlers = pages.reduce((acc, page) => {
-    acc[page.fields.slug] = () => {
-      window.location.href = `/${selectedVersionSlug}${page.fields.slug}`;
+    acc[page.fields.slug] = {
+      $page: () => {
+        window.location.href = `/${selectedVersionSlug}${page.fields.slug}`;
+      },
+      ...page.headings.reduce((headingAcc, heading) => {
+        if (page.fields.slug === selectedPage) {
+          headingAcc[heading.id] = () => {
+            window.location.hash = heading.id;
+
+            scrollToId(heading.id);
+          };
+        } else {
+          headingAcc[heading.id] = () => {
+            window.location.href = `/${selectedVersionSlug}${page.fields.slug}#${heading.id}`;
+          };
+        }
+        return headingAcc;
+      }, {}),
     };
     return acc;
   }, {});
+
+  const selectedHash = window.location.hash;
 
   return (
     <React.Fragment>
@@ -179,13 +202,32 @@ export default function NavListElement({
                       .map((page) => (
                         <React.Fragment key={page.fields.slug}>
                           <ListItemButton
-                            onClick={pagesClickHandlers[page.fields.slug]}
+                            onClick={pagesClickHandlers[page.fields.slug].$page}
                             selected={page.fields.slug === selectedPage}
                             sx={{ ...item, pl: 6 }}
                             key={page.fields.slug}
                           >
                             <ListItemText primary={page.frontmatter.title} />
                           </ListItemButton>
+                          {page.headings.map((heading) => (
+                            <React.Fragment key={page.fields.slug + heading.id}>
+                              <ListItemButton
+                                onClick={
+                                  pagesClickHandlers[page.fields.slug][
+                                    heading.id
+                                  ]
+                                }
+                                selected={`#${heading.id}` === selectedHash}
+                                sx={{
+                                  ...item,
+                                  pl: 6 + (heading.depth - 1) * 2,
+                                }}
+                                key={page.fields.slug + heading.id}
+                              >
+                                <ListItemText primary={"- " + heading.value} />
+                              </ListItemButton>
+                            </React.Fragment>
+                          ))}
                         </React.Fragment>
                       ))}
                     {groups
