@@ -107,6 +107,7 @@ paths:
     post:
       tags:
         - pet
+        - user
       summary: Add a new pet to the store
       description: Add new pet to the store inventory.
       operationId: addPet

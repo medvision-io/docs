@@ -17,6 +17,9 @@ import TimerIcon from "@mui/icons-material/Timer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PhonelinkSetupIcon from "@mui/icons-material/PhonelinkSetup";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import FormatShapesIcon from '@mui/icons-material/FormatShapes';
+import SchemaOutlinedIcon from '@mui/icons-material/SchemaOutlined';
 import { useContext, useState } from "react";
 import { MenuListItem } from "../../services/OpenAPI";
 import OperationBadge from "../common/OperationBadge";
@@ -31,6 +34,9 @@ const ICON_MAP = {
   world: <PublicIcon />,
   width: <SettingsEthernetIcon />,
   connectors: <SettingsInputComponentIcon />,
+  segments: <ScatterPlotIcon />,
+  lines: <FormatShapesIcon />,
+  schema: <SchemaOutlinedIcon />,
   setup: <SettingsIcon />,
   stopwatch: <TimerIcon />,
   phone_setup: <PhonelinkSetupIcon />,

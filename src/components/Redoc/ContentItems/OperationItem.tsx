@@ -2,10 +2,10 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import Chip from "@mui/material/Chip";
-import { H1, H2, H4, H5 } from "../../common/Headings";
+import { H1, H2, H3, H4, H5, H6 } from "../../common/Headings";
 import { Row } from "../../common/Row";
 import { Description } from "../../common/Description";
-import {MiddlePanel, RightPanel} from "../../common/Panels";
+import { MiddlePanel, RightPanel } from "../../common/Panels";
 import { ExternalDocumentation } from "../ExternalDocumentation/ExternalDocumentation";
 import { Markdown } from "../Markdown/Markdown";
 import OperationBadge from "../../common/OperationBadge";
@@ -29,6 +29,7 @@ const OperationRow = styled(Row)`
 export default function OperationItem({ item }: Props) {
   const { summary, description, deprecated, externalDocs, isWebhook } = item;
   const hasDescription = !!(description || externalDocs);
+  console.log(item);
 
   return (
     <React.Fragment>
@@ -36,7 +37,16 @@ export default function OperationItem({ item }: Props) {
         <MiddlePanel compact={false}>
           <H5>
             <OperationBadge item={item} compact={false} />
-            <Link href={`#${item.urlId}`} sx={{textDecorationLine: `${deprecated ? 'line-through' : undefined}`}}>{summary}</Link>
+            <Link
+              href={`#${item.urlId}`}
+              sx={{
+                textDecorationLine: `${
+                  deprecated ? "line-through" : undefined
+                }`,
+              }}
+            >
+              {summary}
+            </Link>
             {deprecated && (
               <Chip
                 sx={{ ml: 2 }}
@@ -54,6 +64,19 @@ export default function OperationItem({ item }: Props) {
               />
             )}
           </H5>
+          {item.pathName && (
+            <div style={{ maxWidth: "100%", overflowWrap: "anywhere" }}>
+              <code
+                style={{
+                  fontSize: "1rem",
+                  maxWidth: "100%",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {item.pathName}
+              </code>
+            </div>
+          )}
           {/*{options.pathInMiddlePanel && !isWebhook && (*/}
           {/*  <Endpoint operation={operation} inverted={true} />*/}
           {/*)}*/}
@@ -74,7 +97,7 @@ export default function OperationItem({ item }: Props) {
         <RightPanel>
           <ExamplesItem requestBody={item.requestBody} type={"request"} />
           <ExamplesItem responses={item.responses} type={"response"} />
-          <CodeItem codeSamples={item['x-codeSamples']} />
+          <CodeItem codeSamples={item["x-codeSamples"]} />
         </RightPanel>
       </OperationRow>
     </React.Fragment>

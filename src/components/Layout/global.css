@@ -1,3 +1,162 @@
 html {
     scroll-behavior: smooth;
 }
+
+.blog-post a {
+    font-weight: 500;
+    color: #006db3;
+}
+
+
+.gatsby-highlight-code-line {
+    background-color: #feb;
+    display: block;
+    margin-right: -1em;
+    margin-left: -1em;
+    padding-right: 1em;
+    padding-left: 0.75em;
+    border-left: 0.25em solid #f99;
+}
+/**
+ * Add back the container background-color, border-radius, padding, margin
+ * and overflow that we removed from <pre>.
+ */
+.gatsby-highlight {
+    background-color: #272822;
+    border-radius: 0.3em;
+    margin: 0.5em 0;
+    padding: 1em;
+    overflow: auto;
+}
+
+/**
+ * Remove the default PrismJS theme background-color, border-radius, margin,
+ * padding and overflow.
+ * 1. Make the element just wide enough to fit its content.
+ * 2. Always fill the visible space in .gatsby-highlight.
+ * 3. Adjust the position of the line numbers
+ */
+.gatsby-highlight pre[class*="language-"] {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    overflow: initial;
+    float: left; /* 1 */
+    min-width: 100%; /* 2 */
+}
+
+/**
+ * If you already use line highlighting
+ */
+
+/* Adjust the position of the line numbers */
+.gatsby-highlight pre[class*="language-"].line-numbers {
+    padding-left: 2.8em;
+}
+
+.gatsby-highlight pre[class*="language-"].line-numbers {
+    padding: 0;
+    padding-left: 2.8em;
+    overflow: initial;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .2em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+blockquote {
+    display: block;
+    background: #fff;
+    padding: 15px 20px 15px 45px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 64px;
+    /*Font*/
+
+    font-family: Georgia, serif;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #666;
+    text-align: justify;
+    /*Borders - (Optional)*/
+
+    border-left: 15px solid #006db3;
+    border-right: 2px solid #006db3;
+    /*Box Shadow - (Optional)*/
+
+    -moz-box-shadow: 2px 2px 15px #ccc;
+    -webkit-box-shadow: 2px 2px 15px #ccc;
+    box-shadow: 2px 2px 15px #ccc;
+}
+
+blockquote:before {
+    content: "\0021";
+    /*Unicode for Left Double Quote*/
+    /*Font*/
+
+    font-family: Georgia, serif;
+    font-size: 40px;
+    font-weight: bold;
+    color: #999;
+    /*Positioning*/
+
+    position: absolute;
+    left: 15px;
+    top: 5px;
+}
+blockquote.notice:before {
+    content: "\0021";
+    /*Unicode for Exclamation mark*/
+    font-size: 50px;
+    left: 12px;
+}
+blockquote.warning:before {
+    content: "\26A0";
+    /*Unicode for Warning*/
+    font-size: 36px;
+    left: 5px;
+}
+blockquote.quote:before {
+    content: "\201C";
+    /*Unicode for Info mark*/
+    font-size: 60px;
+    left: 10px;
+}
+blockquote:after {
+    /*Reset to make sure*/
+
+    content: "";
+}
+
+blockquote cite {
+    color: #999999;
+    font-size: 14px;
+    display: block;
+    margin-top: 5px;
+    text-align: right;
+}
+
+blockquote a,
+blockquote a:link {
+    text-decoration: none;
+    background: #eee;
+    cursor: pointer;
+    padding: 0 3px;
+    color: #006db3;
+}
+
+blockquote a:hover {
+    color: #666;
+}
+
+blockquote em {
+    font-style: italic;
+}
+
+blockquote cite:before {
+    content: "\2014 \2009";
+    /*  an em dash and a space before the text */
+}

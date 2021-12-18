@@ -1,0 +1,48 @@
+get:
+  tags:
+    - Segmentation
+  summary: Get segmentation for series
+  description: |
+    Should return segmentation data for a given segment. Response size should match entire volumen size (`images in series` x `width` x `height`)
+  operationId: getSegmentationForSeries
+  parameters:
+    - name: model-uid
+      in: path
+      description: UID of the model
+      required: true
+      schema:
+        type: string
+    - name: study-uid
+      in: path
+      description: StudyInstanceUID from DICOM metadata
+      required: true
+      schema:
+        type: string
+        format: StudyInstanceUID
+    - name: series-uid
+      in: path
+      description: SeriesInstanceUID from DICOM metadata
+      required: true
+      schema:
+        type: string
+        format: SeriesInstanceUID
+  security:
+    - main_auth:
+        - 'read:model'
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SegmentationObj'
+    '403':
+      description: Forbidden
+      $ref: ../../components/responses/Problem.yaml
+      content:
+        application/json:
+          example:
+            message: You have no access to this model
+    '404':
+      description: Data not found
+      $ref: ../../components/responses/Problem.yaml

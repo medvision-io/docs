@@ -17,16 +17,28 @@ module.exports = {
     // }
   ],
   categories: [
+    // {
+    //   name: "Authentication",
+    //   key: "authentication",
+    //   icon: "users",
+    //   section: "build",
+    // },
+    // {
+    //   name: "Database",
+    //   key: "database",
+    //   icon: "database",
+    //   section: "build",
+    // },
     {
-      name: "Authentication",
-      key: "authentication",
-      icon: "users",
+      name: "Segmentations",
+      key: "segmentation",
+      icon: "segments",
       section: "build",
     },
     {
-      name: "Database",
-      key: "database",
-      icon: "database",
+      name: "Annotations",
+      key: "annotation",
+      icon: "lines",
       section: "build",
     },
     {
@@ -41,12 +53,12 @@ module.exports = {
       icon: "world",
       section: "build",
     },
-    {
-      name: "Functions",
-      key: "functions",
-      icon: "width",
-      section: "build",
-    },
+    // {
+    //   name: "Functions",
+    //   key: "functions",
+    //   icon: "width",
+    //   section: "build",
+    // },
     {
       name: "Machine Learning",
       key: "ml",

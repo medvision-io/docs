@@ -71,16 +71,6 @@
       "path": "./openapi/v1.yaml",
       "out": "./content/openapi/v1.yaml",
       "name": "V1"
-    },
-    {
-      "path": "./openapi/v1.1.yaml",
-      "out": "./content/openapi/v1.1.yaml",
-      "name": "V1.1"
-    },
-    {
-      "path": "./openapi/v1.4.yaml",
-      "out": "./content/openapi/v1.4.yaml",
-      "name": "V1.4"
     }
   ]
 }

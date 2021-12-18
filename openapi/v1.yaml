@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  version: 1.0.0
+  version: 0.1.0
   title: zviha.ai
-  termsOfService: 'https://example.com/terms/'
+  termsOfService: 'https://zhiva.ai/terms/'
   contact:
     email: ceo@zhiva.ai
     url: 'https://zhiva.ai/contact'
@@ -17,20 +17,22 @@ tags:
     description: This is a tag description.
 x-tagGroups:
   - name: General
-    section: database
+    section: segmentation
     tags:
       - Echo
-  - name: General2
-    section: database
+  - name: Segmentation
+    section: segmentation
     tags:
       - Tag
   - name: User Management
-    section: authentication
+    section: annotation
     tags:
       - User
 servers:
   - url: 'https://example.com/api/v1'
 paths:
+  '/segmentations/{model-uid}/studies/{study-uid}/series/{series-uid}':
+    $ref: 'segmentations@{model-uid}@{study-uid}@{series-uid}.yaml'
   '/users/{username}':
     $ref: 'paths/users@{username}.yaml'
   /echo:

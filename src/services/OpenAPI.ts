@@ -135,15 +135,23 @@ export class OpenAPI {
         }
         if (tagItem.responses != null) {
           if (tagItem.responses.$ref != null) {
-            additionalData.responses = this.deref(tagItem.responses);
+            additionalData.responses = {
+              ...this.deref(tagItem.responses),
+              ...tagItem.responses,
+            };
+            delete additionalData.$ref;
           } else {
             additionalData.responses = tagItem.responses;
           }
           Object.keys(additionalData.responses).forEach((responseKey) => {
             if (additionalData.responses[responseKey].$ref != null) {
-              additionalData.responses[responseKey] = this.deref(
-                additionalData.responses[responseKey]
-              );
+              additionalData.responses[responseKey] = {
+                ...this.deref(
+                  additionalData.responses[responseKey]
+                ),
+                ...additionalData.responses[responseKey],
+              };
+              delete additionalData.responses[responseKey].$ref;
             }
             if (additionalData.responses[responseKey].content != null) {
               additionalData.responses[responseKey].examples = {};

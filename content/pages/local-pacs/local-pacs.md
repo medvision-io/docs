@@ -176,6 +176,6 @@ you can change it to:
 
 and access your server at `https://localhost/serv/...`
 
-## Storage
+### Storage
 
 Currently, all the data are stored in [Docker's persistent volume](https://docs.docker.com/storage/volumes/). This is volume created by Docker itself. If you want to specify the path please follow the instruction from the [Docker Docs](https://docs.docker.com/compose/compose-file/compose-file-v3/#short-syntax-3) about setting up directories as volumes. 
