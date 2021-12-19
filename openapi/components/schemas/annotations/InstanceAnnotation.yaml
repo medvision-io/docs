@@ -1,0 +1,11 @@
+description: Annotation object
+type: object
+properties:
+  '{StudyInstanceUID}':
+    type: object
+    properties:
+      '{SeriesInstanceUID}':
+        type: object
+        properties:
+          '{SOPInstanceUID}':
+            $ref: './AnnotationFrame.yaml'

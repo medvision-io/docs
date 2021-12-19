@@ -30,8 +30,8 @@ module.exports = {
     //   section: "build",
     // },
     {
-      name: "Segmentations",
-      key: "segmentation",
+      name: "Inferences",
+      key: "inferences",
       icon: "segments",
       section: "build",
     },

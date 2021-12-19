@@ -20,6 +20,9 @@ function bundleDocDef(doc) {
     `openapi bundle ${doc.path} -o ${doc.out}`,
     function (error, stdout, stderr) {
       console.log(`Doc "${doc.name}" bundled`);
+      if (error) {
+        console.error(error)
+      }
     }
   );
 }

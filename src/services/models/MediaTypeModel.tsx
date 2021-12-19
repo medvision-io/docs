@@ -26,7 +26,7 @@ export class MediaTypeModel {
       generatedPayloadSamplesMaxDepth: number;
     } = {
       onlyRequiredInSamples: false,
-      generatedPayloadSamplesMaxDepth: 6,
+      generatedPayloadSamplesMaxDepth: 12,
     }
   ) {
     if (info.schema.$ref != null) {

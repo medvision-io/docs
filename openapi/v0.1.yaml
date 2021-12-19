@@ -9,21 +9,11 @@ info:
   description:
     $ref: ./info-description.md
 tags:
-  - name: Echo
-    description: Example echo operations.
-  - name: User
-    description: Operations about users.
-  - name: Tag
-    description: This is a tag description.
   - name: Semantic Segmentation
     description: Semantic Segmentation API
   - name: Polygon
     description: Polygon Annotations
 x-tagGroups:
-  - name: General
-    section: segmentation
-    tags:
-      - Echo
   - name: Segmentation
     section: inferences
     tags:
@@ -32,12 +22,8 @@ x-tagGroups:
     section: inferences
     tags:
       - Polygon
-  - name: User Management
-    section: inferences
-    tags:
-      - User
 servers:
-  - url: 'https://example.com/api/v1'
+  - url: 'https://api.zhiva.ai/v1'
 paths:
   '/segmentations/{model-uid}/studies/{study-uid}':
     $ref: 'paths/segmentations/segmentations@{model-uid}@{study-uid}.yaml'
@@ -51,30 +37,6 @@ paths:
     $ref: 'paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}.yaml'
   '/annotations/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
     $ref: 'paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
-  '/users/{username}':
-    $ref: 'paths/users@{username}.yaml'
-  /echo:
-    $ref: paths/echo.yaml
-  /pathItem:
-    $ref: paths/path-item.yaml
-  /pathItemWithExamples:
-    $ref: paths/path-item-with-examples.yaml
-x-webhooks:
-  newPet:
-    post:
-      summary: New pet
-      description: Information about a new pet in the systems
-      operationId: newPet
-      tags:
-        - Echo
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Email"
-      responses:
-        "200":
-          description: Return a 200 status to indicate that the data was received successfully
 components:
   securitySchemes:
     main_auth:
@@ -83,12 +45,8 @@ components:
         implicit:
           authorizationUrl: 'http://example.com/api/oauth/dialog'
           scopes:
-            'read:users': read users info
-            'write:users': modify or remove users
+            'read:models': read users info
     api_key:
       type: apiKey
       in: header
       name: api_key
-    basic_auth:
-      type: http
-      scheme: basic

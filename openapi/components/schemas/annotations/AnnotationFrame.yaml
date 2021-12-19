@@ -1,0 +1,7 @@
+description: Slice frame
+type: object
+properties:
+  rois:
+    type: array
+    items:
+      $ref: './Annotation.yaml'

@@ -1,0 +1,7 @@
+type: array
+items:
+  type: array
+  length: 2
+  items:
+    type: integer
+example: [[120,130], [110, 130], [75, 100]]

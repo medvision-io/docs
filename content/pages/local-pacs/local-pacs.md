@@ -9,13 +9,13 @@ isTop: true
 
 ## TLDR:
 
+If you didn't get your TSL certificate file execute [Generate local TSL](/latest/setting-up-local-pacs#generate-local-tsl-certificate-only-once-every-365-days) first.
+
 ```shell
 git clone https://github.com/medvision-io/pacs-server.git
 
 docker-compose up
 ```
-
-If you didn't get your TSL certificate file execute [Generate local TSL](/latest/setting-up-local-pacs#generate-local-tsl-certificate-only-once-every-365-days) first.
 
 ## Requirements
 

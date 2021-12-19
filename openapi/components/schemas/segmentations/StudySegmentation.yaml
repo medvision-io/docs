@@ -1,0 +1,15 @@
+type: object
+properties:
+  '{StudyInstanceUID}':
+    type: object
+    properties:
+      '{SeriesInstanceUID-1}':
+        type: object
+        properties:
+          '{SOPInstanceUID-1}':
+            $ref: './Frame.yaml'
+      '{SeriesInstanceUID-2}':
+        type: object
+        properties:
+          '{SOPInstanceUID-1}':
+            $ref: './Frame.yaml'

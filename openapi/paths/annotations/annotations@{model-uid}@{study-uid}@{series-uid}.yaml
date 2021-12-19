@@ -1,10 +1,10 @@
 get:
   tags:
-    - Semantic Segmentation
-  summary: Get segmentation for series
+    - Polygon
+  summary: Get annotations for series
   description: |
-    Should return segmentation data for a given segment. Response size should match entire volumen size (`images in series` x `width` x `height`)
-  operationId: getSegmentationForSeries
+    Should return annotation data for a given structure. Response size should match entire volumen size (`images in series` x `width` x `height`)
+  operationId: getAnnotationsForSeries
   parameters:
     - name: model-uid
       in: path
@@ -37,7 +37,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../components/schemas/segmentations/SeriesSegmentation.yaml'
+            $ref: '../../components/schemas/annotations/SeriesAnnotation.yaml'
     '403':
       description: Forbidden
       $ref: ../../components/responses/Problem.yaml
