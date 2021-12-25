@@ -15,7 +15,7 @@ Starts the reference docs preview server.
 #### `npm run build`
 Bundles the definition to the dist folder.
 
-## Contribution Guide (READ [WIKI PAGE](https://github.com/medvision-io/docs/wiki/OpenAPI-Basics))
+## Contribution Guide (READ [WIKI PAGE](https://github.com/zhiva-ai/docs/wiki/OpenAPI-Basics))
 
 ### Pages
 
