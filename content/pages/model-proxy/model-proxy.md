@@ -79,6 +79,29 @@ ipconfig
 
 and look for the setting with the `inet` value that starts with `192.168.`. That should by your address in the local network. You should be able to access the server from `192.168.x.x:8002`.
 
+## Requesting inference for given model
+
+To get an inference using selected Model API you should follow [Inference API Docs](/latest/segmentation#get%2Fsegmentations%2F%7Bmodel-uid%7D%2Fstudies%2F%7Bstudy-uid%7D%2Fseries%2F%7Bseries-uid%7D). This example specifies the request for series segmentation. Model UUID is the same model as defined in [models.json](/latest/setting-up-model-proxy#modelsjson-add-model-api).
+
+If you have mode than one server defined in `./servers.json` then you can select which one should provide DICOM data by setting `?server` query parameter like:
+```
+/segmentations/{model-uid}/studies/{study-uid}/series/{series-uid}?server=63140137-a63d-4ad1-b489-3479bc43387c
+```
+
+Value of this parameter is the UUID key assigned to the server inside `servers.json`.
+
+E.g. To get inference (segmentation) for Study `1.3.6.1.4.1.25403.345050719074.3824.20170125095438.5` and Series `1.3.6.1.4.1.25403.345050719074.3824.20170125095449.8` using Model API with UUID `cf8063dc-d4bb-4b68-8e74-eba77c248c8b` and PACS server with UUID `b5208f48-f748-4339-9402-d1148dab571e` the request will look like:
+
+```
+https://localhost:8011/segmentations/cf8063dc-d4bb-4b68-8e74-eba77c248c8b/studies/1.3.6.1.4.1.25403.345050719074.3824.20170125095438.5/series/1.3.6.1.4.1.25403.345050719074.3824.20170125095449.8?server=b5208f48-f748-4339-9402-d1148dab571e
+```
+
+to get the same inference but using `default` PACS server just remove `server` query parameter:
+
+```
+https://localhost:8011/segmentations/cf8063dc-d4bb-4b68-8e74-eba77c248c8b/studies/1.3.6.1.4.1.25403.345050719074.3824.20170125095438.5/series/1.3.6.1.4.1.25403.345050719074.3824.20170125095449.8
+```
+
 ## servers.json (add DICOMweb server)
 
 path:
