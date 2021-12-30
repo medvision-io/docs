@@ -12,7 +12,7 @@ isTop: true
 If you didn't get your TSL certificate file execute [Generate local TSL](/latest/setting-up-local-pacs#generate-local-tsl-certificate-only-once-every-365-days) first.
 
 ```shell
-git clone https://github.com/medvision-io/pacs-server.git
+git clone https://github.com/zhiva-ai/pacs-server.git
 
 docker-compose up
 ```
@@ -30,10 +30,10 @@ Before we start please make sure your server has access to:
 
 You can either clone this repo
 ```shell
-git clone https://github.com/medvision-io/pacs-server.git
+git clone https://github.com/zhiva-ai/pacs-server.git
 ```
 or download it directly from
-[zhiva.ai PACS server](https://github.com/medvision-io/pacs-server/archive/refs/heads/main.zip).
+[zhiva.ai PACS server](https://github.com/zhiva-ai/pacs-server/archive/refs/heads/main.zip).
 
 ## Generate local TSL certificate (only once every 365 days)
 
