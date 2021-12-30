@@ -89,5 +89,11 @@ module.exports = {
       icon: "setup",
       section: "guides",
     },
+    {
+      name: "AI Model APIs",
+      key: "model-api",
+      icon: "setup",
+      section: "guides",
+    },
   ],
 };
