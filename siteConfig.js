@@ -92,7 +92,7 @@ module.exports = {
     {
       name: "AI Model APIs",
       key: "model-api",
-      icon: "setup",
+      icon: "width",
       section: "guides",
     },
   ],
