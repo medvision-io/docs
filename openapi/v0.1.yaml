@@ -5,7 +5,7 @@ info:
   termsOfService: 'https://zhiva.ai/terms/'
   contact:
     email: ceo@zhiva.ai
-    url: 'https://zhiva.ai/contact'
+    url: 'https://zhiva.ai'
   description:
     $ref: ./info-description.md
 tags:
