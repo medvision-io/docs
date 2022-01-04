@@ -15,7 +15,7 @@ To access server settings select `Settings` option form the main navigation and 
 
 ## Adding new model to the viewer.
 
-> This guide assumes you already have a model API. If you don't please follow the instructions to [Setup your Local Model API](/latest/setting-up-local-model).
+> This guide assumes you already have a model API. If you don't please follow the instructions to [Setup your Local Model API](/latest/setting-up-local-model-api).
 
 When the list is not complete, and you want to add your server to it just click the `Create New Model API` button (bottom left of the page). That should create empty form for you to edit:
 
