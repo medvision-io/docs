@@ -4,7 +4,7 @@ get:
   summary: Get segmentation for study
   description: |
     Should return segmentation data for a given segment. Response size should match entire volumen size (`images in series` x `width` x `height`)
-  operationId: getSegmentationForSeries
+  operationId: getSegmentationForStudyies
   parameters:
     - name: model-uid
       in: path

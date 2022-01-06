@@ -29,7 +29,6 @@ const OperationRow = styled(Row)`
 export default function OperationItem({ item }: Props) {
   const { summary, description, deprecated, externalDocs, isWebhook } = item;
   const hasDescription = !!(description || externalDocs);
-  console.log(item);
 
   return (
     <React.Fragment>

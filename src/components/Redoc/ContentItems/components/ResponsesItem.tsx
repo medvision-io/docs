@@ -51,7 +51,6 @@ export default function ResponsesItem({ responses = {} }: Props) {
   if (Object.keys(responses).length < 1) {
     return null;
   }
-  console.log(responses)
   return (
     <Grid container spacing={2} sx={{ mt: 1 }}>
       <Typography variant={"body1"} sx={{ ml: 2 }}>
