@@ -17,15 +17,17 @@ import TimerIcon from "@mui/icons-material/Timer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PhonelinkSetupIcon from "@mui/icons-material/PhonelinkSetup";
 import ConstructionIcon from "@mui/icons-material/Construction";
-import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
-import FormatShapesIcon from '@mui/icons-material/FormatShapes';
-import SchemaOutlinedIcon from '@mui/icons-material/SchemaOutlined';
+import ScatterPlotIcon from "@mui/icons-material/ScatterPlot";
+import FormatShapesIcon from "@mui/icons-material/FormatShapes";
+import SchemaOutlinedIcon from "@mui/icons-material/SchemaOutlined";
 import { useContext, useState } from "react";
 import { MenuListItem } from "../../services/OpenAPI";
 import OperationBadge from "../common/OperationBadge";
 import { NavigationContext } from "./NavigationContext";
 import { scrollToId } from "../../utils/scrollToId";
 import { isBrowser } from "../Redoc/Markdown/SanitizedMdBlock";
+
+const MAX_HEADING_DEPTH = 2;
 
 const ICON_MAP = {
   users: <PeopleIcon />,
@@ -176,7 +178,7 @@ export default function NavListElement({
     return acc;
   }, {});
 
-  const selectedHash = isBrowser() ? window.location.hash : '';
+  const selectedHash = isBrowser() ? window.location.hash : "";
 
   return (
     <React.Fragment>
@@ -215,25 +217,34 @@ export default function NavListElement({
                           >
                             <ListItemText primary={page.frontmatter.title} />
                           </ListItemButton>
-                          {page.headings.map((heading) => (
-                            <React.Fragment key={page.fields.slug + heading.id}>
-                              <ListItemButton
-                                onClick={
-                                  pagesClickHandlers[page.fields.slug][
-                                    heading.id
-                                  ]
-                                }
-                                selected={`#${heading.id}` === selectedHash}
-                                sx={{
-                                  ...item,
-                                  pl: 6 + (heading.depth - 1) * 2,
-                                }}
+                          {page.headings
+                            .filter(
+                              (heading) => heading.depth <= MAX_HEADING_DEPTH
+                            )
+                            .map((heading) => (
+                              <React.Fragment
                                 key={page.fields.slug + heading.id}
                               >
-                                <ListItemText primary={"- " + heading.value} />
-                              </ListItemButton>
-                            </React.Fragment>
-                          ))}
+                                <ListItemButton
+                                  onClick={
+                                    pagesClickHandlers[page.fields.slug][
+                                      heading.id
+                                    ]
+                                  }
+                                  selected={`#${heading.id}` === selectedHash}
+                                  sx={{
+                                    ...item,
+                                    pl: 6 + (heading.depth - 1) * 2,
+                                  }}
+                                  key={page.fields.slug + heading.id}
+                                >
+                                  <ListItemText
+                                    primaryTypographyProps={{ style: {fontSize: "12px"} }}
+                                    primary={"- " + heading.value}
+                                  />
+                                </ListItemButton>
+                              </React.Fragment>
+                            ))}
                         </React.Fragment>
                       ))}
                     {groups
@@ -281,6 +292,7 @@ export default function NavListElement({
                                       <OperationBadge item={openApiItem} />
                                     </ListItemIcon>
                                     <ListItemText
+                                      primaryTypographyProps={{ style: {fontSize: "12px"} }}
                                       primary={openApiItem.summary}
                                     />
                                   </ListItemButton>

@@ -32,12 +32,14 @@ Usually you should have a list of models defined by your organization and availa
 After modifying settings confirm your choice by clicking on `Save Settings` button (bottom right of the page).
 
 ### List of fields:
-- `Model Name` - Just a display name, visible on the list of servers
-- `Model UUID` - UUIDv4 of model API avaiable though [Model Proxy](/latest/model-proxy)
-- `Model Type` - One of supported types inferences (`segmentation` | `annotation` | `prediction`).
-- `Supported Path` - One of supported data types for inference. This value determines the type od data that model receives through proxy.
-````shell
+- __Model Name__ - Just a display name, visible on the list of servers
+- __Server URL__ - Server to send requests to. If you're using our [Model Proxy](/latest/model-proxy) then it would be `https://localhost:8002`
+- __Model UUID__ - UUIDv4 of model API avaiable though [Model Proxy](/latest/model-proxy)
+- __Model Type__ - One of supported types inferences (`segmentation` | `annotation` | `prediction`).
+- __Supported Path__ - One of supported data types for inference. This value determines the type od data that model receives through proxy. If your model supports more than one path, then just add it twice with different options.
+```shell
 /studies
 /studies/series
 /studies/series/instances
 ```
+- __Modalities__ - If your model is restricted to specific modalities then select them from the list. Otherwise, it will be available for every modality.
