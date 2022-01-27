@@ -45,7 +45,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/predictions/InstanceSegmentation.yaml"
+            $ref: "../../components/schemas/predictions/InstancePrediction.yaml"
     "403":
       description: Forbidden
       $ref: ../../components/responses/Problem.yaml

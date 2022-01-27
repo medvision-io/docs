@@ -37,7 +37,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/predictions/SeriesSegmentation.yaml"
+            $ref: "../../components/schemas/predictions/SeriesPrediction.yaml"
     "403":
       description: Forbidden
       $ref: ../../components/responses/Problem.yaml
