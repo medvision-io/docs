@@ -1,0 +1,22 @@
+description: Metadata Object
+type: object
+properties:
+  dataType:
+    type: string
+    enum:
+      - percentage
+      - date
+      - text
+      - number
+    example: 'percentage'
+  value:
+    type:
+      - string
+      - number
+    example: 12
+  title:
+    type: string
+    example: 'Risk'
+  description:
+    type: string
+    example: 'Risk of patient having a malignant tumor'

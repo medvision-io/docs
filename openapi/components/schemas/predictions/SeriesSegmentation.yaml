@@ -1,4 +1,3 @@
-description: Segmentation object
 type: object
 properties:
   '{StudyInstanceUID}':
@@ -7,8 +6,6 @@ properties:
       '{SeriesInstanceUID}':
         type: object
         properties:
-          '{SOPInstanceUID}':
-            $ref: './Frame.yaml'
           metadata:
             type: array
             items:

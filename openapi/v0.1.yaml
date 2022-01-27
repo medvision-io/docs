@@ -22,6 +22,9 @@ x-tagGroups:
     section: inferences
     tags:
       - Polygon
+  - name: Predictions
+    section: inferences
+    tags: []
 servers:
   - url: 'https://api.zhiva.ai/v1'
 paths:
@@ -37,6 +40,12 @@ paths:
     $ref: 'paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}.yaml'
   '/annotations/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
     $ref: 'paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
+  '/predictions/{model-uid}/studies/{study-uid}':
+    $ref: 'paths/predictions/predictions@{model-uid}@{study-uid}.yaml'
+  '/predictions/{model-uid}/studies/{study-uid}/series/{series-uid}':
+    $ref: 'paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}.yaml'
+  '/predictions/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
+    $ref: 'paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
 components:
   securitySchemes:
     main_auth:
