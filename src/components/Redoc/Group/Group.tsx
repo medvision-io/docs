@@ -17,14 +17,15 @@ export default function Group({ selectedGroup, openApiStore }: Props) {
     <React.Fragment>
       {groups.map((group) => (
         <React.Fragment key={`group-${group.slug}`}>
-          {
-            group.tags.map(tag => (
-              <React.Fragment key={`tag-${tag}`}>
-                <SectionItem item={openApiStore.items[tag]} />
-                <ContentItems items={openApiStore.items[tag].items} />
-              </React.Fragment>
-            ))
-          }
+          {group.tags.map((tag) => (
+            <React.Fragment key={`tag-${tag}`}>
+              <SectionItem item={openApiStore.items[tag]} />
+              <ContentItems items={openApiStore.items[tag].items} />
+            </React.Fragment>
+          ))}
+          {openApiStore.items[group.name] != null && (
+            <ContentItems items={openApiStore.items[group.name].items} />
+          )}
         </React.Fragment>
       ))}
       ;

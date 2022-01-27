@@ -5,7 +5,9 @@ code {
   font-weight: 600;
   color: #e53935;
   background-color: rgba(38, 50, 56, 0.05);
-  white-space: nowrap;
+  white-space: break-spaces;
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 code.regex {

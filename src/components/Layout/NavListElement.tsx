@@ -149,6 +149,27 @@ export default function NavListElement({
             }
           }
         });
+        if (operation.tags.includes(group.name)) {
+          if (isBrowser()) {
+            if (
+              window.location.pathname.includes(
+                ["", selectedVersionSlug, group.slug].join("/")
+              )
+            ) {
+              groupacc[`${group.slug}#${operation.operationId}`] = () => {
+                window.location.hash = operation.urlId;
+
+                scrollToId(operation.urlId);
+              };
+            } else {
+              groupacc[`${group.slug}#${operation.operationId}`] = () => {
+                window.location.href =
+                  ["", selectedVersionSlug, group.slug].join("/") +
+                  `#${operation.urlId}`;
+              };
+            }
+          }
+        }
         return groupacc;
       }, {}),
     };
@@ -239,7 +260,9 @@ export default function NavListElement({
                                   key={page.fields.slug + heading.id}
                                 >
                                   <ListItemText
-                                    primaryTypographyProps={{ style: {fontSize: "12px"} }}
+                                    primaryTypographyProps={{
+                                      style: { fontSize: "12px" },
+                                    }}
                                     primary={"- " + heading.value}
                                   />
                                 </ListItemButton>
@@ -259,6 +282,34 @@ export default function NavListElement({
                           >
                             <ListItemText primary={group.name} />
                           </ListItemButton>
+                          {openApiItems
+                            .filter((openApiItem) =>
+                              openApiItem.tags.includes(group.name)
+                            )
+                            .map((openApiItem) => (
+                              <ListItemButton
+                                onClick={
+                                  operationClickHandlers[
+                                    `${group.slug}#${openApiItem.operationId}`
+                                  ]
+                                }
+                                selected={visibleElements.includes(
+                                  openApiItem.urlId
+                                )}
+                                sx={{ ...item, pl: 8 }}
+                                key={group.slug + openApiItem.operationId}
+                              >
+                                <ListItemIcon sx={{ mr: 0 }}>
+                                  <OperationBadge item={openApiItem} />
+                                </ListItemIcon>
+                                <ListItemText
+                                  primaryTypographyProps={{
+                                    style: { fontSize: "12px" },
+                                  }}
+                                  primary={openApiItem.summary}
+                                />
+                              </ListItemButton>
+                            ))}
                           {group.tags.map((tag) => (
                             <React.Fragment key={group.slug + tag.slug}>
                               <ListItemButton
@@ -292,7 +343,9 @@ export default function NavListElement({
                                       <OperationBadge item={openApiItem} />
                                     </ListItemIcon>
                                     <ListItemText
-                                      primaryTypographyProps={{ style: {fontSize: "12px"} }}
+                                      primaryTypographyProps={{
+                                        style: { fontSize: "12px" },
+                                      }}
                                       primary={openApiItem.summary}
                                     />
                                   </ListItemButton>
