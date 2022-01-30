@@ -1,7 +1,14 @@
-description: Slice frame
-type: object
-properties:
-  rois:
+rois:
+  type: array
+  items:
     type: array
+    length: 2
     items:
-      $ref: './Annotation.yaml'
+      title: Point
+      format: "x,y"
+      type: integer
+  example: "[[120,130], [110, 130], [75, 100]]"
+metadata:
+  type: array
+  items:
+    $ref: '../common/Metadata.yaml'

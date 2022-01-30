@@ -1,14 +1,21 @@
 description: Segmentation object
 type: object
+required:
+  - StudyInstanceUID
 properties:
-  '{StudyInstanceUID}':
+  'StudyInstanceUID':
     type: object
+    required:
+      - SeriesInstanceUID
     properties:
-      '{SeriesInstanceUID}':
+      'SeriesInstanceUID':
         type: object
         properties:
-          '{SOPInstanceUID}':
-            $ref: './Frame.yaml'
+          'SOPInstanceUID':
+            required:
+              - segments
+            properties:
+              $ref: './Frame.yaml'
           metadata:
             type: array
             items:

@@ -2,6 +2,7 @@ description: Metadata Object
 type: object
 properties:
   dataType:
+    required: true
     type: string
     enum:
       - percentage
@@ -10,11 +11,13 @@ properties:
       - number
     example: 'percentage'
   value:
+    required: true
     type:
       - string
       - number
     example: 12
   title:
+    required: true
     type: string
     example: 'Risk'
   description:
