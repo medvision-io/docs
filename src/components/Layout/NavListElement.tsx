@@ -392,7 +392,10 @@ export default function NavListElement({
                       .length === 0 &&
                       pages.filter(
                         (page) => page.frontmatter.category === catKey
-                      ).length === 0 && (
+                      ).length === 0 &&
+                      (catKey === "api-schemas"
+                        ? schemas.length === 0
+                        : true) && (
                         <ListItem sx={{ ...item, pl: 8 }} key={"not found"}>
                           <ListItemIcon sx={{ mr: 1 }}>
                             <ConstructionIcon
