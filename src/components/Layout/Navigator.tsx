@@ -115,6 +115,11 @@ export default function Navigator(props: Props) {
             name
             section
           }
+          schemas {
+            name
+            slug
+            doNotRender
+          }
         }
       }
       site {
@@ -162,6 +167,10 @@ export default function Navigator(props: Props) {
   const groups = nodes.find(
     (node) => node.slug === selectedVersion
   ).x_tagGroups;
+
+  const schemas = nodes.find(
+    (node) => node.slug === selectedVersion
+  ).schemas.filter(schema => schema.doNotRender !== true);
 
   const currVersion = versions.find((ver) => ver.orgSlug === selectedVersion);
   const pages = mdPages.filter((page) =>
@@ -230,6 +239,7 @@ export default function Navigator(props: Props) {
           sections={sections}
           groups={groups}
           pages={pages}
+          schemas={schemas}
           openApiItems={openApiItems}
         />
       </List>

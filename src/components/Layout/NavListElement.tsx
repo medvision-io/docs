@@ -20,6 +20,7 @@ import ConstructionIcon from "@mui/icons-material/Construction";
 import ScatterPlotIcon from "@mui/icons-material/ScatterPlot";
 import FormatShapesIcon from "@mui/icons-material/FormatShapes";
 import SchemaOutlinedIcon from "@mui/icons-material/SchemaOutlined";
+import DataObjectOutlinedIcon from "@mui/icons-material/DataObjectOutlined";
 import { useContext, useState } from "react";
 import { MenuListItem } from "../../services/OpenAPI";
 import OperationBadge from "../common/OperationBadge";
@@ -40,6 +41,7 @@ const ICON_MAP = {
   lines: <FormatShapesIcon />,
   schema: <SchemaOutlinedIcon />,
   setup: <SettingsIcon />,
+  api: <DataObjectOutlinedIcon />,
   stopwatch: <TimerIcon />,
   phone_setup: <PhonelinkSetupIcon />,
 };
@@ -65,6 +67,11 @@ interface Props {
       slug: string;
     }[];
   }[];
+  schemas?: {
+    slug: string;
+    name: string;
+    doNotRender: boolean | null;
+  }[];
   pages?: {
     fields: {
       slug: string;
@@ -88,6 +95,7 @@ export default function NavListElement({
   categories,
   groups = [],
   pages = [],
+  schemas = [],
   openApiItems,
 }: Props) {
   const [
@@ -96,6 +104,7 @@ export default function NavListElement({
       selectedVersionSlug,
       selectedTagGroup,
       selectedPage,
+      selectedSchema,
       visibleElements,
     },
   ] = useContext(NavigationContext);
@@ -104,6 +113,8 @@ export default function NavListElement({
     : selectedPage
     ? pages.find((page) => page.fields.slug === selectedPage).frontmatter
         .category
+    : selectedSchema
+    ? "api-schemas"
     : undefined;
 
   const [openedCategory, setOpenedCategory] = useState(defaultSelectedCategory);
@@ -195,6 +206,15 @@ export default function NavListElement({
         }
         return headingAcc;
       }, {}),
+    };
+    return acc;
+  }, {});
+
+  const schemaClickHandlers = schemas.reduce((acc, schema) => {
+    acc[schema.slug] = {
+      $page: () => {
+        window.location.href = `/${selectedVersionSlug}/schemas/${schema.slug}`;
+      },
     };
     return acc;
   }, {});
@@ -354,6 +374,20 @@ export default function NavListElement({
                           ))}
                         </React.Fragment>
                       ))}
+                    {catKey === "api-schemas"
+                      ? schemas.map((schema) => (
+                          <React.Fragment key={schema.slug}>
+                            <ListItemButton
+                              onClick={schemaClickHandlers[schema.slug].$page}
+                              selected={schema.slug === selectedSchema}
+                              sx={{ ...item, pl: 6 }}
+                              key={schema.slug}
+                            >
+                              <ListItemText primary={schema.name} />
+                            </ListItemButton>
+                          </React.Fragment>
+                        ))
+                      : null}
                     {groups.filter((group) => group.section === catKey)
                       .length === 0 &&
                       pages.filter(
