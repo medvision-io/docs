@@ -28,7 +28,7 @@ export class Markdown extends React.Component<MarkdownProps> {
       <SanitizedMarkdownHTML
         html={renderer.renderMd(source)}
         inline={inline}
-        compact={compact}
+        compact={Boolean(compact)}
         className={className}
         data-role={dataRole}
       />
