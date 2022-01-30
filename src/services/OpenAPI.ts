@@ -6,6 +6,7 @@ import buildOperations from "./helpers/buildOperations";
 import {getDefinitionName, isNamedDefinition} from "../utils/openapi";
 import { MediaTypeModel } from "./models/MediaTypeModel";
 import { ExampleModel } from "./models/ExampleModel";
+import slugify from "slugify";
 
 export type TagsInfoMap = Record<string, any>;
 
@@ -96,14 +97,16 @@ export const GROUP_DEPTH = 0;
 
 export class OpenAPI {
   spec: OpenAPISpec;
+  versionSlug: string;
   menuItems: MenuListItem[];
   items: TagsInfoMap;
   allowMergeRefs: boolean;
   _refCounter: RefCounter;
   ignoreNamedSchemas: Set<string>;
 
-  constructor({ spec }: { spec: OpenAPISpec }) {
+  constructor({ spec, versionSlug }: { spec: OpenAPISpec, versionSlug: string }) {
     this.spec = spec;
+    this.versionSlug = versionSlug;
     this._refCounter = new RefCounter();
     this.allowMergeRefs = true;
     this.ignoreNamedSchemas = new Set([]);
@@ -112,6 +115,22 @@ export class OpenAPI {
     this.items = buildOperations(this.spec);
 
     this.addExamplesToItems();
+  }
+
+  generateSchemaLink = (schemaRef): {
+    href: string,
+    name: string,
+  } => {
+    const schemaName = schemaRef.split('/').pop()
+    const schemaSlug = slugify(schemaName, {
+      replacement: "-",
+      lower: true,
+      strict: true,
+    })
+    return {
+      href: `/${this.versionSlug}/schemas/${schemaSlug}`,
+      name: schemaName
+    };
   }
 
   addExamplesToItems = () => {

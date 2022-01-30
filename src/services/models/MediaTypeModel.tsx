@@ -12,6 +12,7 @@ export class MediaTypeModel {
   isRequestType: boolean;
   onlyRequiredInSamples: boolean;
   generatedPayloadSamplesMaxDepth: number;
+  schemaRefs: string[];
 
   /**
    * @param isRequestType needed to know if skipe RO/RW fields in objects
@@ -29,7 +30,9 @@ export class MediaTypeModel {
       generatedPayloadSamplesMaxDepth: 12,
     }
   ) {
+    this.schemaRefs = [];
     if (info.schema.$ref != null) {
+      this.schemaRefs.push(info.schema.$ref);
       info.schema = openApi.deref(info.schema)
     }
     if (info.schema.allOf != null) {

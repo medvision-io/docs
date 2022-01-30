@@ -2,10 +2,11 @@ import * as React from "react";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout/Layout";
 import { PageContext } from "gatsby/internal";
-import AppInfo from '../components/Redoc/ApiInfo/ApiInfo'
-import {OpenAPI} from "../services/OpenAPI";
-import {OpenAPISpec} from "../types/OpenAPISpec";
+import AppInfo from "../components/Redoc/ApiInfo/ApiInfo";
+import { OpenAPI } from "../services/OpenAPI";
+import { OpenAPISpec } from "../types/OpenAPISpec";
 import DocHead from "../components/Layout/DocHead";
+import {getLatestSemver} from "../utils";
 
 interface Props {
   data: {
@@ -29,30 +30,41 @@ interface Props {
         };
         slug: string;
       }[];
-      spec: string,
+      spec: string;
       slug: string;
       tags: {
         description: string;
         name: string;
       };
     };
+    allOpenapiYaml: {
+      nodes: [
+        {
+          info: {
+            version: string;
+          };
+          slug: string;
+        }
+      ]
+    };
   };
   pageContext: PageContext;
 }
 
 export default function PageTemplate({ data, pageContext }: Props) {
-  const {
-    openapiYaml,
-  } = data;
-  const openApiStore = new OpenAPI({spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec});
+  const { openapiYaml, allOpenapiYaml } = data;
+  const latestVersion = getLatestSemver(allOpenapiYaml.nodes.map((openapi) => openapi.info.version));
+  const openApiStore = new OpenAPI({
+    spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec,
+    versionSlug: openapiYaml.info.version === latestVersion ? 'latest' : openapiYaml.slug,
+  });
   return (
-    <Layout
-      selectedVersion={openapiYaml.slug}
-      openApiStore={openApiStore}
-    >
+    <Layout selectedVersion={openapiYaml.slug} openApiStore={openApiStore}>
       <React.Fragment>
-        <DocHead title={openapiYaml.info.title + ' ' + openapiYaml.info.version}/>
-        <AppInfo store={openApiStore}/>
+        <DocHead
+          title={openapiYaml.info.title + " " + openapiYaml.info.version}
+        />
+        <AppInfo store={openApiStore} />
       </React.Fragment>
     </Layout>
   );
@@ -86,6 +98,14 @@ export const pageQuery = graphql`
       tags {
         description
         name
+      }
+    }
+    allOpenapiYaml {
+      nodes {
+        info {
+          version
+        }
+        slug
       }
     }
   }
