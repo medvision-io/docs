@@ -3,7 +3,7 @@ import { OpenAPISpec, OpenAPIXCodeSample } from "../types/OpenAPISpec";
 import buildMenu from "./helpers/buildMenu";
 import { OpenAPIV3_1 } from "openapi-types";
 import buildOperations from "./helpers/buildOperations";
-import { getDefinitionName } from "./helpers/openapi";
+import {getDefinitionName, isNamedDefinition} from "../utils/openapi";
 import { MediaTypeModel } from "./models/MediaTypeModel";
 import { ExampleModel } from "./models/ExampleModel";
 
@@ -245,6 +245,161 @@ export class OpenAPI {
     }
     return obj;
   };
+
+
+  /**
+   * Merge allOf constraints.
+   * @param schema schema with allOF
+   * @param $ref pointer of the schema
+   * @param forceCircular whether to dereference children even if it is a circular ref
+   */
+  mergeAllOf(
+    schema: OpenAPIV3_1.SchemaObject,
+    $ref?: string,
+    forceCircular: boolean = false,
+    used$Refs = new Set<string>(),
+  ) {
+    if ($ref) {
+      used$Refs.add($ref);
+    }
+
+    schema = this.hoistOneOfs(schema);
+
+    if (schema.allOf === undefined) {
+      return schema;
+    }
+
+    let receiver = {
+      ...schema,
+      allOf: undefined,
+      parentRefs: [],
+      title: schema.title || getDefinitionName($ref),
+    };
+
+    // avoid mutating inner objects
+    if (receiver.properties !== undefined && typeof receiver.properties === 'object') {
+      receiver.properties = { ...receiver.properties };
+    }
+    if (receiver.items !== undefined && typeof receiver.items === 'object') {
+      receiver.items = { ...receiver.items };
+    }
+
+    const allOfSchemas = schema.allOf
+      .map(subSchema => {
+        if (subSchema && subSchema.$ref && used$Refs.has(subSchema.$ref)) {
+          return undefined;
+        }
+
+        const resolved = this.deref(subSchema, forceCircular, true);
+        const subRef = subSchema.$ref || undefined;
+        const subMerged = this.mergeAllOf(resolved, subRef, forceCircular, used$Refs);
+        receiver.parentRefs!.push(...(subMerged.parentRefs || []));
+        return {
+          $ref: subRef,
+          schema: subMerged,
+        };
+      })
+      .filter(child => child !== undefined) as Array<{
+      $ref: string | undefined;
+      schema: OpenAPIV3_1.SchemaObject;
+    }>;
+
+    for (const { $ref: subSchemaRef, schema: subSchema } of allOfSchemas) {
+      if (
+        receiver.type !== subSchema.type &&
+        receiver.type !== undefined &&
+        subSchema.type !== undefined
+      ) {
+        console.warn(
+          `Incompatible types in allOf at "${$ref}": "${receiver.type}" and "${subSchema.type}"`,
+        );
+      }
+
+      if (subSchema.type !== undefined) {
+        receiver.type = subSchema.type;
+      }
+
+      if (subSchema.properties !== undefined) {
+        receiver.properties = receiver.properties || {};
+        for (const prop in subSchema.properties) {
+          if (!receiver.properties[prop]) {
+            receiver.properties[prop] = subSchema.properties[prop];
+          } else {
+            // merge inner properties
+            const mergedProp = this.mergeAllOf(
+              { allOf: [receiver.properties[prop], subSchema.properties[prop]] },
+              $ref + '/properties/' + prop,
+            );
+            receiver.properties[prop] = mergedProp;
+            this.exitParents(mergedProp); // every prop resolution should have separate recursive stack
+          }
+        }
+      }
+
+      if (subSchema.items !== undefined) {
+        receiver.items = receiver.items || {};
+        // merge inner properties
+        receiver.items = this.mergeAllOf(
+          { allOf: [receiver.items, subSchema.items] },
+          $ref + '/items',
+        );
+      }
+
+      if (subSchema.required !== undefined) {
+        receiver.required = (receiver.required || []).concat(subSchema.required);
+      }
+
+      // merge rest of constraints
+      // TODO: do more intelligent merge
+      receiver = { ...subSchema, ...receiver };
+
+      if (subSchemaRef) {
+        receiver.parentRefs!.push(subSchemaRef);
+        if (receiver.title === undefined && isNamedDefinition(subSchemaRef)) {
+          // this is not so correct behaviour. commented out for now
+          // ref: https://github.com/Redocly/redoc/issues/601
+          // receiver.title = JsonPointer.baseName(subSchemaRef);
+        }
+      }
+    }
+
+    return receiver;
+  }
+
+  exitParents(shema) {
+    for (const parent$ref of shema.parentRefs || []) {
+      this.exitRef({ $ref: parent$ref });
+    }
+  }
+
+  private hoistOneOfs(schema: OpenAPIV3_1.SchemaObject) {
+    if (schema.allOf === undefined) {
+      return schema;
+    }
+
+    const allOf = schema.allOf;
+    for (let i = 0; i < allOf.length; i++) {
+      const sub = allOf[i];
+      if (Array.isArray(sub.oneOf)) {
+        const beforeAllOf = allOf.slice(0, i);
+        const afterAllOf = allOf.slice(i + 1);
+        return {
+          oneOf: sub.oneOf.map(part => {
+            const merged = this.mergeAllOf({
+              allOf: [...beforeAllOf, part, ...afterAllOf],
+            });
+
+            // each oneOf should be independent so exiting all the parent refs
+            // otherwise it will cause false-positive recursive detection
+            this.exitParents(merged);
+            return merged;
+          }),
+        };
+      }
+    }
+
+    return schema;
+  }
 
   /**
    * get spec part by JsonPointer ($ref)
