@@ -1,10 +1,10 @@
 import * as React from "react";
-import Link from '@mui/material/Link';
-import {H3, H4} from "../../common/Headings";
+import Link from "@mui/material/Link";
+import { H3, H4 } from "../../common/Headings";
 import { Row } from "../../common/Row";
-import {MiddlePanel, RightPanel} from "../../common/Panels";
-import {ExternalDocumentation} from "../ExternalDocumentation/ExternalDocumentation";
-import {Markdown} from "../Markdown/Markdown";
+import { MiddlePanel, RightPanel } from "../../common/Panels";
+import { ExternalDocumentation } from "../ExternalDocumentation/ExternalDocumentation";
+import { Markdown } from "../Markdown/Markdown";
 
 interface Props {
   item: any;
@@ -21,10 +21,7 @@ export default function SectionItem({ item }: Props) {
           <Header>
             <Link href={`#${item.urlId}`}>{name}</Link>
           </Header>
-          <Markdown
-            source={item.description}
-            data-role="redoc-description"
-          />
+          <Markdown source={description} data-role="redoc-description" />
           {/*{externalDocs && (*/}
           {/*  <Row>*/}
           {/*    <MiddlePanel>*/}
@@ -33,9 +30,7 @@ export default function SectionItem({ item }: Props) {
           {/*  </Row>*/}
           {/*)}*/}
         </MiddlePanel>
-        <RightPanel>
-
-        </RightPanel>
+        <RightPanel></RightPanel>
       </Row>
     </React.Fragment>
   );

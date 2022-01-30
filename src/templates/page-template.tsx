@@ -4,6 +4,7 @@ import Layout from "../components/Layout/Layout";
 import { OpenAPI } from "../services/OpenAPI";
 import { OpenAPISpec } from "../types/OpenAPISpec";
 import DocHead from "../components/Layout/DocHead";
+import {getLatestSemver} from "../utils";
 
 interface Props {
   data: {
@@ -46,6 +47,16 @@ interface Props {
         name: string;
       };
     };
+    allOpenapiYaml: {
+      nodes: [
+        {
+          info: {
+            version: string;
+          };
+          slug: string;
+        }
+      ]
+    };
     site: {
       siteMetadata: {
         categories: {
@@ -62,13 +73,16 @@ export default function PageTemplate({ data }: Props) {
   const {
     markdownRemark,
     openapiYaml,
+    allOpenapiYaml,
     site: {
       siteMetadata: { categories },
     },
   } = data;
   const { frontmatter, html } = markdownRemark;
+  const latestVersion = getLatestSemver(allOpenapiYaml.nodes.map((openapi) => openapi.info.version));
   const openApiStore = new OpenAPI({
     spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec,
+    versionSlug: openapiYaml.info.version === latestVersion ? 'latest' : openapiYaml.slug,
   });
   const selectedCategory = categories.find(
     (cat) => cat.key === frontmatter?.category
@@ -143,6 +157,14 @@ export const pageQuery = graphql`
       tags {
         description
         name
+      }
+    }
+    allOpenapiYaml {
+      nodes {
+        info {
+          version
+        }
+        slug
       }
     }
     site {

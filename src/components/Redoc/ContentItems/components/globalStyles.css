@@ -19,3 +19,14 @@ code.regex {
   background-color: rgba(38, 50, 56, 0.05);
   white-space: break-spaces;
 }
+
+.eqivia {
+  border-radius: 2px;
+  background-color: rgba(51, 51, 51, 0.05);
+  color: rgba(51, 51, 51, 0.9);
+  padding: 0px 5px;
+  border: 1px solid rgba(51, 51, 51, 0.1);
+  font-family: Courier, monospace;
+  white-space: break-spaces;
+  word-wrap: break-word;
+}

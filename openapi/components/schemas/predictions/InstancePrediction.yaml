@@ -1,13 +1,13 @@
 description: Segmentation object
 type: object
 properties:
-  '{StudyInstanceUID}':
+  'StudyInstanceUID':
     type: object
     properties:
-      '{SeriesInstanceUID}':
+      'SeriesInstanceUID':
         type: object
         properties:
-          '{SOPInstanceUID}':
+          'SOPInstanceUID':
             type: object
             properties:
               metadata:

@@ -42,6 +42,7 @@ const IndexPage = ({ data }: Props) => {
   }, [latestVer]);
   const openApiStore = new OpenAPI({
     spec: JSON.parse(latestVer.node.spec || "{}") as any as OpenAPISpec,
+    versionSlug: latestVer.node.slug,
   });
   return (
     <Layout openApiStore={openApiStore} selectedVersion={latestVer.node.slug}>

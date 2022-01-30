@@ -1,10 +1,8 @@
 import * as URLtemplate from 'url-template';
-import {OpenAPIParameter} from "../OpenAPI";
+import {OpenAPIParameter} from "../services/OpenAPI";
 import {OpenAPIV3_1} from "openapi-types";
-
-export function isJsonLike(contentType: string): boolean {
-  return contentType.search(/json/i) !== -1;
-}
+import {isJsonLike} from "./helpers";
+import {FieldModel} from "../services/models/FieldModel";
 
 export function serializeParameterValueWithMime(value: any, mime: string): string {
   if (isJsonLike(mime)) {
@@ -273,4 +271,67 @@ export function humanizeConstraints(schema: OpenAPIV3_1.SchemaObject): string[] 
   }
 
   return res;
+}
+
+export function isNamedDefinition(pointer?: string): boolean {
+  return /^#\/components\/(schemas|pathItems)\/[^\/]+$/.test(pointer || '');
+}
+
+export function isPrimitiveType(
+  schema: any,
+  type: string | string[] | undefined = schema.type,
+) {
+  if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
+    return false;
+  }
+
+  let isPrimitive = true;
+  const isArray = Array.isArray(type);
+
+  if (type === 'object' || (isArray && type?.includes('object'))) {
+    isPrimitive =
+      schema.properties !== undefined
+        ? Object.keys(schema.properties).length === 0
+        : schema.additionalProperties === undefined;
+  }
+
+  if (schema.items !== undefined && (type === 'array' || (isArray && type?.includes('array')))) {
+    isPrimitive = isPrimitiveType(schema.items, schema.items.type);
+  }
+
+  return isPrimitive;
+}
+
+export function pluralizeType(displayType: string): string {
+  return displayType
+    .split(' or ')
+    .map(type => type.replace(/^(string|object|number|integer|array|boolean)s?( ?.*)/, '$1s$2'))
+    .join(' or ');
+}
+
+export function sortByField(
+  fields: FieldModel[],
+  param: keyof Pick<FieldModel, 'name' | 'description' | 'kind'>,
+) {
+  return [...fields].sort((a, b) => {
+    return a[param].localeCompare(b[param]);
+  });
+}
+
+export function sortByRequired(fields: FieldModel[], order: string[] = []) {
+  const unrequiredFields: FieldModel[] = [];
+  const orderedFields: FieldModel[] = [];
+  const unorderedFields: FieldModel[] = [];
+
+  fields.forEach(field => {
+    if (field.required) {
+      order.includes(field.name) ? orderedFields.push(field) : unorderedFields.push(field);
+    } else {
+      unrequiredFields.push(field);
+    }
+  });
+
+  orderedFields.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+
+  return [...orderedFields, ...unorderedFields, ...unrequiredFields];
 }

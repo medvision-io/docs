@@ -28,6 +28,11 @@ async function createPages({ actions, graphql }) {
               }
               slug
             }
+            schemas {
+              name
+              slug
+              doNotRender
+            }
             slug
             info {
               version

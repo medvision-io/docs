@@ -1,15 +1,32 @@
 type: object
+required:
+  - StudyInstanceUID
 properties:
-  '{StudyInstanceUID}':
+  'StudyInstanceUID':
     type: object
+    required:
+      - SeriesInstanceUID
+    additionalProperties:
+      type: object
+      required:
+        - SOPInstanceUID
+      minItems: 1
+      x-additionalPropertiesName: SeriesInstanceUID
+      additionalProperties:
+        type: object
+        minItems: 1
+        x-additionalPropertiesName: SOPInstanceUID
+        required:
+          - rois
+        properties:
+          $ref: './AnnotationFrame.yaml'
+      properties:
+        metadata:
+          type: array
+          items:
+            $ref: '../common/Metadata.yaml'
     properties:
-      '{SeriesInstanceUID-1}':
-        type: object
-        properties:
-          '{SOPInstanceUID-1}':
-            $ref: './AnnotationFrame.yaml'
-      '{SeriesInstanceUID-2}':
-        type: object
-        properties:
-          '{SOPInstanceUID-1}':
-            $ref: './AnnotationFrame.yaml'
+      metadata:
+        type: array
+        items:
+          $ref: '../common/Metadata.yaml'

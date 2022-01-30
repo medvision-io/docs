@@ -7,13 +7,15 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { OpenAPIV3_1 } from "openapi-types";
-import { ReactElement, useState } from "react";
+import { ReactElement, useContext, useState } from "react";
 import ReactJson from "react-json-view";
 import ToggleButton from "@mui/material/ToggleButton";
-import {isBrowser} from "../../Markdown/SanitizedMdBlock";
+import { isBrowser } from "../../Markdown/SanitizedMdBlock";
+import Link from "@mui/material/Link";
+import { OpenAPIContext } from "../../../Layout/OpenAPIContext";
 
 interface Props {
-  requestBody?: OpenAPIV3_1.ResponsesObject;
+  requestBody?: OpenAPIV3_1.RequestBodyObject;
   responses?: OpenAPIV3_1.ResponsesObject;
   type: string;
 }
@@ -73,6 +75,7 @@ function getExamplesList({ responses, requestBody, type }: Props): {
   key: string;
   parentKey: string;
   mediaType: string;
+  schemaRefs?: string[];
 }[] {
   if (type === "request") {
     return Object.entries(requestBody.examples).reduce(
@@ -85,6 +88,7 @@ function getExamplesList({ responses, requestBody, type }: Props): {
                 mediaType: requestKey,
                 key: exampleKey,
                 name: exampleKey,
+                schemaRefs: requestData.schemaRefs,
                 example,
               });
             }
@@ -109,6 +113,7 @@ function getExamplesList({ responses, requestBody, type }: Props): {
                       mediaType: mediaType,
                       key: exampleKey,
                       name: exampleKey,
+                      schemaRefs: mediaData.schemaRefs,
                       example,
                     });
                   }
@@ -166,11 +171,12 @@ export default function ExamplesItem({ responses, requestBody, type }: Props) {
     );
     return acc;
   }, {});
+
   const [selectedParent, setSelectedParent] = useState(uniqueParentKeys[0]);
   const [selectedMedia, setSelectedMedia] = useState(
     mediaTypes[uniqueParentKeys[0]][0]
   );
-  const [selectedKeys, setSelectedKeys] = useState(null);
+  const { openApi } = useContext(OpenAPIContext);
 
   const handleParentChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -183,6 +189,7 @@ export default function ExamplesItem({ responses, requestBody, type }: Props) {
   const handleMediaChange = (event: SelectChangeEvent) => {
     setSelectedMedia(event.target.value);
   };
+
   return (
     <Grid container spacing={2} sx={{ mt: 1 }}>
       {getTitle(type)}
@@ -192,7 +199,7 @@ export default function ExamplesItem({ responses, requestBody, type }: Props) {
             <StyledToggleButton
               key={parentKey}
               sx={{ mr: 1, pl: 2, pr: 2, pt: 0, pb: 0 }}
-              style={{ fontWeight: (selectedParent === parentKey ? 700 : 400) }}
+              style={{ fontWeight: selectedParent === parentKey ? 700 : 400 }}
               color={"secondary"}
               selected={selectedParent === parentKey}
               value={parentKey}
@@ -244,21 +251,35 @@ export default function ExamplesItem({ responses, requestBody, type }: Props) {
             ({ key, parentKey, mediaType }) =>
               mediaType === selectedMedia && parentKey === selectedParent
           )
-          .map(({ example, name, key, parentKey, mediaType }) => {
-            const handleSelect = () => {
-              setSelectedKeys(`${parentKey}-${mediaType}-${key}`);
-            };
+          .map(({ example, schemaRefs }) => {
             return (
               <Grid item xs={12}>
-                {
-                  isBrowser() && <ReactJson
+                {isBrowser() && (
+                  <ReactJson
                     theme={"monokai"}
                     src={example.value}
                     collapsed={1}
                     name={false}
                     collapseStringsAfterLength={10}
                   />
-                }
+                )}
+                {schemaRefs != null &&
+                  schemaRefs.map((schemaRef) => {
+                    const schemaLinkObj = openApi.generateSchemaLink(schemaRef);
+
+                    return (
+                      <Typography variant={"body2"} sx={{ p: 1, mt: 2 }}>
+                        <span>Detailed definition available in </span>
+                        <Link
+                          href={schemaLinkObj.href}
+                          underline={"hover"}
+                          aria-label={"Link to Schema definition"}
+                        >
+                          {`${schemaLinkObj.name} schema`}
+                        </Link>
+                      </Typography>
+                    );
+                  })}
               </Grid>
             );
           })}

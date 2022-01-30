@@ -6,6 +6,7 @@ type State = {
   selectedVersionSlug: string | null;
   selectedTagGroup: string | null;
   selectedPage: string | null;
+  selectedSchema: string | null;
   visibleElements: string[] | null;
 };
 
@@ -33,6 +34,7 @@ const defaultNavigationOptions: State = {
   selectedVersionSlug: null,
   selectedTagGroup: null,
   selectedPage: null,
+  selectedSchema: null,
   visibleElements: [],
 };
 
