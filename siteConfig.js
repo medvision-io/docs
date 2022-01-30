@@ -84,6 +84,12 @@ module.exports = {
     //   section: 'quality'
     // },
     {
+      name: "API Schemas",
+      key: "api-schemas",
+      icon: "api",
+      section: "build",
+    },
+    {
       name: "DICOM Server",
       key: "dicom-server",
       icon: "setup",
