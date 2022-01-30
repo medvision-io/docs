@@ -71,7 +71,7 @@ export class MediaTypeModel {
     const samplerOptions = {
       skipReadOnly: this.isRequestType,
       skipWriteOnly: !this.isRequestType,
-      skipNonRequired: this.isRequestType && this.onlyRequiredInSamples,
+      skipNonRequired: this.onlyRequiredInSamples,
       maxSampleDepth: this.generatedPayloadSamplesMaxDepth,
     };
     if (this.schema && this.schema.oneOf) {
@@ -102,6 +102,7 @@ export class MediaTypeModel {
         );
       }
     } else if (this.schema) {
+      // console.log(info.schema)
       this.examples = {
         default: new ExampleModel(
           openApi,
