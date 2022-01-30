@@ -5,7 +5,6 @@ import { OpenAPI } from "../services/OpenAPI";
 import { OpenAPISpec } from "../types/OpenAPISpec";
 import Layout from "../components/Layout/Layout";
 import semver from "semver";
-import { getLatestSemver } from "../utils";
 
 // styles
 const pageStyles = {
@@ -33,28 +32,30 @@ const codeStyles = {
 interface Props {
   data: {
     allOpenapiYaml: {
-      nodes: {
-        info: {
-          version: string;
+      edges: {
+        node: {
+          info: {
+            version: string;
+          };
+          openapi: string;
+          slug: string;
+          spec: string;
         };
-        openapi: string;
-        slug: string;
-        spec: string;
-      };
-    }[];
+      }[];
+    };
   };
 }
 
 const NotFoundPage = ({ data }: Props) => {
   const {
-    allOpenapiYaml: { nodes },
+    allOpenapiYaml: { edges },
   } = data;
   const latestVerNum = semver.maxSatisfying(
-    nodes.map((edge) => edge.info.version),
+    edges.map((edge) => edge.node.info.version),
     "x"
   );
-  const latestVer = nodes.find(
-    (edge) => edge.info.version === latestVerNum
+  const latestVer = edges.find(
+    (edge) => edge.node.info.version === latestVerNum
   );
   const openApiStore = new OpenAPI({
     spec: JSON.parse(latestVer.node.spec || "{}") as any as OpenAPISpec,
@@ -89,13 +90,15 @@ const NotFoundPage = ({ data }: Props) => {
 export const pageQuery = graphql`
   query NotFoundPage {
     allOpenapiYaml {
-      nodes {
-        info {
-          version
+      edges {
+        node {
+          info {
+            version
+          }
+          openapi
+          slug
+          spec
         }
-        openapi
-        slug
-        spec
       }
     }
   }
