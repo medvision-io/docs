@@ -67,6 +67,15 @@ async function onCreateNode(
       },
       tags: obj.tags,
       openapi: obj.openapi,
+      schemas: Object.entries(obj.components.schemas).map(([schemaName, schema]) => ({
+        name: schemaName,
+        doNotRender: schema.doNotRender,
+        slug: slugify(schemaName, {
+          replacement: "-",
+          lower: true,
+          strict: true,
+        })
+      })),
       "x-tagGroups": obj["x-tagGroups"],
       slug: kebabCase(obj.info.version),
     };
