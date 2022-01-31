@@ -5,13 +5,13 @@ import SchemaItem from "../ContentItems/components/SchemaItem";
 import { SchemaModel } from "../../../services/models/SchemaModel";
 import { MediaTypeModel } from "../../../services/models/MediaTypeModel";
 import { OpenAPIV3_1 } from "openapi-types";
-import { Row } from "../../common/Row";
 import { MiddlePanel, RightPanel } from "../../common/Panels";
 import Grid from "@mui/material/Grid";
 import { isBrowser } from "../Markdown/SanitizedMdBlock";
 import ReactJson from "react-json-view";
 import { useState } from "react";
 import { StyledToggleButton } from "../ContentItems/components/ExamplesItem";
+import { OperationRow } from "../ContentItems/OperationItem";
 
 interface Props {
   selectedSchema: string;
@@ -66,35 +66,35 @@ export default function Schema({ selectedSchema, openApiStore }: Props) {
   return (
     <React.Fragment>
       <SectionItem item={schema} />
-      <Row>
+      <OperationRow>
         <MiddlePanel compact={false}>
           <SchemaItem schema={schema} />
         </MiddlePanel>
         <RightPanel>
+          <Grid container spacing={2} sx={{ mt: 1, ml: 1 }}>
+            <Grid item xs={12}>
+              {exampleNames.map((parentKey) => (
+                <StyledToggleButton
+                  key={parentKey}
+                  sx={{ mr: 1, pl: 2, pr: 2, pt: 0, pb: 0 }}
+                  style={{
+                    fontWeight: selectedExample === parentKey ? 700 : 400,
+                  }}
+                  color={"secondary"}
+                  selected={selectedExample === parentKey}
+                  value={parentKey}
+                  onChange={handleExampleChange}
+                >
+                  {parentKey}
+                </StyledToggleButton>
+              ))}
+            </Grid>
+          </Grid>
           <Grid
             item
             xs={12}
             sx={{ mt: 1, backgroundColor: (theme) => theme.palette.grey[900] }}
           >
-            <Grid container spacing={2} sx={{ m: 1, ml: 0 }}>
-              <Grid item xs={12}>
-                {exampleNames.map((parentKey) => (
-                  <StyledToggleButton
-                    key={parentKey}
-                    sx={{ mr: 1, pl: 2, pr: 2, pt: 0, pb: 0 }}
-                    style={{
-                      fontWeight: selectedExample === parentKey ? 700 : 400,
-                    }}
-                    color={"secondary"}
-                    selected={selectedExample === parentKey}
-                    value={parentKey}
-                    onChange={handleExampleChange}
-                  >
-                    {parentKey}
-                  </StyledToggleButton>
-                ))}
-              </Grid>
-            </Grid>
             <Grid item xs={12}>
               {examples[selectedExample] != null && isBrowser() && (
                 <ReactJson
@@ -108,7 +108,7 @@ export default function Schema({ selectedSchema, openApiStore }: Props) {
             </Grid>
           </Grid>
         </RightPanel>
-      </Row>
+      </OperationRow>
     </React.Fragment>
   );
 }

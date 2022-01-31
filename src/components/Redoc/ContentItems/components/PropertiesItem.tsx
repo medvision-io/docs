@@ -63,7 +63,7 @@ export const PropertiesItem = ({
           {isRequired && <Typography color={"error"}>required</Typography>}
         </Grid>
         <Grid item xs={8}>
-          <PropertyItem item={item} />
+          <PropertyItem item={item} kind={field.kind} />
           <Divider sx={{ mt: 2 }} />
         </Grid>
         {isSelectable && selectedItems.includes(itemKey) && (
@@ -100,22 +100,32 @@ export const PropertiesItem = ({
   );
 };
 
-function getPropertyName(item: SchemaModel): ReactElement {
+function getPropertyName(item: SchemaModel, kind?: string): ReactElement {
   return (
     <React.Fragment>
       {item.typePrefix}
-      {item.displayType}
+      {kind != null &&
+      kind === "additionalProperties" &&
+      item.displayType === "object"
+        ? "dictionary"
+        : item.displayType}
       {item.displayFormat && `<${item.displayFormat}>`}
     </React.Fragment>
   );
 }
 
-export const PropertyItem = ({ item }: { item: SchemaModel }) => {
+export const PropertyItem = ({
+  item,
+  kind,
+}: {
+  item: SchemaModel;
+  kind?: string;
+}) => {
   return (
     <React.Fragment>
       <Typography sx={{ mr: 1 }}>
         <Typography variant={"caption"} sx={{ mr: 1 }}>
-          {getPropertyName(item)}
+          {getPropertyName(item, kind)}
         </Typography>
         {item.constraints.length > 0 && (
           <span className={"eqivia"} style={{ marginRight: "12px" }}>

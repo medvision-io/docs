@@ -34,7 +34,7 @@ export default function CodeItem({ codeSamples }: Props) {
     }
   };
   return (
-    <Grid container spacing={2} sx={{ mt: 1 }}>
+    <Grid container spacing={2} sx={{ mt: 1, ml: 0, pr: 2  }}>
       <Typography variant={"body1"} sx={{ ml: 2 }}>
         Code samples:
       </Typography>

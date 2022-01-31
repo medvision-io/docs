@@ -191,7 +191,7 @@ export default function ExamplesItem({ responses, requestBody, type }: Props) {
   };
 
   return (
-    <Grid container spacing={2} sx={{ mt: 1 }}>
+    <Grid container spacing={2} sx={{ mt: 1, ml: 0, pr: 2 }}>
       {getTitle(type)}
       {type !== "request" && (
         <Grid item xs={12}>

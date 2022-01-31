@@ -142,6 +142,13 @@ theme = {
         },
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          wordBreak: 'break-all',
+        }
+      }
+    },
     MuiDivider: {
       styleOverrides: {
         root: {
