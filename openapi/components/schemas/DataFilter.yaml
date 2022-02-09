@@ -1,0 +1,30 @@
+type: array
+items:
+  description: DataFilter Object
+  type: object
+  properties:
+    dataKey:
+      required: true
+      type: string
+      description: Key used by model to identify data
+      example: 'pre-contrast-series'
+    uuid:
+      required: true
+      type: string
+      example: '1d64342f-926c-4c07-b448-59c59823d469'
+    dataFilter:
+      type: array
+      required: false
+      items:
+        description: DataFilter Object
+        type: object
+        properties:
+          dataKey:
+            required: true
+            type: string
+            description: Key used by model to identify data
+            example: 'pre-contrast-series'
+          uuid:
+            required: true
+            type: string
+            example: '1d64342f-926c-4c07-b448-59c59823d469'

@@ -75,7 +75,7 @@ export default function SchemaItem({ schema, oneOf, allOf }: Props) {
   let properties = selectedSchemaObj.fields || [];
 
   return (
-    <Paper elevation={1} sx={{ pt: 1 }}>
+    <Paper elevation={1} sx={{ pt: 1, width: '100%' }}>
       {selectedSchemaObj.type === "array" && (
         <Typography variant={"caption"} sx={{ pl: 1 }}>
           Array [

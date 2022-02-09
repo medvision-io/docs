@@ -33,10 +33,6 @@ export const PropertiesItem = ({
     item.type === "array" &&
     (item.items.type === "object" || item.items.type === "array");
 
-  if (field.title === "Segment") {
-    console.log(field, item.type);
-  }
-
   const isSelectable =
     isOneOf ||
     hasRef ||
@@ -50,6 +46,8 @@ export const PropertiesItem = ({
     (item.constraints.length > 0 && item.constraints.includes("non-empty")) ||
     field.required === true;
 
+  const isDeprecated = field.deprecated;
+
   return (
     <li key={itemKey}>
       <Grid container xs={12}>
@@ -58,9 +56,11 @@ export const PropertiesItem = ({
             itemKey={itemKey}
             name={itemKey}
             selected={selectedItems.includes(itemKey)}
+            deprecated={isDeprecated}
             onClick={isSelectable ? onItemClick : undefined}
           />
           {isRequired && <Typography color={"error"}>required</Typography>}
+          {isDeprecated && <Typography color={"error"}>deprecated</Typography>}
         </Grid>
         <Grid item xs={8}>
           <PropertyItem item={item} kind={field.kind} />

@@ -19,7 +19,6 @@ export class ExampleModel {
     encoding?: { [field: string]: OpenAPIV3_1.EncodingObject },
   ) {
     const example = parser.deref(infoOrRef);
-    // console.log(example);
     this.value = example.value;
     this.summary = example.summary;
     this.description = example.description;

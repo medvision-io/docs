@@ -105,7 +105,6 @@ export class MediaTypeModel {
         );
       }
     } else if (this.schema) {
-      // console.log(info.schema)
       this.examples = {
         default: new ExampleModel(
           openApi,
