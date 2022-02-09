@@ -33,8 +33,8 @@ After modifying settings confirm your choice by clicking on `Save Settings` butt
 
 ### List of fields:
 - __Model Name__ - Just a display name, visible on the list of servers
-- __Server URL__ - Server to send requests to. If you're using our [Model Proxy](/latest/model-proxy) then it would be `https://localhost:8002`
-- __Model UUID__ - UUIDv4 of model API avaiable though [Model Proxy](/latest/model-proxy)
+- __Server URL__ - Server to send requests to. If you're using our [Model Proxy](/latest/setting-up-model-proxy) then it would be `https://localhost:8002`
+- __Model UUID__ - UUIDv4 of model API avaiable though [Model Proxy](/latest/setting-up-model-proxy)
 - __Model Type__ - One of supported types inferences (`segmentation` | `annotation` | `prediction`).
 - __Supported Path__ - One of supported data types for inference. This value determines the type od data that model receives through proxy. If your model supports more than one path, then just add it twice with different options.
 ```shell
