@@ -9,7 +9,7 @@ isTop: true
 
 ## Accessing model settings
 
-To access server settings select `Settings` option form the main navigation and make sure `AI Models` tab is selected:
+To access model settings select `Settings` option form the main navigation and make sure `AI Models` tab is selected:
 
 ![Model nav link](./model-settings-nav.png)
 
@@ -23,6 +23,12 @@ When the list is not complete, and you want to add your server to it just click 
 
 As you can see, this model API is not on the list and is not a valid API yet. You have to enter required fields and `Save Settings` at the end.
 
+## Getting your model's config
+
+If you don't want to manually create JSON config for a model, use __Copy to Clipboard__ icon to get a valid config that you can use in [Model Proxy](/latest/setting-up-model-proxy):
+
+![copy to clipboard](./copy-model-settings.png)
+
 ## Modifying existing model
 
 Usually you should have a list of models defined by your organization and available without setting them manually. Chose one by selecting it from the `Select Model` dropdown.
@@ -34,7 +40,7 @@ After modifying settings confirm your choice by clicking on `Save Settings` butt
 ### List of fields:
 - __Model Name__ - Just a display name, visible on the list of servers
 - __Server URL__ - Server to send requests to. If you're using our [Model Proxy](/latest/setting-up-model-proxy) then it would be `https://localhost:8002`
-- __Model UUID__ - UUIDv4 of model API avaiable though [Model Proxy](/latest/setting-up-model-proxy)
+- __Model UUID__ - UUIDv4 of model API available though [Model Proxy](/latest/setting-up-model-proxy)
 - __Model Type__ - One of supported types inferences (`segmentation` | `annotation` | `prediction`).
 - __Supported Path__ - One of supported data types for inference. This value determines the type od data that model receives through proxy. If your model supports more than one path, then just add it twice with different options.
 ```shell
@@ -43,3 +49,5 @@ After modifying settings confirm your choice by clicking on `Save Settings` butt
 /studies/series/instances
 ```
 - __Modalities__ - If your model is restricted to specific modalities then select them from the list. Otherwise, it will be available for every modality.
+- __Series/Instance data filters__ - list of data filters if model requires specific data from the DICOM study (see [Managing Data Filters](latest/managing-data-filters)).
+
