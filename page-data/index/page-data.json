@@ -2,4 +2,4 @@
     "componentChunkName": "component---src-pages-index-tsx",
     "path": "/",
     "result": {"data":{"allOpenapiYaml":{"edges":[{"node":{"info":{"version":"0.1.0"},"openapi":"3.1.0","slug":"0-1-0"}}]}},"pageContext":{}},
-    "staticQueryHashes": ["1428769721","561272883"]}
+    "staticQueryHashes": ["1428769721","2970016195"]}
