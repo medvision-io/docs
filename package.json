@@ -14,7 +14,8 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "bundle-openapi-watch": "node openapi-bundler.js watch",
-    "bundle-openapi": "node openapi-bundler.js"
+    "bundle-openapi": "node openapi-bundler.js",
+    "set-domain": "node set-domain.js"
   },
   "dependencies": {
     "@emotion/react": "^11.7.0",
@@ -53,7 +54,7 @@
     "katex": "^0.13.24",
     "lodash.kebabcase": "^4.1.1",
     "marked": "^4.0.6",
-    "openapi-sampler": "^1.1.1",
+    "openapi-sampler": "^1.2.0",
     "openapi-types": "^10.0.0",
     "prettier": "^2.5.1",
     "prismjs": "^1.25.0",

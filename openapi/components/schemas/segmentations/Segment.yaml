@@ -1,22 +1,39 @@
 description: Segment definition (one slide)
 type: object
+required:
+  - points
+  - color
+  - className
 properties:
   points:
-    $ref: './Points.yaml'
+    required: true
+    type: array
+    title: Points Array
+    items:
+      title: row
+      type: array
+      items:
+        title: column
+        type: integer
+    example: [ [ 0,0,1,0 ], [ 0,1,1,0 ] ]
   color:
     type: string
     format: RGB
+    required: true
     example: 'rgb(120, 80, 40)'
   classColor:
     type: string
     format: RGB
     example: 'rgb(120, 80, 40)'
+    default: 'same as "color"'
   activeColor:
     type: string
     format: RGB
     example: 'rgb(120, 80, 40)'
+    default: 'same as "color"'
   className:
     type: string
+    required: true
     example: 'Lung'
   description:
     type: string

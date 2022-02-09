@@ -22,13 +22,12 @@ export type MarkdownProps = BaseMarkdownProps &
 
 export class Markdown extends React.Component<MarkdownProps> {
   render() {
-    const { source = '', inline, compact, className, 'data-role': dataRole } = this.props;
+    const { source = '', inline, className, 'data-role': dataRole } = this.props;
     const renderer = new MarkdownRenderer();
     return (
       <SanitizedMarkdownHTML
         html={renderer.renderMd(source)}
         inline={inline}
-        compact={compact}
         className={className}
         data-role={dataRole}
       />

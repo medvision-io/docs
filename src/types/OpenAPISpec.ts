@@ -1,5 +1,6 @@
 import { OpenAPIV3_1 } from "openapi-types";
 import SecuritySchemeObject = OpenAPIV3_1.SecuritySchemeObject;
+import {Referenced} from "../services/OpenAPI";
 
 export type OpenAPISpec = OpenAPIV3_1.Document & {
   tags?: OpenAPIV3_1.TagObject & {
@@ -14,6 +15,34 @@ export type OpenAPISpec = OpenAPIV3_1.Document & {
   }[]
 }
 
+export type OpenAPIParameterLocation = 'query' | 'header' | 'path' | 'cookie';
+
+export type OpenAPIParameterStyle =
+  | 'matrix'
+  | 'label'
+  | 'form'
+  | 'simple'
+  | 'spaceDelimited'
+  | 'pipeDelimited'
+  | 'deepObject';
+
+export interface OpenAPIParameter {
+  name: string;
+  in?: OpenAPIParameterLocation;
+  description?: string;
+  required?: boolean;
+  deprecated?: boolean;
+  allowEmptyValue?: boolean;
+  style?: OpenAPIParameterStyle;
+  explode?: boolean;
+  allowReserved?: boolean;
+  schema?: Referenced<OpenAPIV3_1.SchemaObject>;
+  example?: any;
+  examples?: { [media: string]: Referenced<OpenAPIV3_1.ExampleObject> };
+  content?: { [media: string]: OpenAPIV3_1.MediaTypeObject };
+  encoding?: Record<string, OpenAPIV3_1.EncodingObject>;
+  const?: any;
+}
 
 export interface OpenAPIXCodeSample {
   lang: string;

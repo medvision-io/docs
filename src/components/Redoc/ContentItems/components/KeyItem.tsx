@@ -59,8 +59,15 @@ interface KeyItemProps {
   name?: string;
   onClick?: (key: string) => void;
   selected?: boolean;
+  deprecated?: boolean;
 }
-export const KeyItem = ({ itemKey, name, onClick, selected }: KeyItemProps) => {
+export const KeyItem = ({
+  itemKey,
+  name,
+  onClick,
+  selected,
+  deprecated,
+}: KeyItemProps) => {
   const handleClick = () => {
     if (onClick != null) {
       onClick(itemKey);
@@ -72,6 +79,9 @@ export const KeyItem = ({ itemKey, name, onClick, selected }: KeyItemProps) => {
       component={"span"}
       sx={{
         cursor: selected != null && onClick != null ? "pointer" : "inherit",
+      }}
+      style={{
+        textDecorationLine: deprecated ? "line-through" : "auto",
       }}
     >
       {name || itemKey}

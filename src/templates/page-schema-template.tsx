@@ -2,10 +2,11 @@ import * as React from "react";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout/Layout";
 import { PageContext } from "gatsby/internal";
-import AppInfo from "../components/Redoc/ApiInfo/ApiInfo";
 import { OpenAPI } from "../services/OpenAPI";
 import { OpenAPISpec } from "../types/OpenAPISpec";
+import Group from "../components/Redoc/Group/Group";
 import DocHead from "../components/Layout/DocHead";
+import Schema from "../components/Redoc/Schema/Schema";
 import {getLatestSemver} from "../utils";
 
 interface Props {
@@ -24,11 +25,17 @@ interface Props {
       openapi: string;
       x_tagGroups: {
         name: string;
+        section: string;
         tags: {
           name: string;
           slug: string;
         };
         slug: string;
+      }[];
+      schemas: {
+        name: string;
+        slug: string;
+        doNotRender: boolean | null;
       }[];
       spec: string;
       slug: string;
@@ -47,32 +54,59 @@ interface Props {
         }
       ]
     };
+    site: {
+      siteMetadata: {
+        categories: {
+          name: string;
+          key: string;
+        }[];
+      };
+    };
   };
   pageContext: PageContext;
 }
 
 export default function PageTemplate({ data, pageContext }: Props) {
-  const { openapiYaml, allOpenapiYaml } = data;
+  const {
+    openapiYaml,
+    allOpenapiYaml,
+    site: {
+      siteMetadata: { categories },
+    },
+  } = data;
   const latestVersion = getLatestSemver(allOpenapiYaml.nodes.map((openapi) => openapi.info.version));
   const openApiStore = new OpenAPI({
     spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec,
     versionSlug: openapiYaml.info.version === latestVersion ? 'latest' : openapiYaml.slug,
   });
+  const selectedSchema = openapiYaml?.schemas?.find(
+    (schema) => schema.slug === pageContext.schema
+  );
   return (
-    <Layout selectedVersion={openapiYaml.slug} openApiStore={openApiStore}>
+    <Layout
+      selectedVersion={openapiYaml.slug}
+      selectedSchema={pageContext.schema}
+      openApiStore={openApiStore}
+    >
       <React.Fragment>
         <DocHead
-          title={openapiYaml.info.title + " " + openapiYaml.info.version}
+          title={pageContext.schema + " - v" + openapiYaml.info.version}
         />
-        <AppInfo store={openApiStore} />
+        <Schema
+          selectedSchema={selectedSchema.name}
+          openApiStore={openApiStore}
+        />
       </React.Fragment>
     </Layout>
   );
 }
 
 export const pageQuery = graphql`
-  query ($verid: String!) {
-    openapiYaml(id: { eq: $verid }) {
+  query VersionWithSchema($verid: String!, $schema: String!) {
+    openapiYaml(
+      schemas: { elemMatch: { slug: { eq: $schema } } }
+      id: { eq: $verid }
+    ) {
       info {
         contact {
           email
@@ -93,6 +127,11 @@ export const pageQuery = graphql`
         }
         slug
       }
+      schemas {
+        slug
+        name
+        doNotRender
+      }
       spec
       slug
       tags {
@@ -106,6 +145,14 @@ export const pageQuery = graphql`
           version
         }
         slug
+      }
+    }
+    site {
+      siteMetadata {
+        categories {
+          name
+          key
+        }
       }
     }
   }

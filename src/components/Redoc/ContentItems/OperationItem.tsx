@@ -20,7 +20,7 @@ interface Props {
   item: any;
 }
 
-const OperationRow = styled(Row)`
+export const OperationRow = styled(Row)`
   backface-visibility: hidden;
   contain: content;
   overflow: hidden;

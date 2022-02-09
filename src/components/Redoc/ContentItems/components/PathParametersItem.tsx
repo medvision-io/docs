@@ -1,12 +1,16 @@
 import * as React from "react";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { SecurityScheme } from "../../../../types/OpenAPISpec";
 import { OpenAPIV3_1 } from "openapi-types";
-import { Timeline } from "./CodeTimeline";
-import { PropertyItem } from "./SchemaItem";
+import { Timeline } from "./KeyItem";
+import { PropertyItem } from "./PropertiesItem";
+import { useContext, useState } from "react";
+import { OpenAPIContext } from "../../../Layout/OpenAPIContext";
+import { SchemaModel } from "../../../../services/models/SchemaModel";
+import { Referenced } from "../../../../services/OpenAPI";
+import SchemaItem from "./SchemaItem";
 
 interface Props {
   pathParameters: OpenAPIV3_1.ParameterObject[];
@@ -23,10 +27,19 @@ export default function PathParametersItem({ pathParameters = [] }: Props) {
   if (pathParameters.length === 0) {
     return null;
   }
+  const { openApi } = useContext(OpenAPIContext);
 
   const pathParameterGroups = pathParameters.reduce(
     (acc, pathParameter) => {
-      acc[pathParameter.in].push(pathParameter);
+      acc[pathParameter.in].push({
+        ...pathParameter,
+        schema: new SchemaModel(
+          openApi,
+          pathParameter.schema as any as Referenced<OpenAPIV3_1.SchemaObject>,
+          "",
+          {}
+        ),
+      });
 
       return acc;
     },
@@ -44,7 +57,7 @@ export default function PathParametersItem({ pathParameters = [] }: Props) {
         .filter(
           ([groupName, pathParameterGroup]) => pathParameterGroup.length > 0
         )
-        .map(([groupName, pathParameterGroups]) => (
+        .map(([groupName, pathParameterGroup]) => (
           <React.Fragment key={groupName}>
             <Grid item xs={12}>
               {groupName === PARAM_PLACES.path && (
@@ -61,47 +74,49 @@ export default function PathParametersItem({ pathParameters = [] }: Props) {
               )}
               <Divider />
             </Grid>
-            <Timeline>
-              {pathParameterGroups.map((pathParameterGroup) => (
-                <li key={pathParameterGroup.key + pathParameterGroup.name}>
-                  <Grid container xs={12} sx={{ pl: 2 }}>
-                    <Grid item xs={5}>
-                      <Typography>
-                        <Typography
-                          style={{
-                            textDecorationLine: pathParameterGroup.deprecated
-                              ? "line-through"
-                              : "auto",
-                          }}
-                        >
-                          {pathParameterGroup.name}
-                        </Typography>
-                        {pathParameterGroup.required &&
-                          !pathParameterGroup.deprecated && (
-                            <Typography color={"error"}>required</Typography>
+            <Paper elevation={1} sx={{ ml: 1, mt: 1, width: "100%" }}>
+              <Timeline>
+                {pathParameterGroup.map((pathParameterItem) => (
+                  <li key={pathParameterItem.key + pathParameterItem.name}>
+                    <Grid container xs={12} sx={{ pl: 2 }}>
+                      <Grid item xs={5}>
+                        <Typography>
+                          <Typography
+                            style={{
+                              textDecorationLine: pathParameterItem.deprecated
+                                ? "line-through"
+                                : "auto",
+                            }}
+                          >
+                            {pathParameterItem.name}
+                          </Typography>
+                          {pathParameterItem.required &&
+                            !pathParameterItem.deprecated && (
+                              <Typography color={"error"}>required</Typography>
+                            )}
+                          {pathParameterItem.deprecated && (
+                            <Typography color={"error"}>deprecated</Typography>
                           )}
-                        {pathParameterGroup.deprecated && (
-                          <Typography color={"error"}>deprecated</Typography>
-                        )}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={7}>
-                      <PropertyItem
-                        item={pathParameterGroup.schema}
-                        isSelectable={false}
-                      />
-                      {pathParameterGroup.example && (
-                        <Typography variant={"caption"}>
-                          Example: <code>{pathParameterGroup.example}</code>
                         </Typography>
+                      </Grid>
+                      <Grid item xs={7}>
+                        <PropertyItem item={pathParameterItem.schema} />
+                        {pathParameterItem.example && (
+                          <Typography variant={"caption"}>
+                            Example: <code>{pathParameterItem.example}</code>
+                          </Typography>
+                        )}
+                        <Typography>{pathParameterItem.description}</Typography>
+                        <Divider />
+                      </Grid>
+                      {pathParameterItem.schema.items != null && (
+                        <SchemaItem schema={pathParameterItem.schema} />
                       )}
-                      <Typography>{pathParameterGroup.description}</Typography>
-                      <Divider />
                     </Grid>
-                  </Grid>
-                </li>
-              ))}
-            </Timeline>
+                  </li>
+                ))}
+              </Timeline>
+            </Paper>
           </React.Fragment>
         ))}
     </Grid>

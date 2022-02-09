@@ -1,9 +1,9 @@
 type: object
 properties:
-  '{StudyInstanceUID}':
+  'StudyInstanceUID':
     type: object
     properties:
-      '{SeriesInstanceUID}':
+      'SeriesInstanceUID':
         type: object
         properties:
           metadata:

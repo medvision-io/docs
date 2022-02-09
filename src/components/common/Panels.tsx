@@ -13,7 +13,7 @@ export const RightPanel = styled('div')`
   width: 40%;
   color: ${({ theme }) => theme.palette.common.white};
   background-color: ${({ theme }) => theme.palette.grey[800]};
-  padding: 0 0 0 ${(props) => props.theme.spacing(2)};
+  padding: 0;
 
   ${(props) => props.theme.breakpoints.down("md")} {
     width: 100%;

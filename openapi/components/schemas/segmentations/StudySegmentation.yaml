@@ -1,23 +1,28 @@
 type: object
+required:
+  - StudyInstanceUID
 properties:
-  '{StudyInstanceUID}':
+  "StudyInstanceUID":
     type: object
+    additionalProperties:
+      type: object
+      minItems: 1
+      x-additionalPropertiesName: SeriesInstanceUID
+      additionalProperties:
+        type: object
+        minItems: 1
+        x-additionalPropertiesName: SOPInstanceUID
+        required:
+          - segments
+        properties:
+          $ref: "./Frame.yaml"
+      properties:
+        metadata:
+          type: array
+          items:
+            $ref: "../common/Metadata.yaml"
     properties:
-      '{SeriesInstanceUID-1}':
-        type: object
-        properties:
-          '{SOPInstanceUID-1}':
-            $ref: './Frame.yaml'
-      '{SeriesInstanceUID-2}':
-        type: object
-        properties:
-          '{SOPInstanceUID-1}':
-            $ref: './Frame.yaml'
-          metadata:
-            type: array
-            items:
-              $ref: '../common/Metadata.yaml'
       metadata:
         type: array
         items:
-          $ref: '../common/Metadata.yaml'
+          $ref: "../common/Metadata.yaml"

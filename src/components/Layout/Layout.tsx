@@ -7,14 +7,14 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Navigator from "./Navigator";
 import Header from "./Header";
-import {ReactElement, useEffect} from "react";
+import { ReactElement, useEffect } from "react";
 import theme from "../../theme";
 import { OpenAPI } from "../../services/OpenAPI";
 import { NavigationContextProvider } from "./NavigationContext";
 import DocHead from "./DocHead";
 import { OpenAPIContextProvider } from "./OpenAPIContext";
-import './global.css';
-import 'katex/dist/katex.min.css';
+import "./global.css";
+import "katex/dist/katex.min.css";
 
 function Copyright() {
   return (
@@ -35,6 +35,7 @@ interface Props {
   openApiStore: OpenAPI;
   selectedVersion?: string;
   selectedTagGroup?: string;
+  selectedSchema?: string;
   selectedPage?: string;
 }
 
@@ -43,6 +44,7 @@ export default function Layout({
   selectedVersion,
   selectedTagGroup,
   selectedPage,
+  selectedSchema,
   openApiStore,
 }: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -61,6 +63,7 @@ export default function Layout({
             selectedVersionSlug: selectedVersion,
             selectedTagGroup: selectedTagGroup,
             selectedPage: selectedPage,
+            selectedSchema: selectedSchema,
             visibleElements: [],
           }}
         >
@@ -86,11 +89,18 @@ export default function Layout({
                 sx={{ display: { sm: "block", xs: "none" } }}
               />
             </Box>
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", width: { sm: `calc(100% - ${drawerWidth}px)`, xs: '100%' } }}>
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                width: { sm: `calc(100% - ${drawerWidth}px)`, xs: "100%" },
+              }}
+            >
               <Header onDrawerToggle={handleDrawerToggle} />
               <Box
                 component="main"
-                style={{scrollBehavior: 'smooth'}}
+                style={{ scrollBehavior: "smooth" }}
                 sx={{ flex: 1, py: 0, px: 0, bgcolor: "#eaeff1" }}
               >
                 {children}

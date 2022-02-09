@@ -6,6 +6,7 @@ import { OpenAPI } from "../services/OpenAPI";
 import { OpenAPISpec } from "../types/OpenAPISpec";
 import Group from "../components/Redoc/Group/Group";
 import DocHead from "../components/Layout/DocHead";
+import {getLatestSemver} from "../utils";
 
 interface Props {
   data: {
@@ -37,6 +38,16 @@ interface Props {
         name: string;
       };
     };
+    allOpenapiYaml: {
+      nodes: [
+        {
+          info: {
+            version: string;
+          };
+          slug: string;
+        }
+      ]
+    };
     site: {
       siteMetadata: {
         categories: {
@@ -52,12 +63,15 @@ interface Props {
 export default function PageTemplate({ data, pageContext }: Props) {
   const {
     openapiYaml,
+    allOpenapiYaml,
     site: {
       siteMetadata: { categories },
     },
   } = data;
+  const latestVersion = getLatestSemver(allOpenapiYaml.nodes.map((openapi) => openapi.info.version));
   const openApiStore = new OpenAPI({
     spec: JSON.parse(openapiYaml.spec) as any as OpenAPISpec,
+    versionSlug: openapiYaml.info.version === latestVersion ? 'latest' : openapiYaml.slug,
   });
   const selectedGroup = openapiYaml?.x_tagGroups?.find(
     (group) => group.slug === pageContext.group
@@ -118,6 +132,14 @@ export const pageQuery = graphql`
       tags {
         description
         name
+      }
+    }
+    allOpenapiYaml {
+      nodes {
+        info {
+          version
+        }
+        slug
       }
     }
     site {

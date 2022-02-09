@@ -1,6 +1,7 @@
 type: object
 additionalProperties: true
 minProperties: 1
+doNotRender: true
 description: >-
   The Problem Details JSON Object [[RFC7807](https://tools.ietf.org/html/rfc7807)].
 properties:
