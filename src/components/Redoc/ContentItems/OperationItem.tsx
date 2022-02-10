@@ -33,7 +33,7 @@ export default function OperationItem({ item }: Props) {
   return (
     <React.Fragment>
       <OperationRow>
-        <MiddlePanel compact={false}>
+        <MiddlePanel compact={undefined}>
           <H5>
             <OperationBadge item={item} compact={false} />
             <Link

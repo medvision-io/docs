@@ -17,7 +17,7 @@ export default function SectionItem({ item }: Props) {
   return (
     <React.Fragment>
       <Row>
-        <MiddlePanel compact={false}>
+        <MiddlePanel compact={undefined}>
           <Header>
             <Link href={`#${item.urlId}`}>{name}</Link>
           </Header>

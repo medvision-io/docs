@@ -67,7 +67,7 @@ export default function Schema({ selectedSchema, openApiStore }: Props) {
     <React.Fragment>
       <SectionItem item={schema} />
       <OperationRow>
-        <MiddlePanel compact={false}>
+        <MiddlePanel compact={undefined}>
           <SchemaItem schema={schema} />
         </MiddlePanel>
         <RightPanel>
