@@ -20,7 +20,7 @@ import zhivaIcon from "./zhiva_light.svg";
 import { useContext, useEffect, useState } from "react";
 import { MenuListItem, OpenAPI } from "../../services/OpenAPI";
 import { ActionKind, NavigationContext } from "./NavigationContext";
-import {compareVersions, getLatestSemver} from "../../utils";
+import { compareVersions, getLatestSemver } from "../../utils";
 
 const item = {
   py: "2px",
@@ -139,20 +139,25 @@ export default function Navigator(props: Props) {
       }
     }
   `);
-  const [{ selectedVersion, selectedVersionSlug }, dispatch] = useContext(NavigationContext);
+  const [{ selectedVersion, selectedVersionSlug }, dispatch] =
+    useContext(NavigationContext);
   const { openApiItems, ...other } = props;
 
-  const latestVersion = getLatestSemver(nodes.map((openapi) => openapi.info.version));
+  const latestVersion = getLatestSemver(
+    nodes.map((openapi) => openapi.info.version)
+  );
   const latestVersionSlug = nodes.find(
     (openapi) => openapi.info.version === latestVersion
   ).slug;
 
-  const versions = nodes.map((openapi) => ({
-    version: openapi.info.version,
-    key: latestVersion === openapi.info.version ? 'latest' : openapi.slug,
-    slug: `/${openapi.slug}`,
-    orgSlug: openapi.slug,
-  })).sort((a, b) => compareVersions(a.version, b.version));
+  const versions = nodes
+    .map((openapi) => ({
+      version: openapi.info.version,
+      key: latestVersion === openapi.info.version ? "latest" : openapi.slug,
+      slug: `/${openapi.slug}`,
+      orgSlug: openapi.slug,
+    }))
+    .sort((a, b) => compareVersions(a.version, b.version));
 
   useEffect(() => {
     if (latestVersionSlug === selectedVersion) {
@@ -168,9 +173,20 @@ export default function Navigator(props: Props) {
     (node) => node.slug === selectedVersion
   ).x_tagGroups;
 
-  const schemas = nodes.find(
-    (node) => node.slug === selectedVersion
-  ).schemas.filter(schema => schema.doNotRender !== true);
+  const schemas = nodes
+    .find((node) => node.slug === selectedVersion)
+    .schemas.filter((schema) => schema.doNotRender !== true)
+    .sort((el1, el2) => {
+      const nameA = el1.name.toUpperCase();
+      const nameB = el2.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
 
   const currVersion = versions.find((ver) => ver.orgSlug === selectedVersion);
   const pages = mdPages.filter((page) =>
@@ -185,14 +201,20 @@ export default function Navigator(props: Props) {
   };
 
   const goToHome = () => {
-    window.location.href = ['', selectedVersionSlug].join("/");
-  }
+    window.location.href = ["", selectedVersionSlug].join("/");
+  };
 
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem
-          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff", cursor: 'pointer' }}
+          sx={{
+            ...item,
+            ...itemCategory,
+            fontSize: 22,
+            color: "#fff",
+            cursor: "pointer",
+          }}
           onClick={goToHome}
         >
           <ListItemIcon sx={{ height: 32 }}>
@@ -222,7 +244,7 @@ export default function Navigator(props: Props) {
               >
                 {versions.map(({ version, key }) => (
                   <MenuItem value={key} key={key}>
-                    {version} {key === 'latest' ? '(cur.)' : ''}
+                    {version} {key === "latest" ? "(cur.)" : ""}
                   </MenuItem>
                 ))}
               </Select>
