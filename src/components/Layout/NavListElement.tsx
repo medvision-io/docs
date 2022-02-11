@@ -238,7 +238,6 @@ export default function NavListElement({
   const pagesClickHandlers = pages.reduce((acc, page) => {
     acc[page.fields.slug] = {
       $page: (event) => {
-        console.log(window.location);
         if (event.button === 1) {
           window
             .open(

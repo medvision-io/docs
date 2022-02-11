@@ -50,7 +50,7 @@ export const PropertiesItem = ({
 
   return (
     <li key={itemKey}>
-      <Grid container xs={12}>
+      <Grid container spacing={1}>
         <Grid item xs={4}>
           <KeyItem
             itemKey={itemKey}
@@ -68,10 +68,7 @@ export const PropertiesItem = ({
         </Grid>
         {isSelectable && selectedItems.includes(itemKey) && (
           <Grid item xs={12}>
-            {isOneOf &&
-              item.oneOf.map((oneOfSchema) => (
-                <SchemaItem schema={oneOfSchema} oneOf={item.oneOf} />
-              ))}
+            {isOneOf && <SchemaItem schema={item} oneOf={item.oneOf} />}
             {isAllOf &&
               item.allOf.map((oneOfSchema) => (
                 <SchemaItem schema={oneOfSchema} allOf={item.allOf} />
@@ -117,9 +114,11 @@ function getPropertyName(item: SchemaModel, kind?: string): ReactElement {
 export const PropertyItem = ({
   item,
   kind,
+  hideDescription,
 }: {
   item: SchemaModel;
   kind?: string;
+  hideDescription?: boolean;
 }) => {
   return (
     <React.Fragment>
@@ -161,7 +160,7 @@ export const PropertyItem = ({
           Default: <span className={"eqivia"}>{item.default}</span>
         </Typography>
       )}
-      <Typography>{item.description}</Typography>
+      {!hideDescription && <Typography>{item.description}</Typography>}
     </React.Fragment>
   );
 };

@@ -78,7 +78,7 @@ export default function PathParametersItem({ pathParameters = [] }: Props) {
               <Timeline>
                 {pathParameterGroup.map((pathParameterItem) => (
                   <li key={pathParameterItem.key + pathParameterItem.name}>
-                    <Grid container xs={12} sx={{ pl: 2 }}>
+                    <Grid container sx={{ pl: 2 }}>
                       <Grid item xs={5}>
                         <Typography>
                           <Typography

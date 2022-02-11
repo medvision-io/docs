@@ -30,7 +30,7 @@ export const AdditionalPropertiesItem = ({
       <Typography variant={"caption"} sx={{ pl: 1 }}>
         {"Dictionary {"}
       </Typography>
-      <Grid container xs={12}>
+      <Grid container>
         <Grid item xs={4}>
           <KeyItem
             itemKey={itemKey}
