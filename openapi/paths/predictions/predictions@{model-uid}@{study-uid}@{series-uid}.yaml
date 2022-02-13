@@ -41,7 +41,7 @@ get:
       description: List of data filters
       required: false
       schema:
-        $ref: '../../components/schemas/DataFilter.yaml'
+        $ref: '../../components/schemas/common/DataFilter.yaml'
   security:
     - main_auth:
         - "read:model"

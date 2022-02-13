@@ -127,8 +127,18 @@ export default function NavListElement({
   }, {});
 
   const groupClickHandlers = groups.reduce((acc, group) => {
-    acc[group.slug] = () => {
-      window.location.href = ["", selectedVersionSlug, group.slug].join("/");
+    acc[group.slug] = (event) => {
+      if (event.button === 1) {
+        window
+          .open(
+            `${window.location.origin}/${
+              ["", selectedVersionSlug, group.slug].join("/")
+            }`,
+            "_blank"
+          );
+      } else {
+        window.location.href = ["", selectedVersionSlug, group.slug].join("/");
+      }
     };
     return acc;
   }, {});
@@ -145,16 +155,35 @@ export default function NavListElement({
                   ["", selectedVersionSlug, group.slug].join("/")
                 )
               ) {
-                groupacc[`${group.slug}#${operation.operationId}`] = () => {
-                  window.location.hash = operation.urlId;
+                groupacc[`${group.slug}#${operation.operationId}`] = (event) => {
+                  if (event.button === 1) {
+                    window
+                      .open(
+                        `${window.location.origin}${window.location.pathname}#${operation.urlId}`,
+                        "_blank"
+                      );
+                  } else {
+                    window.location.hash = operation.urlId;
 
-                  scrollToId(operation.urlId);
+                    scrollToId(operation.urlId);
+                  }
                 };
               } else {
-                groupacc[`${group.slug}#${operation.operationId}`] = () => {
-                  window.location.href =
-                    ["", selectedVersionSlug, group.slug].join("/") +
-                    `#${operation.urlId}`;
+                groupacc[`${group.slug}#${operation.operationId}`] = (event) => {
+                  if (event.button === 1) {
+                    window
+                      .open(
+                        `${window.location.origin}/${
+                          ["", selectedVersionSlug, group.slug].join("/") +
+                          `#${operation.urlId}`
+                        }`,
+                        "_blank"
+                      );
+                  } else {
+                    window.location.href =
+                      ["", selectedVersionSlug, group.slug].join("/") +
+                      `#${operation.urlId}`;
+                  }
                 };
               }
             }
@@ -167,16 +196,35 @@ export default function NavListElement({
                 ["", selectedVersionSlug, group.slug].join("/")
               )
             ) {
-              groupacc[`${group.slug}#${operation.operationId}`] = () => {
-                window.location.hash = operation.urlId;
+              groupacc[`${group.slug}#${operation.operationId}`] = (event) => {
+                if (event.button === 1) {
+                  window
+                    .open(
+                      `${window.location.origin}${window.location.pathname}#${operation.urlId}`,
+                      "_blank"
+                    );
+                } else {
+                  window.location.hash = operation.urlId;
 
-                scrollToId(operation.urlId);
+                  scrollToId(operation.urlId);
+                }
               };
             } else {
-              groupacc[`${group.slug}#${operation.operationId}`] = () => {
-                window.location.href =
-                  ["", selectedVersionSlug, group.slug].join("/") +
-                  `#${operation.urlId}`;
+              groupacc[`${group.slug}#${operation.operationId}`] = (event) => {
+                if (event.button === 1) {
+                  window
+                    .open(
+                      `${window.location.origin}/${
+                        ["", selectedVersionSlug, group.slug].join("/") +
+                        `#${operation.urlId}`
+                      }`,
+                      "_blank"
+                    );
+                } else {
+                  window.location.href =
+                    ["", selectedVersionSlug, group.slug].join("/") +
+                    `#${operation.urlId}`;
+                }
               };
             }
           }
@@ -189,19 +237,43 @@ export default function NavListElement({
 
   const pagesClickHandlers = pages.reduce((acc, page) => {
     acc[page.fields.slug] = {
-      $page: () => {
-        window.location.href = `/${selectedVersionSlug}${page.fields.slug}`;
+      $page: (event) => {
+        if (event.button === 1) {
+          window
+            .open(
+              `${window.location.origin}/${selectedVersionSlug}${page.fields.slug}`,
+              "_blank"
+            );
+        } else {
+          window.location.href = `/${selectedVersionSlug}${page.fields.slug}`;
+        }
       },
       ...page.headings.reduce((headingAcc, heading) => {
         if (page.fields.slug === selectedPage) {
-          headingAcc[heading.id] = () => {
-            window.location.hash = heading.id;
+          headingAcc[heading.id] = (event) => {
+            if (event.button === 1) {
+              window
+                .open(
+                  `${window.location.origin}${window.location.pathname}#${heading.id}`,
+                  "_blank"
+                );
+            } else {
+              window.location.hash = heading.id;
 
-            scrollToId(heading.id);
+              scrollToId(heading.id);
+            }
           };
         } else {
-          headingAcc[heading.id] = () => {
-            window.location.href = `/${selectedVersionSlug}${page.fields.slug}#${heading.id}`;
+          headingAcc[heading.id] = (event) => {
+            if (event.button === 1) {
+              window
+                .open(
+                  `${window.location.origin}/${selectedVersionSlug}${page.fields.slug}#${heading.id}`,
+                  "_blank"
+                );
+            } else {
+              window.location.href = `/${selectedVersionSlug}${page.fields.slug}#${heading.id}`;
+            }
           };
         }
         return headingAcc;
@@ -212,8 +284,16 @@ export default function NavListElement({
 
   const schemaClickHandlers = schemas.reduce((acc, schema) => {
     acc[schema.slug] = {
-      $page: () => {
-        window.location.href = `/${selectedVersionSlug}/schemas/${schema.slug}`;
+      $page: (event) => {
+        if (event.button === 1) {
+          window
+            .open(
+              `${window.location.origin}/${selectedVersionSlug}/schemas/${schema.slug}`,
+              "_blank"
+            );
+        } else {
+          window.location.href = `/${selectedVersionSlug}/schemas/${schema.slug}`;
+        }
       },
     };
     return acc;
@@ -251,7 +331,9 @@ export default function NavListElement({
                       .map((page) => (
                         <React.Fragment key={page.fields.slug}>
                           <ListItemButton
-                            onClick={pagesClickHandlers[page.fields.slug].$page}
+                            onMouseDown={
+                              pagesClickHandlers[page.fields.slug].$page
+                            }
                             selected={page.fields.slug === selectedPage}
                             sx={{ ...item, pl: 6 }}
                             key={page.fields.slug}
@@ -267,7 +349,7 @@ export default function NavListElement({
                                 key={page.fields.slug + heading.id}
                               >
                                 <ListItemButton
-                                  onClick={
+                                  onMouseDown={
                                     pagesClickHandlers[page.fields.slug][
                                       heading.id
                                     ]
@@ -295,7 +377,7 @@ export default function NavListElement({
                       .map((group) => (
                         <React.Fragment key={group.slug}>
                           <ListItemButton
-                            onClick={groupClickHandlers[group.slug]}
+                            onMouseDown={groupClickHandlers[group.slug]}
                             selected={group.slug === selectedTagGroup}
                             sx={{ ...item, pl: 6 }}
                             key={group.slug}
@@ -308,7 +390,7 @@ export default function NavListElement({
                             )
                             .map((openApiItem) => (
                               <ListItemButton
-                                onClick={
+                                onMouseDown={
                                   operationClickHandlers[
                                     `${group.slug}#${openApiItem.operationId}`
                                   ]
@@ -344,7 +426,7 @@ export default function NavListElement({
                                 )
                                 .map((openApiItem) => (
                                   <ListItemButton
-                                    onClick={
+                                    onMouseDown={
                                       operationClickHandlers[
                                         `${group.slug}#${openApiItem.operationId}`
                                       ]
@@ -378,7 +460,7 @@ export default function NavListElement({
                       ? schemas.map((schema) => (
                           <React.Fragment key={schema.slug}>
                             <ListItemButton
-                              onClick={schemaClickHandlers[schema.slug].$page}
+                              onMouseDown={schemaClickHandlers[schema.slug].$page}
                               selected={schema.slug === selectedSchema}
                               sx={{ ...item, pl: 6 }}
                               key={schema.slug}

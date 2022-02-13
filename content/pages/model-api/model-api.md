@@ -49,11 +49,11 @@ If you want to run the server on different port then modify `posts` mapping insi
 
 Model API receives an array of instances. Each instance is encoded as array of bytes and parsed into DICOM Instance with [pydicom](https://pydicom.github.io/) library.
 
-This happens at [L41 endpoint definition](https://github.com/zhiva-ai/Lung-Segmentation-API/blob/main/app/endpoints/pacs_endpoint.py#L41). You don't have to worry about handling DICOM data. It is covered by [model-proxy](/latest/setting-up-model-proxy) and your API gets prepared data directly.
+This happens at [L31 endpoint definition](https://github.com/zhiva-ai/Lung-Segmentation-API/blob/main/app/endpoints/segmentation.py#L31-L34). You don't have to worry about handling DICOM data. It is covered by [model-proxy](/latest/setting-up-model-proxy) and your API gets prepared data directly.
 
 ### Inference point
 
 Your model should receive a list of DICOM SOP Instances. and the example implementation is available here:
 [https://github.com/zhiva-ai/Lung-Segmentation-API/blob/5a3863bc587f956cf6920e8a466b3bbc16983c2d/app/segmentation/lungs_segmentation_inference.py#L39](https://github.com/zhiva-ai/Lung-Segmentation-API/blob/5a3863bc587f956cf6920e8a466b3bbc16983c2d/app/segmentation/lungs_segmentation_inference.py#L39).
 
-If you have your own model then replace the invocation at [L58 of endpoint definition](https://github.com/zhiva-ai/Lung-Segmentation-API/blob/main/app/endpoints/pacs_endpoint.py#L58) with it.
+If you have your own model then replace the invocation at [L42 of endpoint definition](https://github.com/zhiva-ai/Lung-Segmentation-API/blob/main/app/endpoints/segmentation.py#L42) with it.

@@ -7,6 +7,7 @@ import { StyledPre } from "../../common/PrismDiv";
 import { highlight } from "../../../utils";
 
 interface Props {
+  title: string,
   codeSamples: {
     name?: string,
     key?: string,
@@ -15,7 +16,7 @@ interface Props {
   }[];
 }
 
-export default function CodeItem({ codeSamples }: Props) {
+export default function CodeItem({ codeSamples, title = 'Code samples:' }: Props) {
   if (codeSamples == null || codeSamples.length < 1) {
     return null;
   }
@@ -36,7 +37,7 @@ export default function CodeItem({ codeSamples }: Props) {
   return (
     <Grid container spacing={2} sx={{ mt: 1, ml: 0, pr: 2  }}>
       <Typography variant={"body1"} sx={{ ml: 2 }}>
-        Code samples:
+        {title}
       </Typography>
       <Grid item xs={12}>
         {codeSamples.map(({ lang, name, key }) => (

@@ -25,32 +25,38 @@ export class MediaTypeModel {
     options: {
       onlyRequiredInSamples: boolean;
       generatedPayloadSamplesMaxDepth: number;
+      addDiscriminatorProp?: boolean;
     } = {
       onlyRequiredInSamples: false,
       generatedPayloadSamplesMaxDepth: 12,
+      addDiscriminatorProp: false,
     }
   ) {
     this.schemaRefs = [];
     if (info.schema.$ref != null) {
       this.schemaRefs.push(info.schema.$ref);
-      info.schema = openApi.deref(info.schema)
+      info.schema = openApi.deref(info.schema);
     }
     if (info.schema.allOf != null) {
       info.schema = info.schema.allOf.reduce((acc, schema) => {
         return {
           ...acc,
-          ...openApi.deref(schema)
-        }
-      }, {})
+          ...openApi.deref(schema),
+        };
+      }, {});
     }
     this.name = name;
     this.isRequestType = isRequestType;
-    this.schema = info.schema
+    this.schema = info.schema;
     this.schema.discriminatorProp =
-      (this.schema.discriminator || this.schema["x-discriminator"] || {}).propertyName || "default-discriminator";
+      (this.schema.discriminator || this.schema["x-discriminator"] || {})
+        .propertyName || options.addDiscriminatorProp
+        ? "default-discriminator"
+        : undefined;
     this.onlyRequiredInSamples = options.onlyRequiredInSamples;
     this.generatedPayloadSamplesMaxDepth =
       options.generatedPayloadSamplesMaxDepth;
+
     if (info.examples !== undefined) {
       this.examples = mapValues(
         info.examples,
@@ -80,7 +86,7 @@ export class MediaTypeModel {
     if (this.schema && this.schema.oneOf) {
       this.examples = {};
       for (const subSchema of this.schema.oneOf) {
-        const rawScheme = openApi.deref(subSchema)
+        const rawScheme = openApi.deref(subSchema);
         const sample = Sampler.sample(
           rawScheme as any,
           samplerOptions,

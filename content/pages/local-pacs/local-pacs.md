@@ -7,7 +7,7 @@ category: dicom-server
 isTop: true
 ---
 
-## TLDR:
+<h2>TLDR:</h2>
 
 If you didn't get your TSL certificate file execute [Generate local TSL](/latest/setting-up-local-pacs#generate-local-tsl-certificate-only-once-every-365-days) first.
 
@@ -35,8 +35,8 @@ git clone https://github.com/zhiva-ai/pacs-server.git
 or download it directly from
 [zhiva.ai PACS server](https://github.com/zhiva-ai/pacs-server/archive/refs/heads/main.zip).
 
-## Generate local TSL certificate (only once every 365 days)
-
+## Generate local TSL certificate
+(only once every 365 days)
 
 > If you already have the `.crt` and `.key` files do not generate them again. Go straight to <a href="#build-the-server">Build the server section</a> and run your server with existing certificate.
 

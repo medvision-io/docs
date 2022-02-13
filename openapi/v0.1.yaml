@@ -59,3 +59,14 @@ components:
       type: apiKey
       in: header
       name: api_key
+  schemas:
+    ModelInput_Study:
+      oneOf:
+        - $ref: 'components/schemas/model/FullStudyModelInput.yaml'
+        - $ref: 'components/schemas/model/FilteredStudyModelInput.yaml'
+    ModelInput_Series:
+      oneOf:
+        - $ref: 'components/schemas/model/FullSeriesModelInput.yaml'
+        - $ref: 'components/schemas/model/FilteredSeriesModelInput.yaml'
+    ModelInput_Instance:
+      $ref: 'components/schemas/model/FullInstanceModelInput.yaml'
