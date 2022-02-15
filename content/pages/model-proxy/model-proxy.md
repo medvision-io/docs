@@ -29,19 +29,21 @@ Before we start please make sure your server has access to:
 ## Get the server code
 
 You can either clone this repo
+
 ```shell
 git clone https://github.com/zhiva-ai/model-proxy-example.git
 ```
+
 or download it directly from
 [zhiva.ai PACS server](https://github.com/zhiva-ai/model-proxy-example/archive/refs/heads/main.zip).
 
 ## Local PACS and Model API
 
-To use model proxy you have to get something that proxy could use. There are two main objects handled by proxy server. 
+To use model proxy you have to get something that proxy could use. There are two main objects handled by proxy server.
 
-The first one is __Model API__ ([setup here](/latest/setting-up-local-model-api)). Model API is responsible for inferences, and it is the whole reason the proxy exists. You have to define your model APIs as described in [models.json](#modelsjson-add-model-api) section.
+The first one is **Model API** ([setup here](/latest/setting-up-local-model-api)). Model API is responsible for inferences, and it is the whole reason the proxy exists. You have to define your model APIs as described in [models.json](#modelsjson-add-model-api) section.
 
-The second one is __PACS Server__ ([setup here](/latest/setting-up-local-pacs)). Server is required to extract DICOM data for the Model APIs. It has to be server that supports DICOMWeb standard. You have to define your server as described in [servers.json](#serversjson-add-dicomweb-server) section.
+The second one is **PACS Server** ([setup here](/latest/setting-up-local-pacs)). Server is required to extract DICOM data for the Model APIs. It has to be server that supports DICOMWeb standard. You have to define your server as described in [servers.json](#serversjson-add-dicomweb-server) section.
 
 ## Setup your local server
 
@@ -53,7 +55,7 @@ At this point you should have 1 `.crt` files and 1 `.key` file. Check this by ca
  ls *.{crt,key}
 ```
 
-from your main directory. It should return following result `zhiva.crt  zhiva.key`.
+from your main directory. It should return following result `zhiva.crt zhiva.key`.
 
 ### Build the server
 
@@ -61,18 +63,20 @@ from your main directory. It should return following result `zhiva.crt  zhiva.ke
 docker-compose up
 ```
 
-You proxy server should be available at `https://localhost:8002`. 
+You proxy server should be available at `https://localhost:8002`.
 
 ## Access from within internal network
 
 If you have more than one computer inside your network (or VPN connection), then you can share the server settings with them. To check the server address please run the following command:
 
 Linux or Mac:
+
 ```shell
 ifconfig
 ```
 
 Windows
+
 ```shell
 ipconfig
 ```
@@ -84,6 +88,7 @@ and look for the setting with the `inet` value that starts with `192.168.`. That
 To get an inference using selected Model API you should follow [Inference API Docs](/latest/segmentation#get%2Fsegmentations%2F%7Bmodel-uid%7D%2Fstudies%2F%7Bstudy-uid%7D%2Fseries%2F%7Bseries-uid%7D). This example specifies the request for series segmentation. Model UUID is the same model as defined in [models.json](/latest/setting-up-model-proxy#modelsjson-add-model-api).
 
 If you have mode than one server defined in `./servers.json` then you can select which one should provide DICOM data by setting `?server` query parameter like:
+
 ```
 /segmentations/{model-uid}/studies/{study-uid}/series/{series-uid}?server=63140137-a63d-4ad1-b489-3479bc43387c
 ```
@@ -113,13 +118,15 @@ Keeps all definitions of available pacs servers. It has to be a valid dicomweb s
 {
   [{uuidv4}]: {
     "uri": string ("https://valid.server.uri/to/dicomweb"),
-    "isDefault": boolean (default false)
+    "isDefault": boolean (default false),
+    "statusUri": string ("https://valid.server.uri/to/status/page")
   }
 }
 ```
 
 - `uri` - URI of dicomweb server
-- `isDefault` - boolean which indicates the default server used when request doesn't specify the `uuidv4` value. __One server should have this set to `true`.__
+- `isDefault` - boolean which indicates the default server used when request doesn't specify the `uuidv4` value. **One server should have this set to `true`.**
+- `statusUri` - (optional)URI to status page. This can be any page accessible through **GET** request that returns stats **200** if server is working correctly. If you don't have any specific page, you can just point to list of studies: `https://valid.server.uri/to/dicomweb/studies`.
 
 ## models.json (add model API)
 
@@ -132,7 +139,8 @@ Stores all definitions of inference models. Each model might be available for di
   [{uuidv4}]: {
     "uri": string ("https://valid.model.uri/to/inference"),
     "task": string ("segmentation" | "annotation" | "prediction"),
-    "supports": Array<string> (list of supported paths, eg. ["/studies/series"])
+    "supports": Array<string> (list of supported paths, eg. ["/studies/series"]),
+    "statusUri": (optional) string ("https://valid.model.uri/to/status/page")
   }
 }
 ```
@@ -140,8 +148,20 @@ Stores all definitions of inference models. Each model might be available for di
 - `uri` - URI of the inference model API (eg. `http://localhost:8011/predict`)
 - `task` - Task which model performs (one of `segmentation` | `annotation` | `prediction`)
 - `supports` - List of available paths that model supports:
+
 ```shell
 /studies
 /studies/series
 /studies/series/instances
+```
+
+- `statusUri` - URI to status page. This can be any page accessible through **GET** request that returns stats **200** if model is working correctly.
+
+## Status check
+
+After defining your models and servers you can check if all of them are available through proxy. This is possible by accessing `https://localhost:8002/status` page. This page is only visible when your `docker-compose.yml` configuration has `ZHIVA_SHOW_STATUS_PAGE` variable set to `true`:
+
+```yaml
+    environment:
+      - ZHIVA_SHOW_STATUS_PAGE=true
 ```
