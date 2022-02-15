@@ -159,3 +159,21 @@ blockquote cite:before {
   content: "\2014 \2009";
   /*  an em dash and a space before the text */
 }
+
+/*.mermaid a {*/
+/*  text-decoration: underline;*/
+/*  font-weight: bold;*/
+/*  padding-right: 10px;*/
+/*  color: #0e7c86;*/
+/*}*/
+
+.mermaid a span {
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 15px;
+  color: #006db3 !important;
+}
+
+.mermaid span {
+  font-size: 16px;
+}
