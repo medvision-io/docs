@@ -44,6 +44,21 @@ Where:
 - `category` (`string (required)`) - one of the `x-tagGroup` categories available in `docVersion` specifications
 - `isTop` (`string (required)`) - in progress
 
+#### Diagrams
+
+To add diagram just follow the [Mermaid Syntax](https://mermaid-js.github.io/mermaid/#/flowchart) and surround it with ` ```mermaid ` code block.
+
+<pre>
+```mermaid
+flowchart TD
+    A[Start] --> B{Is it?};
+    B -- Yes --> C[OK];
+    C --> D[Rethink];
+    D --> B;
+    B -- No ----> E[End];
+```
+</pre>
+
 ### Schemas
 
 #### Adding Schemas

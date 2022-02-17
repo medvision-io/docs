@@ -41,6 +41,18 @@ module.exports = {
         // Plugins configs
         plugins: [
           {
+            resolve: 'gatsby-remark-mermaid',
+            options: {
+              language: 'mermaid',
+              theme: 'default',
+              securityLevel: 'loose',
+              mermaidOptions: {
+                securityLevel: 'loose',
+                themeCSS: ".label foreignObject { overflow: visible; }"
+              }
+            }
+          },
+          {
             resolve: `gatsby-remark-images`,
             options: {
               // It's important to specify the maxWidth (in pixels) of
