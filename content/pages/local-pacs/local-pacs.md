@@ -149,7 +149,7 @@ With that change you can provide your username and password inside `RegisteredUs
 },
 ```
 
-You can create as many users as you need.
+You can create as many users as you need. It's a good practice to have at least 2 different users (one for the application and one for the server), but we encourage you to provide unique users per workstation.
 
 To still being able to use DicomWeb with Orthanc you then have to provide that password in `DicomWeb` property inside `orthanc.json` file.
 
@@ -163,7 +163,7 @@ To still being able to use DicomWeb with Orthanc you then have to provide that p
 },
 ```
 
-Remember to enter created credentials into the application settings. To see how please read [Authentication](latest/managing-servers-inside-the-dicom-viewer#authentication) section.
+Remember to enter created credentials into the application settings and model proxy. To see how please read [Application Authentication](latest/managing-servers-inside-the-dicom-viewer#authentication) section for managing the App and [Model Proxy Authentication](latest/setting-up-model-proxy#authentication) for setting up PACS connection security inside the proxy.
 
 ## Customization
 

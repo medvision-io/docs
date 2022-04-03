@@ -251,7 +251,7 @@ export default function Navigator(props: Props) {
             </FormControl>
           }
         >
-          <ListItemIcon>
+          <ListItemIcon sx={{mr:1}}>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText>Version</ListItemText>

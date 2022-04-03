@@ -119,7 +119,10 @@ Keeps all definitions of available pacs servers. It has to be a valid dicomweb s
   [{uuidv4}]: {
     "uri": string ("https://valid.server.uri/to/dicomweb"),
     "isDefault": boolean (default false),
-    "statusUri": string ("https://valid.server.uri/to/status/page")
+    "statusUri": string ("https://valid.server.uri/to/status/page"),
+    "authType": string ("" | "basicAuth"),
+    "login": string,
+    "password": string,
   }
 }
 ```
@@ -127,6 +130,9 @@ Keeps all definitions of available pacs servers. It has to be a valid dicomweb s
 - `uri` - URI of dicomweb server
 - `isDefault` - boolean which indicates the default server used when request doesn't specify the `uuidv4` value. **One server should have this set to `true`.**
 - `statusUri` - (optional)URI to status page. This can be any page accessible through **GET** request that returns stats **200** if server is working correctly. If you don't have any specific page, you can just point to list of studies: `https://valid.server.uri/to/dicomweb/studies`.
+- `authType` - Authentication method (`""` | `"basicAuth"`)
+- `login` - (optional) Login to use when `authType` is set
+- `password` - (optional) Password to use when `authType` is set
 
 ## models.json (add model API)
 
@@ -165,3 +171,20 @@ After defining your models and servers you can check if all of them are availabl
     environment:
       - ZHIVA_SHOW_STATUS_PAGE=true
 ```
+
+## Authentication
+
+If your PACS server requires an authentication please provide correct credentials (`login` and `password`) as well as change the `authType` value. If you're using [our Local Server](/latest/setting-up-local-pacs) you can read more about securing your server in the [Server Authentication](/latest/setting-up-local-pacs#authentication) section.
+
+Example setting:
+```javascript
+  "b1407f18-575d-487c-bc0c-640c6da651bc": {
+    "uri": "https://localhost/zhiva/pacs",
+    "statusUri": "https://localhost/zhiva/pacs/studies",
+    "authType": "basicAuth",
+    "login": "zhiva",
+    "password": "35&Q39Nj&i@Eyk6P"
+  }
+```
+
+This setting with work with authentication defined in our local PACS server configuration. It uses `login` and `password` to generate authentication token which is then used by the server to access data from PACS.
