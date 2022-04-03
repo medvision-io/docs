@@ -34,8 +34,9 @@ As you can see, this server is not on the list and is not a valid server yet. Yo
 ### List of fields:
 - __Server Name__ - Just a display name, visible on the list of servers
 - __Server URL__ - Valid URL to the DICOM server. This path should be compatible with DICOMWeb standard and has to start with `https://`. If you're using our local server then it will look like `https://localhost/zhiva/pacs` or `https://192.168.1.2/zhiva/pacs` if the server is not on your local machine.
-- __Server Postfix__ - Any string that is part of the server url. Usually empty but some of the servers have additional postfix like `https://server.mydomain.com/pacs/DCM4CHEE` where `DCM4CHEE` is a `postfix`.
+- __Authentication Type__ - Authentication type used by the server.
 - __Server UUID__ - UUIDV4 of the server. If the server is used for inference it should have one. This UUID is sent along with the inference request to the model (see [`server` property](latest/setting-up-model-proxy#requesting-inference-for-given-model)).
+- __Server Postfix__ - Any string that is part of the server url. Usually empty but some of the servers have additional postfix like `https://server.mydomain.com/pacs/DCM4CHEE` where `DCM4CHEE` is a `postfix`.
 - __WADO URI Postfix__ - Another postfix in case the `WADO` (_Web Access DIICOM Objects_) protocol requires it. Usually `wado`.
 - __WADO Postfix__ - If there is additional postfix after `WADO URI` then put it here. Often the value `rs` (_Request/Response_) is used but some servers doesn't have that requirement.
 - __QIDO Postfix__ - Postfix for QIDO (_Query based on ID for DICOM Objects_) protocol. Works the same as other postfixes. Often `rs` but some servers leave it empty.
@@ -50,3 +51,13 @@ As you can see, this server is not on the list and is not a valid server yet. Yo
 We've created predefined server settings for [Our Local Server](/latest/setting-up-local-pacs). It is available under `Local Server` option. You might want to modify the `Server URL` to accommodate your local network settings. If you running the server on your local machine then leave `localhost` as hostname. If the server is somewhere in your network then change `localhost` to servers' IP address (sth. like `192.168.x.x`).
 
 If you've changed other settings that affect the URL change them as well in the setting.
+
+## Authentication
+
+### Basic Auth
+
+If your server is not available publicly and requires a login and password you can provide that information by selecting __Authentication Type__.
+
+![Server auth](./authentication.png)
+
+Selecting `Basic Auth` value allows you to enter credential that will be then used by the application to connect to PACS server. If you're using [our Local Server](/latest/setting-up-local-pacs) you can read more about securing your server in the [Authentication](/latest/setting-up-local-pacs#authentication) section.

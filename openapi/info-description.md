@@ -25,3 +25,7 @@ When you have a model you cannot just connect it directly to the application. Yo
 At the end you have to add your models that are now accessible through [Model Proxy](/latest/setting-up-model-proxy) to application. Please follow [Managing AI Models inside the DICOM viewer](/latest/managing-ai-models-inside-the-dicom-viewer) guide.
 
 ### 6. You're good to go
+
+Your architecture should look like this:
+
+![local architecture](/local_architecture.png)

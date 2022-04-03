@@ -29,17 +29,19 @@ Before we start please make sure your server has access to:
 ## Get the server code
 
 You can either clone this repo
+
 ```shell
 git clone https://github.com/zhiva-ai/pacs-server.git
 ```
+
 or download it directly from
 [zhiva.ai PACS server](https://github.com/zhiva-ai/pacs-server/archive/refs/heads/main.zip).
 
 ## Generate local TSL certificate
+
 (only once every 365 days)
 
 > If you already have the `.crt` and `.key` files do not generate them again. Go straight to <a href="#build-the-server">Build the server section</a> and run your server with existing certificate.
-
 
 Before we starty storing data on the server we have to secure the connection between the server and the viewer. We're going to use [Transport Layer Security (TSL)](https://en.wikipedia.org/wiki/Transport_Layer_Security). First, we have to generate certificate (`.crt`) and key (`.key`) files. Because we're doing it from the local server we're going to use [OpenSSL](https://www.openssl.org/) (we don't need external party to sign certificate, if you want to use it on the external server you should sign with something like [Let's Encrypt](https://letsencrypt.org/)).
 
@@ -55,6 +57,7 @@ openssl req -x509 \
 ```
 
 Change `-subj` to describe your organization:
+
 - `C` - country code (2 letter code)
 - `L` - location (city name)
 - `O` - organization name
@@ -74,7 +77,7 @@ At this point you should have 2 `.crt` files and 1 `.key` file. Check this by ca
  ls *.{crt,key}
 ```
 
-from your main directory. It should return following result `trusted.crt  zhiva.crt  zhiva.key`.
+from your main directory. It should return following result `trusted.crt zhiva.crt zhiva.key`.
 
 If one of those files is missing go back to [Generate local TSL certificate](#generate-local-tsl-certificate-only-once-every-365-days) section and make sure you have all of them.
 
@@ -93,11 +96,13 @@ After starting the server you should be able to access [localhost/zhiva/app/expl
 If you have more than one computer inside your network (or VPN connection), then you can share the server settings with them. To check the server address please run the following command:
 
 Linux or Mac:
+
 ```shell
 ifconfig
 ```
 
 Windows
+
 ```shell
 ipconfig
 ```
@@ -125,15 +130,47 @@ Detailed instruction is described in [Managing servers inside the DICOM viewer](
 - _"Why my server doesn't accept very large DICOM files?"_
 
 There is an maximum file size setting inside server config. If you want to change that please go to `./nginx.conf` and modify:
+
 ```nginx configuration
 client_max_body_size 2000m;
 ```
+
+## Authentication
+
+### Basic Auth
+
+To secure your local server you can use Basic Auth function that is built-in into Orthanc. To enable authentication simply change the value of `AuthenticationEnabled` to `true` inside `orthanc.json` configuration file.
+
+With that change you can provide your username and password inside `RegisteredUsers` property:
+
+```javascript
+"RegisteredUsers": {
+  "zhiva": "35&Q39Nj&i@Eyk6P"
+},
+```
+
+You can create as many users as you need. It's a good practice to have at least 2 different users (one for the application and one for the server), but we encourage you to provide unique users per workstation.
+
+To still being able to use DicomWeb with Orthanc you then have to provide that password in `DicomWeb` property inside `orthanc.json` file.
+
+```javascript
+"DicomWeb": {
+    [...]
+    "Servers" : {
+      "zhiva" : [ "http://localhost:8042/pacs/", "zhiva", "35&Q39Nj&i@Eyk6P" ]
+    },
+    [...]
+},
+```
+
+Remember to enter created credentials into the application settings and model proxy. To see how please read [Application Authentication](latest/managing-servers-inside-the-dicom-viewer#authentication) section for managing the App and [Model Proxy Authentication](latest/setting-up-model-proxy#authentication) for setting up PACS connection security inside the proxy.
 
 ## Customization
 
 ### URL
 
 You're able to change server url by modifying two settings:
+
 - `orthanc.json` - inner server settings
 - `nginx.conf` - main server settings
 
@@ -178,4 +215,4 @@ and access your server at `https://localhost/serv/...`
 
 ### Storage
 
-Currently, all the data are stored in [Docker's persistent volume](https://docs.docker.com/storage/volumes/). This is volume created by Docker itself. If you want to specify the path please follow the instruction from the [Docker Docs](https://docs.docker.com/compose/compose-file/compose-file-v3/#short-syntax-3) about setting up directories as volumes. 
+Currently, all the data are stored in [Docker's persistent volume](https://docs.docker.com/storage/volumes/). This is volume created by Docker itself. If you want to specify the path please follow the instruction from the [Docker Docs](https://docs.docker.com/compose/compose-file/compose-file-v3/#short-syntax-3) about setting up directories as volumes.

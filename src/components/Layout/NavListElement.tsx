@@ -354,7 +354,7 @@ export default function NavListElement({
                                       heading.id
                                     ]
                                   }
-                                  selected={`#${heading.id}` === selectedHash}
+                                  selected={`${page.fields.slug}#${heading.id}` === `${selectedPage}${selectedHash}`}
                                   sx={{
                                     ...item,
                                     pl: 6 + (heading.depth - 1) * 2,
@@ -365,7 +365,7 @@ export default function NavListElement({
                                     primaryTypographyProps={{
                                       style: { fontSize: "12px" },
                                     }}
-                                    primary={"- " + heading.value}
+                                    primary={`- ${heading.value}`}
                                   />
                                 </ListItemButton>
                               </React.Fragment>
