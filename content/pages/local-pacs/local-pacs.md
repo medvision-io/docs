@@ -107,7 +107,7 @@ Windows
 ipconfig
 ```
 
-and look for the setting with the `inet` value that starts with `192.168.`. That should by your address in the local network. You should be able to access the upload page from `192.168.x.x:8042/app/explorer.html`.
+and look for the setting with the `inet` value that starts with `192.168.`. That should by your address in the local network. You should be able to access the upload page from `https://192.168.x.x/zhiva/app/explorer.html`.
 
 ## Upload your DICOMs
 
