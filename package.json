@@ -80,5 +80,8 @@
       "out": "./content/openapi/v0.2.yaml",
       "name": "V0.2"
     }
-  ]
+  ],
+  "engines": {
+    "node": "16"
+  }
 }
