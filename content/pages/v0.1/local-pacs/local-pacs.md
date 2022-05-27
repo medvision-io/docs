@@ -113,7 +113,7 @@ and look for the setting with the `inet` value that starts with `192.168.`. That
 
 Go to [localhost/zhiva/app/explorer.html#upload](https://localhost/zhiva/app/explorer.html#upload) and click on `Select files to upload`.
 
-![Upload dicoms screenshot](./upload-dicoms.png)
+![Upload dicoms screenshot](upload-dicoms.png)
 
 After selecting all the DICOMs click `Start the upload` to store them on the server.
 

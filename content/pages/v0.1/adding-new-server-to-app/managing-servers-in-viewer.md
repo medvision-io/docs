@@ -11,13 +11,13 @@ isTop: true
 
 To access server settings select `Settings` option form the main navigation and make sure `Servers` tab is selected:
 
-![Server nav link](./server-settings-nav.png)
+![Server nav link](server-settings-nav.png)
 
 ## Selecting sever
 
 Usually you should have a list of servers defined by your organization and available without setting them manually. Chose one by selecting it from the `Selected Server` dropdown.
 
-![List of servers](./list-of-servers.png)
+![List of servers](list-of-servers.png)
 
 After that confirm your choice by clicking on `Save Settings` button (bottom right of the page). Now in the `DICOMs` section, all study data should be loaded from selected PACS.
 
@@ -27,7 +27,7 @@ After that confirm your choice by clicking on `Save Settings` button (bottom rig
 
 When the list is not complete, and you want to add your server to it just click the `Create New Server` button (bottom left of the page). That should create empty form for you to edit:
 
-![New server form](./new-server-form.png)
+![New server form](new-server-form.png)
 
 As you can see, this server is not on the list and is not a valid server yet. You have to enter required fields and `Save Settings` at the end.
 
@@ -58,6 +58,6 @@ If you've changed other settings that affect the URL change them as well in the 
 
 If your server is not available publicly and requires a login and password you can provide that information by selecting __Authentication Type__.
 
-![Server auth](./authentication.png)
+![Server auth](authentication.png)
 
 Selecting `Basic Auth` value allows you to enter credential that will be then used by the application to connect to PACS server. If you're using [our Local Server](/latest/setting-up-local-pacs) you can read more about securing your server in the [Authentication](/latest/setting-up-local-pacs#authentication) section.
