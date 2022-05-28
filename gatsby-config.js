@@ -41,6 +41,10 @@ module.exports = {
         // Plugins configs
         plugins: [
           {
+            resolve: "gatsby-remark-mermaid-parser",
+            options: {},
+          },
+          {
             resolve: `gatsby-remark-images`,
             options: {
               // It's important to specify the maxWidth (in pixels) of
@@ -63,14 +67,14 @@ module.exports = {
             resolve: `gatsby-remark-autolink-headers`,
             options: {
               isIconAfterHeader: true,
-            }
+            },
           },
           {
             resolve: `gatsby-remark-katex`,
             options: {
               // Add any KaTeX options from https://github.com/KaTeX/KaTeX/blob/master/docs/options.md here
-              strict: `ignore`
-            }
+              strict: `ignore`,
+            },
           },
           {
             resolve: `gatsby-remark-prismjs`,
