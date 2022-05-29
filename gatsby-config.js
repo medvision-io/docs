@@ -41,16 +41,8 @@ module.exports = {
         // Plugins configs
         plugins: [
           {
-            resolve: 'gatsby-remark-mermaid',
-            options: {
-              language: 'mermaid',
-              theme: 'default',
-              securityLevel: 'loose',
-              mermaidOptions: {
-                securityLevel: 'loose',
-                themeCSS: ".label foreignObject { overflow: visible; }"
-              }
-            }
+            resolve: "gatsby-remark-mermaid-parser",
+            options: {},
           },
           {
             resolve: `gatsby-remark-images`,
@@ -75,14 +67,14 @@ module.exports = {
             resolve: `gatsby-remark-autolink-headers`,
             options: {
               isIconAfterHeader: true,
-            }
+            },
           },
           {
             resolve: `gatsby-remark-katex`,
             options: {
               // Add any KaTeX options from https://github.com/KaTeX/KaTeX/blob/master/docs/options.md here
-              strict: `ignore`
-            }
+              strict: `ignore`,
+            },
           },
           {
             resolve: `gatsby-remark-prismjs`,

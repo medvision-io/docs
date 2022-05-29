@@ -11,7 +11,7 @@ isTop: true
 
 To access model settings select `Settings` option form the main navigation and make sure `AI Models` tab is selected:
 
-![Model nav link](./model-settings-nav.png)
+![Model nav link](model-settings-nav.png)
 
 ## Adding new model to the viewer.
 
@@ -19,7 +19,7 @@ To access model settings select `Settings` option form the main navigation and m
 
 When the list is not complete, and you want to add your server to it just click the `Create New Model API` button (bottom left of the page). That should create empty form for you to edit:
 
-![New server form](./new-model-form.png)
+![New server form](new-model-form.png)
 
 As you can see, this model API is not on the list and is not a valid API yet. You have to enter required fields and `Save Settings` at the end.
 
@@ -27,13 +27,13 @@ As you can see, this model API is not on the list and is not a valid API yet. Yo
 
 If you don't want to manually create JSON config for a model, use __Copy to Clipboard__ icon to get a valid config that you can use in [Model Proxy](/latest/setting-up-model-proxy):
 
-![copy to clipboard](./copy-model-settings.png)
+![copy to clipboard](copy-model-settings.png)
 
 ## Modifying existing model
 
 Usually you should have a list of models defined by your organization and available without setting them manually. Chose one by selecting it from the `Select Model` dropdown.
 
-![List of servers](./list-of-models.png)
+![List of servers](list-of-models.png)
 
 After modifying settings confirm your choice by clicking on `Save Settings` button (bottom right of the page).
 

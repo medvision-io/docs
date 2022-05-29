@@ -145,7 +145,7 @@ theme = {
     MuiTypography: {
       styleOverrides: {
         root: {
-          wordBreak: 'break-all',
+          wordBreak: 'break-word',
         }
       }
     },
