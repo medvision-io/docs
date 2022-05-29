@@ -45,6 +45,7 @@ As you can see, this server is not on the list and is not a valid server yet. Yo
 - __Thumbnail rendering protocol__ - Prefix for retrieving thumbnail data from the server. Usually it's `wadors` or `wado` but might be `https`. Most of the servers use the same value as for __Image rendering protocol__ but if you have extra thumbnail server this value might differ.
 - __Enable Study LazyLoad__ - Do not load the whole study at once. Only load selected series (speeds up loading)
 - __Supports Fuzzy Matching__ - Does server supports _Fuzzy Matching_ when searching for Studies? ([Our Local Server](/latest/setting-up-local-pacs) does)
+- __Can Store/Update Data?__ - Check if user has access to modify data on PACS (more about it in [Local PACS Security](/latest/local-pacs-security/) section)
 
 ### zhiva.ai Local Server Setup
 
@@ -60,4 +61,4 @@ If your server is not available publicly and requires a login and password you c
 
 ![Server auth](authentication.png)
 
-Selecting `Basic Auth` value allows you to enter credential that will be then used by the application to connect to PACS server. If you're using [our Local Server](/latest/setting-up-local-pacs) you can read more about securing your server in the [Authentication](/latest/setting-up-local-pacs#authentication) section.
+Selecting `Basic Auth` value allows you to enter credential that will be then used by the application to connect to PACS server. If you're using [our Local Server](/latest/setting-up-local-pacs) you can read more about securing your server in the [Authentication](/latest/setting-up-local-pacs#authentication) section. If you decide to create more restricted roles (__admin__/__editor__/__viewer__) please read [Local PACS Security](/latest/local-pacs-security/).

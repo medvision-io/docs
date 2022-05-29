@@ -44,6 +44,10 @@ You can add as many users as you want, but we advise to add at least 3 different
 
 These are only example users. You can create more than one user per role (e.g. have one editor user per radiologist).
 
+## Set your user credentials inside application
+
+
+
 ## Allow admin for local orthanc viewer
 
 To manage your local PACS you have to define server access in DicomWeb config. Usually you want to have admin access to your data locally, so you should add that account as default account for authentication.
@@ -73,3 +77,5 @@ local admins = {'zhiva-admin'}
 ```
 
 You can assign user to more than one role. When assigning to admin role (`admins`), user automatically get permission to every action possible. __You should never give the admin permission to untrusted users__. Other two roles can be assigned separately. You can create editor (`editors`) without `read` access (this can be used for devices that only store data into PACS). _Editor_ can update and create data. Delete action is available only for _Admin_. _Viewer_ is a basic role and safe to use for most of the users. This should be your default account for your users.
+
+Enter user credentials in [Authentication](/latest/managing-servers-inside-the-dicom-viewer/#authentication) section in your server settings.
