@@ -7,7 +7,7 @@ info:
     email: ceo@zhiva.ai
     url: 'https://zhiva.ai'
   description:
-    $ref: ./info-description.md
+    $ref: ./info-description-v0.2.md
 tags:
   - name: Semantic Segmentation
     description: Semantic Segmentation API
