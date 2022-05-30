@@ -79,3 +79,43 @@ local admins = {'zhiva-admin'}
 You can assign user to more than one role. When assigning to admin role (`admins`), user automatically get permission to every action possible. __You should never give the admin permission to untrusted users__. Other two roles can be assigned separately. You can create editor (`editors`) without `read` access (this can be used for devices that only store data into PACS). _Editor_ can update and create data. Delete action is available only for _Admin_. _Viewer_ is a basic role and safe to use for most of the users. This should be your default account for your users.
 
 Enter user credentials in [Authentication](/latest/managing-servers-inside-the-dicom-viewer/#authentication) section in your server settings.
+
+## Example setup
+
+Let us create an example accounts for your users. We're going to have one __admin_ account, three __editor_ accounts for radiologists who are working on developing ML models, and one __viewer__ account (to use by everyone else).
+
+#### Setup accounts
+
+Go to `/orthanc.json` and find `RegisteredUsers` property. We have to add all users to this list:
+
+```javascript
+  "RegisteredUsers": {
+    "zhiva-admin": "Gf3hDbjY6HkdDsRh",
+    "radiologist-one": "ptrioBBQcKMnz5$j",
+    "radiologist-two": "PtxdcgMErs5ab?F4",
+    "radiologist-three": "4&QDTDJ$!cE8xdYJ",
+    "radiology": "3$yc$XYQhSA55bJf"
+  },
+```
+
+#### Set permissions for your users
+
+Now we have to open `./scripts/IncomingHttpRequestFilter.lua` and modify list of users assigned to particular roles:
+
+```javascript
+local viewers = {'radiology', 'radiologist-one', 'radiologist-two', 'radiologist-three'}
+local editors = {'radiologist-one', 'radiologist-two', 'radiologist-three'}
+local admins = {'zhiva-admin'}
+```
+
+#### Set credentials inside application
+
+Every user has to enter credentials into the application. Let's assume you're one of the radiologists and got your credentials (`"radiologist-one": "ptrioBBQcKMnz5$j"`). Go to [Application Setting Authentication](/latest/managing-servers-inside-the-dicom-viewer#authentication) and set __Server Login__ and __Server Password__. Because your account has __editor__ permission you should also check __Can Store/Update Data?__
+
+![Can Save button](./can-save-button.png)
+
+This is important because it allows you to write data back to the PACS (e.g. segmentation).
+
+Now let's do the same for default __viewer__ account (`radiology`). This account could be used as a default account for inference but does not require to store the data on the server. As in the previous example, you should enter your credentials (`"radiology": "3$yc$XYQhSA55bJf"`) to __Server Login__ and __Server Password__. This time you leave __Can Store/Update Data?__ box __unchecked__.
+
+> Nothing will happen if you leave __Can Store/Update Data?__ checked for a user without __editor__ permission. This permission is checked on the server either way. This checkbox is there only for disabling save buttons so the user won't get request error message when trying to store data on PACS.
