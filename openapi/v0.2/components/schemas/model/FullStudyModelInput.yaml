@@ -1,0 +1,9 @@
+type: array
+description: List of Study instances (includes all instances from all series)
+doNotRender: true
+title: Full study model input
+items:
+  description: Binary DICOM data encoded
+  type: string
+  format: Binary<DICOM DATA>
+  example: '[0,0,0,1,5,21,...,21,0]'

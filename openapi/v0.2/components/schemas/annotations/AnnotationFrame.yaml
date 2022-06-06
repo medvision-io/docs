@@ -1,0 +1,8 @@
+rois:
+  type: array
+  items:
+    $ref: './Roi.yaml'
+metadata:
+  type: array
+  items:
+    $ref: '../common/Metadata.yaml'

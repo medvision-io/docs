@@ -1,0 +1,6 @@
+type: array
+description: List of Series instances
+doNotRender: true
+title: Full series model input
+items:
+  $ref: './FullInstanceModelInput.yaml'

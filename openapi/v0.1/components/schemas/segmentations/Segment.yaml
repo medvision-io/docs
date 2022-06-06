@@ -1,0 +1,36 @@
+description: Segment definition (one slide)
+type: object
+required:
+  - points
+  - color
+  - className
+properties:
+  points:
+    type: array
+    title: Points Array
+    items:
+      title: row
+      type: array
+      items:
+        title: column
+        type: integer
+    example: [ [ 0,0,1,0 ], [ 0,1,1,0 ] ]
+  color:
+    type: string
+    format: RGB
+    example: 'rgb(120, 80, 40)'
+  classColor:
+    type: string
+    format: RGB
+    example: 'rgb(120, 80, 40)'
+    default: 'same as "color"'
+  activeColor:
+    type: string
+    format: RGB
+    example: 'rgb(120, 80, 40)'
+    default: 'same as "color"'
+  className:
+    type: string
+    example: 'Lung'
+  description:
+    type: string

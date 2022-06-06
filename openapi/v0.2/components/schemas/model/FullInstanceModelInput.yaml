@@ -1,0 +1,6 @@
+type: string
+format: Binary<DICOM DATA>
+example: '[0,0,0,1,5,21,...,21,0]'
+description: Binary DICOM data encoded
+doNotRender: true
+title: Full instance model input
