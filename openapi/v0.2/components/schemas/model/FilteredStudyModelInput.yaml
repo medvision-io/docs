@@ -1,0 +1,12 @@
+type: object
+doNotRender: true
+title: Filtered study model input
+additionalProperties:
+  type: object
+  minItems: 1
+  x-additionalPropertiesName: series-key
+  properties:
+    data:
+      oneOf:
+        - $ref: './FullSeriesModelInput.yaml'
+        - $ref: './FilteredSeriesModelInput.yaml'

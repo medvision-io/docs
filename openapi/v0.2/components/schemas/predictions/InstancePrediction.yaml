@@ -1,0 +1,24 @@
+description: Segmentation object
+type: object
+properties:
+  'StudyInstanceUID':
+    type: object
+    properties:
+      'SeriesInstanceUID':
+        type: object
+        properties:
+          'SOPInstanceUID':
+            type: object
+            properties:
+              metadata:
+                type: array
+                items:
+                  $ref: '../common/Metadata.yaml'
+          metadata:
+            type: array
+            items:
+              $ref: '../common/Metadata.yaml'
+      metadata:
+        type: array
+        items:
+          $ref: '../common/Metadata.yaml'
