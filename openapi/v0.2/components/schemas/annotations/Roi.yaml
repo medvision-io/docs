@@ -6,7 +6,6 @@ required:
   - className
 properties:
   points:
-    required: true
     type: array
     title: Points Array
     items:
@@ -20,7 +19,6 @@ properties:
   color:
     type: string
     format: RGB
-    required: true
     example: 'rgb(120, 80, 40)'
   classColor:
     type: string
@@ -34,7 +32,6 @@ properties:
     default: 'same as "color"'
   className:
     type: string
-    required: true
     example: 'Lung'
   description:
     type: string
