@@ -1,7 +1,7 @@
 ---
 title: "Managing servers inside the DICOM viewer"
 date: "2021-12-17T11:19:51.246Z"
-docVersion: x
+docVersion: "<=0.2.x"
 description: How to add newly creates server to DICOM viewer and use it as a data provider?
 category: dicom-server
 isTop: true

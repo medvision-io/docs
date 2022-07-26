@@ -1,11 +1,13 @@
 ---
 title: "Local PACS Security"
 date: "2022-05-27T01:19:51.246Z"
-docVersion: "0.2.x"
+docVersion: ">=0.3.x"
 description: How to setup local server to store DICOM files and use it as a data provider for the app?
 category: dicom-server
 isTop: true
 ---
+
+> This page refers to [Basic PACS](/latest/setting-up-local-pacs) doesn't apply to the server using [Token authentication](/latest/setting-up-local-pacs-with-jwt).
 
 This guide goes through security options that are available for our local PACS server. It is advised to create different roles for different types of users and restrict some actions (like `DELETE`) to administrator.
 
