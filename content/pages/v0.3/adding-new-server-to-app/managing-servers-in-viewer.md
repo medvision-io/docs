@@ -40,7 +40,7 @@ Where `YOUR_AUTH_TOKEN` is the same token as in [Token auth](/managing-servers-i
 
 ## Adding new server to the viewer.
 
-> This guide assumes you already have a server that is available and secured with TSL. If you don't please follow the instructions to [Setup your Local PACS server](/latest/setting-up-local-pacs).
+> This guide assumes you already have a server that is available and secured with TSL. If you don't please follow the instructions to [Setup your Local PACS server](/latest/setting-up-local-pacs) or [Setup PACS with JWT](/latest/setting-up-local-pacs-with-jwt).
 
 When the list is not complete, and you want to add your server to it just click the `Create New Server` button (bottom left of the page). That should create empty form for you to edit:
 
@@ -110,8 +110,8 @@ __Access Token__ returned by the __token Server__ should contain following field
 {
   "name": string,
   "username": string,
-  "canEditResource": boolean (optional, recommended),
-  "aud": string,
+  "canEditResource": boolean,
+  "aud": string (optional, recommended),
   "iat": number,
   "exp": number,
   "iss": string

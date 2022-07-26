@@ -1,7 +1,7 @@
 ---
 title: "Setting up Model Proxy"
 date: "2021-12-30T19:19:51.246Z"
-docVersion: "<=0.2.x"
+docVersion: ">=0.3.x"
 description: How to setup model proxy server that handles communication between PACS server, DICOM Viewer and Model API?
 category: model-api
 isTop: true
@@ -123,6 +123,10 @@ Keeps all definitions of available pacs servers. It has to be a valid dicomweb s
     "authType": string ("" | "basicAuth"),
     "login": string,
     "password": string,
+    "token": string,
+    "signInServer": string ("https://localhost/auth/sign-user"),
+    "signInTokenServer": string ("https://localhost/auth/generate-access-token"),
+    "refreshServer": string ("https://localhost/auth/refresh-token"),
   }
 }
 ```
@@ -130,9 +134,13 @@ Keeps all definitions of available pacs servers. It has to be a valid dicomweb s
 - `uri` - URI of dicomweb server
 - `isDefault` - boolean which indicates the default server used when request doesn't specify the `uuidv4` value. **One server should have this set to `true`.**
 - `statusUri` - (optional)URI to status page. This can be any page accessible through **GET** request that returns stats **200** if server is working correctly. If you don't have any specific page, you can just point to list of studies: `https://valid.server.uri/to/dicomweb/studies`.
-- `authType` - Authentication method (`""` | `"basicAuth"`)
-- `login` - (optional) Login to use when `authType` is set
-- `password` - (optional) Password to use when `authType` is set
+- `authType` - Authentication method (`""` | `"basicAuth"` | `token` | `zhivaAuth`)
+- `login` - (optional) Login to use when `authType` or `zhivaAuth` is set
+- `password` - (optional) Password to use when `authType` or `zhivaAuth` is set
+- `authToken` - (optional) token to use when `token` or `zhivaAuth` is set
+- `signInServer` - (optional) zhiva sign in server to use when `zhivaAuth` is set and `login` with `password` are provided (usually `https://localhost/auth/sign-user`)
+- `signInTokenServer` - (optional) token sign in server to use when `token` or `zhivaAuth` is set (`https://localhost/auth/generate-access-token` for [Local PACS with JWT](/latest/setting-up-local-pacs-with-jwt))
+- `refreshServer` - (optional) refresh token server to use when `token` or `zhivaAuth` is set (`https://localhost/auth/refresh-token` for [Local PACS with JWT](/latest/setting-up-local-pacs-with-jwt))
 
 ## models.json (add model API)
 
@@ -174,6 +182,8 @@ After defining your models and servers you can check if all of them are availabl
 
 ## Authentication
 
+### Basic auth
+
 If your PACS server requires an authentication please provide correct credentials (`login` and `password`) as well as change the `authType` value. If you're using [our Local Server](/latest/setting-up-local-pacs) you can read more about securing your server in the [Server Authentication](/latest/setting-up-local-pacs#authentication) section.
 
 Example setting:
@@ -188,3 +198,52 @@ Example setting:
 ```
 
 This setting with work with authentication defined in our local PACS server configuration. It uses `login` and `password` to generate authentication token which is then used by the server to access data from PACS.
+
+### Zhiva auth
+
+If you're using our [Local PACS with JWT](/latest/setting-up-local-pacs-with-jwt) you should use our standard authentication method. First, you have to generate [User account](/latest/setting-up-local-pacs-with-jwt#user-accounts) without __"Can edit PACS resources?"__ access (unless proxy has to be able to edit data on PACS). Then just enter this user's credentials to your server config like:
+
+```javascript
+  "b1407f18-575d-487c-bc0c-640c6da651bc": {
+    "uri": "https://localhost/zhiva/pacs",
+    "statusUri": "https://localhost/zhiva/pacs/studies",
+    "authType": "zhivaAuth",
+    "login": "your_username",
+    "password": "your_secret_password",
+    "signInServer": "https://localhost/auth/sign-user",
+    "signInTokenServer": "https://localhost/auth/generate-access-token",
+    "refreshServer": "https://localhost/auth/refresh-token"
+  }
+```
+
+And you're good to go! Now, proxy server will use provided user to generate token and store it inside Docker's persistent volume.
+
+### External Token
+
+If you have your own token provider you can use it with one-off token authentication. You have to generate __Auth Token__ and enter it into the server's config.
+
+```javascript
+  "b1407f18-575d-487c-bc0c-640c6da651bc": {
+    "uri": "https://localhost/zhiva/pacs",
+    "statusUri": "https://localhost/zhiva/pacs/studies",
+    "authType": "token",
+    "authToken": "YOUR_AUTH_TOKEN",
+    "signInTokenServer": "https://localhost/auth/generate-access-token",
+    "refreshServer": "https://localhost/auth/refresh-token" //optional
+  }
+```
+
+This `authToken` is going to be sent to `signInTokenServer` which should return __Access Token__ (in `Authentication` header) and optional __Refresh Token__ in response's body (`Content-Type: text/html`). __Access Token__ should contain following fields:
+
+```javascript
+{
+  "name": string,
+  "username": string,
+  "canEditResource": boolean,
+  "iat": number,
+  "exp": number,
+  "iss": string
+}
+```
+
+When __Auth Token__ expires then (if provided) __Refresh Token__ will be used to retrieve new token from `refreshServer`. 
