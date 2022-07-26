@@ -1,0 +1,72 @@
+openapi: 3.1.0
+info:
+  version: 0.3.1
+  title: zviha.ai
+  termsOfService: 'https://zhiva.ai/terms/'
+  contact:
+    email: ceo@zhiva.ai
+    url: 'https://zhiva.ai'
+  description:
+    $ref: ./info-description-v0.3.md
+tags:
+  - name: Semantic Segmentation
+    description: Semantic Segmentation API
+  - name: Polygon
+    description: Polygon Annotations
+x-tagGroups:
+  - name: Segmentation
+    section: inferences
+    tags:
+      - Semantic Segmentation
+  - name: Annotations
+    section: inferences
+    tags:
+      - Polygon
+  - name: Predictions
+    section: inferences
+    tags: []
+servers:
+  - url: 'https://api.zhiva.ai/v1'
+paths:
+  '/segmentations/{model-uid}/studies/{study-uid}':
+    $ref: 'v0.3/paths/segmentations/segmentations@{model-uid}@{study-uid}.yaml'
+  '/segmentations/{model-uid}/studies/{study-uid}/series/{series-uid}':
+    $ref: 'v0.3/paths/segmentations/segmentations@{model-uid}@{study-uid}@{series-uid}.yaml'
+  '/segmentations/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
+    $ref: 'v0.3/paths/segmentations/segmentations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
+  '/annotations/{model-uid}/studies/{study-uid}':
+    $ref: 'v0.3/paths/annotations/annotations@{model-uid}@{study-uid}.yaml'
+  '/annotations/{model-uid}/studies/{study-uid}/series/{series-uid}':
+    $ref: 'v0.3/paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}.yaml'
+  '/annotations/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
+    $ref: 'v0.3/paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
+  '/predictions/{model-uid}/studies/{study-uid}':
+    $ref: 'v0.3/paths/predictions/predictions@{model-uid}@{study-uid}.yaml'
+  '/predictions/{model-uid}/studies/{study-uid}/series/{series-uid}':
+    $ref: 'v0.3/paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}.yaml'
+  '/predictions/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
+    $ref: 'v0.3/paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
+components:
+  securitySchemes:
+    main_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://example.com/api/oauth/dialog'
+          scopes:
+            'read:models': read users info
+    api_key:
+      type: apiKey
+      in: header
+      name: api_key
+  schemas:
+    ModelInput_Study:
+      oneOf:
+        - $ref: 'v0.3/components/schemas/model/FullStudyModelInput.yaml'
+        - $ref: 'v0.3/components/schemas/model/FilteredStudyModelInput.yaml'
+    ModelInput_Series:
+      oneOf:
+        - $ref: 'v0.3/components/schemas/model/FullSeriesModelInput.yaml'
+        - $ref: 'v0.3/components/schemas/model/FilteredSeriesModelInput.yaml'
+    ModelInput_Instance:
+      $ref: 'v0.3/components/schemas/model/FullInstanceModelInput.yaml'
