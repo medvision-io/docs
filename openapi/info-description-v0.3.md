@@ -6,7 +6,7 @@ If you want to setup everything for your local research please execute following
 
 ### 1. Setup Local PACS server
 
-You have to have something that servers the __DICOM__ data. Usually this is a __PACS server__ with __DICOMWeb__. Setting local server is easy and everything you should do is described in [Setting up Local PACS](/latest/setting-up-local-pacs)
+You have to have something that servers the __DICOM__ data. Usually this is a __PACS server__ with __DICOMWeb__. Setting local server is easy and everything you should do is described in [Setting up Local PACS](/latest/setting-up-local-pacs). If your server deals with multiple users you should consider [Setting up PACS with JWT](/latest/setting-up-local-pacs-with-jwt). This version of PACS gives you ability to easily create multiple users with limited access to the server.
 
 ### 2. Add Local PACS server to application settings
 
@@ -26,7 +26,13 @@ At the end you have to add your models that are now accessible through [Model Pr
 
 ### 6. Setup your user accounts (optional but advised)
 
+#### For [Basic Local PACS](/latest/setting-up-local-pacs)
+
 Usually you're dealing with more than one account. Some of them should have write permission and some of them are only for viewing data. [Example setup](/latest/local-pacs-security/#example-setup) explains how to set accounts for different users in your local environment.
+
+#### For [Local PACS with JWT](/latest/setting-up-local-pacs-with-jwt)
+
+If you're using PACS with Tokens you're usually dealing with mode users. Every user should have its own account created by Administrator as described in [User account](/latest/setting-up-local-pacs-with-jwt#user-accounts) section.
 
 ### 7. You're good to go
 
