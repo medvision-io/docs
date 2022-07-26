@@ -1,13 +1,13 @@
 openapi: 3.1.0
 info:
-  version: 0.2.2
+  version: 0.3.1
   title: zviha.ai
   termsOfService: 'https://zhiva.ai/terms/'
   contact:
     email: ceo@zhiva.ai
     url: 'https://zhiva.ai'
   description:
-    $ref: ./info-description-v0.2.md
+    $ref: ./info-description-v0.3.md
 tags:
   - name: Semantic Segmentation
     description: Semantic Segmentation API
@@ -29,23 +29,23 @@ servers:
   - url: 'https://api.zhiva.ai/v1'
 paths:
   '/segmentations/{model-uid}/studies/{study-uid}':
-    $ref: 'v0.2/paths/segmentations/segmentations@{model-uid}@{study-uid}.yaml'
+    $ref: 'v0.3/paths/segmentations/segmentations@{model-uid}@{study-uid}.yaml'
   '/segmentations/{model-uid}/studies/{study-uid}/series/{series-uid}':
-    $ref: 'v0.2/paths/segmentations/segmentations@{model-uid}@{study-uid}@{series-uid}.yaml'
+    $ref: 'v0.3/paths/segmentations/segmentations@{model-uid}@{study-uid}@{series-uid}.yaml'
   '/segmentations/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
-    $ref: 'v0.2/paths/segmentations/segmentations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
+    $ref: 'v0.3/paths/segmentations/segmentations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
   '/annotations/{model-uid}/studies/{study-uid}':
-    $ref: 'v0.2/paths/annotations/annotations@{model-uid}@{study-uid}.yaml'
+    $ref: 'v0.3/paths/annotations/annotations@{model-uid}@{study-uid}.yaml'
   '/annotations/{model-uid}/studies/{study-uid}/series/{series-uid}':
-    $ref: 'v0.2/paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}.yaml'
+    $ref: 'v0.3/paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}.yaml'
   '/annotations/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
-    $ref: 'v0.2/paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
+    $ref: 'v0.3/paths/annotations/annotations@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
   '/predictions/{model-uid}/studies/{study-uid}':
-    $ref: 'v0.2/paths/predictions/predictions@{model-uid}@{study-uid}.yaml'
+    $ref: 'v0.3/paths/predictions/predictions@{model-uid}@{study-uid}.yaml'
   '/predictions/{model-uid}/studies/{study-uid}/series/{series-uid}':
-    $ref: 'v0.2/paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}.yaml'
+    $ref: 'v0.3/paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}.yaml'
   '/predictions/{model-uid}/studies/{study-uid}/series/{series-uid}/instances/{sop-instance-uid}':
-    $ref: 'v0.2/paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
+    $ref: 'v0.3/paths/predictions/predictions@{model-uid}@{study-uid}@{series-uid}@{sop-instance-uid}.yaml'
 components:
   securitySchemes:
     main_auth:
@@ -62,11 +62,11 @@ components:
   schemas:
     ModelInput_Study:
       oneOf:
-        - $ref: 'v0.2/components/schemas/model/FullStudyModelInput.yaml'
-        - $ref: 'v0.2/components/schemas/model/FilteredStudyModelInput.yaml'
+        - $ref: 'v0.3/components/schemas/model/FullStudyModelInput.yaml'
+        - $ref: 'v0.3/components/schemas/model/FilteredStudyModelInput.yaml'
     ModelInput_Series:
       oneOf:
-        - $ref: 'v0.2/components/schemas/model/FullSeriesModelInput.yaml'
-        - $ref: 'v0.2/components/schemas/model/FilteredSeriesModelInput.yaml'
+        - $ref: 'v0.3/components/schemas/model/FullSeriesModelInput.yaml'
+        - $ref: 'v0.3/components/schemas/model/FilteredSeriesModelInput.yaml'
     ModelInput_Instance:
-      $ref: 'v0.2/components/schemas/model/FullInstanceModelInput.yaml'
+      $ref: 'v0.3/components/schemas/model/FullInstanceModelInput.yaml'

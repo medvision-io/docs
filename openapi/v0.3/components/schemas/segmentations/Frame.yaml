@@ -1,0 +1,8 @@
+segments:
+  type: array
+  items:
+    $ref: './Segment.yaml'
+metadata:
+  type: array
+  items:
+    $ref: '../common/Metadata.yaml'
