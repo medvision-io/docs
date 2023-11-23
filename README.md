@@ -1,8 +1,8 @@
-# zhiva.ai Docs
+# ZhivaAI Docs
 
 ### Versions:
-- [Production documentation](https://docs.zhiva.ai/latest)
-- [Staging documentation](https://docs-staging.zhiva.ai/latest)
+- [Production documentation](https://docs.zhiva.org/latest)
+- [Staging documentation](https://docs-staging.zhiva.org/latest)
 
 ## Working on your OpenAPI Definition
 

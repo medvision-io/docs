@@ -20,8 +20,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://zhiva.ai/">
-        zhiva.ai
+      <Link color="inherit" href="https://zhiva.org/">
+        zhiva.org
       </Link>{" "}
       {new Date().getFullYear()}.
     </Typography>

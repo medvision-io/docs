@@ -35,7 +35,7 @@ git clone https://github.com/zhiva-ai/pacs-server.git
 ```
 
 or download it directly from
-[zhiva.ai PACS server](https://github.com/zhiva-ai/pacs-server/archive/refs/heads/main.zip).
+[ZhivaAI PACS server](https://github.com/zhiva-ai/pacs-server/archive/refs/heads/main.zip).
 
 ## Generate local TSL certificate
 

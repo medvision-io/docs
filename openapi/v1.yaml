@@ -1,11 +1,11 @@
 openapi: 3.1.0
 info:
   version: 0.1.0
-  title: zviha.ai
-  termsOfService: 'https://zhiva.ai/terms/'
+  title: ZhivaAI
+  termsOfService: 'https://zhiva.org/terms/'
   contact:
-    email: ceo@zhiva.ai
-    url: 'https://zhiva.ai/contact'
+    email: ceo@zhiva.org
+    url: 'https://zhiva.org/contact'
   description:
     $ref: ./info-description.md
 tags:
