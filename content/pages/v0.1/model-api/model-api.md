@@ -30,7 +30,7 @@ You can either clone this repo
 git clone https://github.com/zhiva-ai/Lung-Segmentation-API.git
 ```
 or download it directly from
-[zhiva.ai Local Model API](https://github.com/zhiva-ai/Lung-Segmentation-API/archive/refs/heads/main.zip).
+[ZhivaAI Local Model API](https://github.com/zhiva-ai/Lung-Segmentation-API/archive/refs/heads/main.zip).
 
 ## Build the server
 

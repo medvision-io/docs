@@ -1,11 +1,11 @@
 openapi: 3.1.0
 info:
   version: 0.3.1
-  title: zviha.ai
-  termsOfService: 'https://zhiva.ai/terms/'
+  title: ZhivaAI
+  termsOfService: 'https://zhiva.org/terms/'
   contact:
-    email: ceo@zhiva.ai
-    url: 'https://zhiva.ai'
+    email: ceo@zhiva.org
+    url: 'https://zhiva.org'
   description:
     $ref: ./info-description-v0.3.md
 tags:
@@ -26,7 +26,7 @@ x-tagGroups:
     section: inferences
     tags: []
 servers:
-  - url: 'https://api.zhiva.ai/v1'
+  - url: 'https://api.zhiva.org/v1'
 paths:
   '/segmentations/{model-uid}/studies/{study-uid}':
     $ref: 'v0.3/paths/segmentations/segmentations@{model-uid}@{study-uid}.yaml'

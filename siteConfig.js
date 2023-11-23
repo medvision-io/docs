@@ -1,7 +1,7 @@
 module.exports = {
-  title: "zhiva.ai",
-  siteUrl: "https://docs.zhiva.ai",
-  description: "Documentation for zhiva.ai",
+  title: "ZhivaAI",
+  siteUrl: "https://docs.zhiva.org",
+  description: "Documentation for ZhivaAI",
   sections: [
     {
       name: "Guides",

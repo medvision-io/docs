@@ -66,7 +66,7 @@ export default function Header({
               <Grid item xs />
               <Grid item>
                 <Link
-                  href="https://zhiva.ai"
+                  href="https://zhiva.org"
                   variant="body2"
                   sx={{
                     textDecoration: "none",
@@ -78,7 +78,7 @@ export default function Header({
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Go to <strong>zhiva.ai</strong> homepage
+                  Go to <strong>ZhivaAI</strong> homepage
                 </Link>
               </Grid>
             </Grid>

@@ -1,4 +1,4 @@
-This is a documentation for _zhiva.ai_ products. Feel free to read the whole thing but here is a:
+This is a documentation for _ZhivaAI_ products. Feel free to read the whole thing but here is a:
 
 # Quickstart
 

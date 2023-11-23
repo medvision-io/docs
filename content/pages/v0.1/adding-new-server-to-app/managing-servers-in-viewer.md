@@ -47,7 +47,7 @@ As you can see, this server is not on the list and is not a valid server yet. Yo
 - __Supports Fuzzy Matching__ - Does server supports _Fuzzy Matching_ when searching for Studies? ([Our Local Server](/latest/setting-up-local-pacs) does)
 - __Can Store/Update Data?__ - Check if user has access to modify data on PACS (more about it in [Local PACS Security](/latest/local-pacs-security/) section)
 
-### zhiva.ai Local Server Setup
+### ZhivaAI Local Server Setup
 
 We've created predefined server settings for [Our Local Server](/latest/setting-up-local-pacs). It is available under `Local Server` option. You might want to modify the `Server URL` to accommodate your local network settings. If you running the server on your local machine then leave `localhost` as hostname. If the server is somewhere in your network then change `localhost` to servers' IP address (sth. like `192.168.x.x`).
 

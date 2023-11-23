@@ -35,7 +35,7 @@ git clone https://github.com/zhiva-ai/model-proxy-example.git
 ```
 
 or download it directly from
-[zhiva.ai PACS server](https://github.com/zhiva-ai/model-proxy-example/archive/refs/heads/main.zip).
+[ZhivaAI PACS server](https://github.com/zhiva-ai/model-proxy-example/archive/refs/heads/main.zip).
 
 ## Local PACS and Model API
 

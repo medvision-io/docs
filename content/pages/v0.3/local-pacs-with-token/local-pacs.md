@@ -37,7 +37,7 @@ git clone https://github.com/zhiva-ai/pacs-token-server.git
 ```
 
 or download it directly from
-[zhiva.ai JWT PACS server](https://github.com/zhiva-ai/pacs-token-server/archive/refs/heads/main.zip).
+[ZhivaAI JWT PACS server](https://github.com/zhiva-ai/pacs-token-server/archive/refs/heads/main.zip).
 
 ## Generate local TSL certificate
 
@@ -150,10 +150,10 @@ At the end you'll be presented with one-off __AuthToken__.
 __Auth Token__ is used to sign-in user in zhiva application. You can use it in [Zhiva login](/latest/managing-servers-inside-the-dicom-viewer/#zhiva-login), or you can generate __one-off login URL__:
 
 ```javascript
-https://alpha.zhiva.ai/auth/oauth?token=YOUR_AUTH_TOKEN
+https://alpha.zhiva.org/auth/oauth?token=YOUR_AUTH_TOKEN
 ```
 
-This link can bo modified if you're using different domain/subdomain than default `alpha.zhiva.ai`. Just replace the domain and leave the rest of the path the same. Link for the default domain is also stored in __This Direct Link__ just below textfield with token.
+This link can bo modified if you're using different domain/subdomain than default `alpha.zhiva.org`. Just replace the domain and leave the rest of the path the same. Link for the default domain is also stored in __This Direct Link__ just below textfield with token.
 
 ### Access to orthanc explorer
 
